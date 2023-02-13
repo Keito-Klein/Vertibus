@@ -24,45 +24,56 @@ const addBuff = (name, buff) => {
 const getBuff = (name) => {
     let position = false
     Object.keys(guild).forEach((i) => {
-    if (guild[i].id === name) {
+    if (guild[i].id.toLowerCase() === name.toLowerCase()) {
     position = i
     }
 })
-    if(position === false) {
-      return 'ign tersebut tidak ada!!'
-    } else {
 return guild[position].buff
-    } 
 }
 
-/*const multipleBuff = (buff) => {
-  arr = []
-  Object.keys(guild).forEach((i) => {
-    if(guild[i].buff.includes(buff)) {
-      arr.push(guild[i].id)
-    } else {
-      arr.push(false)
+//OK
+const multipleBuff = (buff) => {
+  let position = ["tidak ada"]
+  Object.keys(guild).forEach( (i) =>  {
+    if(guild[i].buff.toLowerCase().includes(buff)) {
+       position.push(guild[i].id)
     }
   })
-  return arr
-}*/
+  if(position.length > 1) {
+    position.splice(0, 1)
+    }
+       return position
+}
 
 //OK
 const checkName = (name) => {
   let position = false
   Object.keys(guild).forEach((i) => {
-                if (guild[i].id === name) {
+                if (guild[i].id.toLowerCase() === name.toLowerCase()) {
                     position = true
                 }
             })
             return position
         }
 
+        const changeName = (name, cname) => {
+          let position = false;
+  Object.keys(guild).forEach((i) => {
+    if(guild[i].id.toLowerCase() == name.toLowerCase()) {
+      position = i
+    }
+  })
+  if(position !== false) {
+    guild[position].id = cname
+    fs.writeFileSync('./lib/guild.json', JSON.stringify(guild))
+  }
+        }
+
 //OK
 const changeBuff = (name, lvl) => {
   let position = false;
   Object.keys(guild).forEach((i) => {
-    if(guild[i].id == name) {
+    if(guild[i].id.toLowerCase() == name.toLowerCase()) {
       position = i
     }
   })
@@ -76,7 +87,7 @@ const changeBuff = (name, lvl) => {
 const delBuff = (name) => {
   let position = false
   Object.keys(guild).forEach((i) => {
-    if (guild[i].id == name) {
+    if (guild[i].id.toLowerCase() == name.toLowerCase()) {
       position = i
     }
   })
@@ -618,6 +629,52 @@ case 'kain':
       client.sendText(from, 'Buff telah diganti!!', mek)
       } else {
         reply(`${ign} tidak ada dalam list buff serikat!!`)
+      }
+    break 
+
+    case 'cn':
+    if(!m.isGroup) return reply("hanya bisa di lakukan di group!")
+    if(!isMyGuild) return reply("Tidak bisa di gunakan di grup ini!")
+    if(!isGroupAdmins) return reply("Minta admin untuk mengganti!")
+    if(!text) return reply(`Cara penggunan ${prefix}${command} ign lama|ign baru`)
+    if(!text.includes('|')) return reply('Format salah!!')
+      ign = q.split('|')[0]
+      buff = q.split('|')[1]
+      validation = checkName(ign)
+      if(validation === true) {
+      await changeName(ign, buff)
+      client.sendText(from, 'IGN telah diganti!!', mek)
+      } else {
+        reply(`${ign} tidak ada dalam list buff serikat!!`)
+      }
+    break 
+
+  case 'getbuff':
+    if(!m.isGroup) return reply("hanya bisa di lakukan di group!")
+    if(!isMyGuild) return reply("Tidak bisa di gunakan di grup ini!")
+    if(!text) return reply(`Cara penggunan ${prefix}${command} ign`)
+      validation = checkName(text)
+      if(validation === true) {
+        db = await getBuff(text)
+      client.sendText(from, db, mek)
+      } else {
+        reply(`${text} tidak ada dalam list buff serikat!!`)
+      }
+    break 
+
+  case 'gmbuff':
+    if(!m.isGroup) return reply("hanya bisa di lakukan di group!")
+    if(!isMyGuild) return reply("Tidak bisa di gunakan di grup ini!")
+    if(!text) return reply(`Cara penggunan ${prefix}${command} buffland`)
+      validation = multipleBuff(text)
+      if(validation === "tidak ada") {
+      return reply(`${text} tidak ada dalam list buff serikat!!`)
+      } else {
+        db = `List member yang masak ${text} adalah :\n\n`
+      for(let i = 0; i < validation.length; i++) {
+        db += `- ${validation[i]}\n`
+      }
+      client.sendText(from, db, mek)
       }
     break 
 
