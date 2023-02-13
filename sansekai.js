@@ -4,6 +4,7 @@ const util = require("util");
 const chalk = require("chalk");
 const { Configuration, OpenAIApi } = require("openai");
 const cheerio = require("cheerio");
+const axios = require("axios")
 const { event } = require("./lib/event.js")
 const { mt } = require("./lib/mt.js")
 let setting = require("./key.json");
@@ -398,7 +399,7 @@ Membuat sticker dengan teks
           break;
         case "ai": case "openai": 
           try {
-            if (setting.keyopenai === "ISI_APIKEY_OPENAI_DISINI") return reply("Apikey belum diisi\n\nSilahkan isi terlebih dahulu apikeynya di file key.json\n\nApikeynya bisa dibuat di website: https://beta.openai.com/account/api-keys");
+            if (setting.keyopenai === "Your_ApiKey_Here") return reply("Apikey belum diisi\n\nSilahkan isi terlebih dahulu apikeynya di file key.json\n\nApikeynya bisa dibuat di website: https://beta.openai.com/account/api-keys");
             if (!text) return reply(`Chat dengan AI.\n\nContoh:\n${prefix}${command} Apa itu resesi`);
             const configuration = new Configuration({
               apiKey: setting.keyopenai,
