@@ -18,6 +18,9 @@
     <img title="Keito-Klein" src="https://img.shields.io/badge/AUTHOR-MiKako-orange.svg?style=for-the-badge&logo=github"></a>
 </div>
 
+<br>
+<p> Pls Help me build this bot. I want to add any feature about toram</p>
+
 
 ***WhatsApp OpenAI Create with NodeJS Using Library [Baileys](https://github.com/adiwajshing/Baileys)***
 
