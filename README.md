@@ -19,7 +19,7 @@
 </div>
 
 <br>
-<p> Pls Help me build this bot. I want to add any feature about toram</p>
+<p> Pls Help me build this bot. I want to add any feature about toram online</p>
 
 
 ***WhatsApp OpenAI Create with NodeJS Using Library [Baileys](https://github.com/adiwajshing/Baileys)***
