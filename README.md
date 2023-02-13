@@ -38,6 +38,7 @@
 ## Getting Started
 This project require :
 - [NodeJS](https://nodejs.org/en/download/) [v16 or greater](https://nodejs.org/dist/)
+- [FFmpeg](https://www.gyan.dev/ffmpeg/builds/) 
 
 ## Get & Change OpenAI ApiKey
 - Silakan buat apikeynya terlebih dahulu [Disini](https://beta.openai.com/account/api-keys)
