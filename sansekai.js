@@ -7,10 +7,15 @@ const cheerio = require("cheerio");
 const axios = require("axios")
 const { event } = require("./lib/event.js")
 const { mt } = require("./lib/mt.js")
+const { ind } =require("./language")
+const { eng } = require("./language")
 let setting = require("./key.json");
 var packName = "Masbro"
 var author = "MiKako"
 const guild = JSON.parse(fs.readFileSync('./db/guild.json'))
+
+/*Change Your Language Here!*/
+lang = eng
 
 //Buff Function
 //OK
@@ -361,57 +366,13 @@ module.exports = sansekai = async (client, m, chatUpdate, store) => {
       switch (command) {
         case "help":
         case "menu":
-          m.reply(`*Vertibus Toram DB*
-            
-*(ChatGPT)*
-Cmd: ${prefix}ai 
-Tanyakan apa saja kepada AI. 
-
-*(DALL-E)*
-Cmd: ${prefix}img
-Membuat gambar dari teks
-
-*(Toram Online DB)*
-Cmd: ${prefix}lvl
-List Leveling character
-
-Cmd: ${prefix}farming
-List recommend farming
-
-Cmd: ${prefix}event 
-list event
-*(Dalam Pengembangan)*
-
-Cmd: ${prefix}maintenance
-menampilkan maintenance terbaru
-
-*(Guild DB)*
-Cmd: ${prefix}buff
-Menampilkan seluruh Buff serikat
-
-Cmd: ${prefix}push
-Menambahkan buff kedalam list buff serikat
-
-Cmd: ${prefix}change
-Mengganti salah satu buff di list buff serikat
-
-Cmd: ${prefix}delete
-Menghapus salah satu buff di list buff serikat
-
-*(OTHER)*
-Cmd: ${prefix}sticker
-Membuat sticker dari gambar yg dikirim
-*Error*
-
-Cmd: ${prefix}smeme
-Membuat sticker dengan teks
-*Error*
-`)
+          m.reply(lang.menu(prefix))
           break;
+
         case "ai": case "openai": 
           try {
-            if (setting.keyopenai === "Your_ApiKey_Here") return reply("Apikey belum diisi\n\nSilahkan isi terlebih dahulu apikeynya di file key.json\n\nApikeynya bisa dibuat di website: https://beta.openai.com/account/api-keys");
-            if (!text) return reply(`Chat dengan AI.\n\nContoh:\n${prefix}${command} Apa itu resesi`);
+            if (setting.keyopenai === "Your_ApiKey_Here") return reply(lang.nonApikey());
+            if (!text) return reply(lang.format(prefix, command));
             const configuration = new Configuration({
               apiKey: setting.keyopenai,
             });
@@ -429,13 +390,13 @@ Membuat sticker dengan teks
             m.reply(`${response.data.choices[0].text}`);
           } catch (err) {
             console.log(err);
-            m.reply("Maaf, sepertinya ada yang error :" + err);
+            m.reply(lang.eror(err));
           }
           break;
         case "img": case "ai-img": case "image": case "images":
           try {
-            if (setting.keyopenai === "ISI_APIKEY_OPENAI_DISINI") return reply("Apikey belum diisi\n\nSilahkan isi terlebih dahulu apikeynya di file key.json\n\nApikeynya bisa dibuat di website: https://beta.openai.com/account/api-keys");
-            if (!text) return reply(`Membuat gambar dari AI.\n\nContoh:\n${prefix}${command} Wooden house on snow mountain`);
+            if (setting.keyopenai === "Your_ApiKey_Here") return reply(lang.nonApikey());
+            if (!text) return reply(lang.format(prefix, command));
             const configuration = new Configuration({
               apiKey: setting.keyopenai,
             });
@@ -449,7 +410,7 @@ Membuat sticker dengan teks
             client.sendImage(from, response.data.data[0].url, text, mek);
           } catch (err) {
             console.log(err);
-            m.reply("Maaf, sepertinya ada yang error :"+ err);
+            m.reply(lang.eror(err));
           }
           break;
 
@@ -457,12 +418,13 @@ Membuat sticker dengan teks
           case 'lvl':
           case 'lvling' : 
           case 'leveling':
+            try {
         let lvl = q.split('|')[0]
         let bexp = q.split('|')[1]
-         if (!lvl) return m.reply(`cara penggunaan ${prefix + command} level|bonus exp`)
-           if (!bexp) return m.reply(`cara penggunaan ${prefix + command} level|bonus exp`)
-          if( isNaN(lvl)) return m.reply(`cara penggunaan ${prefix + command} level|bonus exp`)
-            if( isNaN(bexp)) return m.reply(`cara penggunaan ${prefix + command} level|bonus exp`)
+         if (!lvl) return m.reply(lang.format(prefix, command))
+           if (!bexp) return m.reply(lang.format(prefix, command))
+          if( isNaN(lvl)) return m.reply(lang.format(prefix, command))
+            if( isNaN(bexp)) return m.reply(lang.format(prefix, command))
         
 
     axios.get(`https://toram-id.info/leveling?level=${lvl}&bonusexp=${bexp}&range=5`)
@@ -478,20 +440,26 @@ Membuat sticker dengan teks
           exp: $(this).find('.text-primary').text().trim()
         }
       });
-      let gb = `*Leveling lvl ${lvl} dengan bonus exp ${bexp}*\n`
+      let gb = `*Leveling lvl ${lvl} & bonus exp ${bexp}*\n`
       for(let i = 0; i < array.length; i++) {
           gb += `-------------------------------\nBoss: ${array[i].boss}\nLocation: ${array[i].location}\nEXP: ${array[i].exp}\n`
       }
-      console.log(gb)
       client.sendText(from, gb, mek)
       console.log(array[0])
     }
   })
+    } catch (err) {
+      console.log(err)
+      m.reply(lang.eror(err))
+    }
   break;
 
   case 'mobs':
 case 'boss':
-  if(!text) return reply("Masukan nama boss/monster!")
+case 'monster':
+  try {
+
+  if(!text) return reply(lang.format(prefix,command))
 
   axios.get(`https://coryn.club/monster.php?name=${text}#`)
  .then((response) => {
@@ -512,7 +480,7 @@ case 'boss':
                 drop: $(this).find(`.monster-drop > div > a`).text().trim()
             }
         })
-            db = `Berikut detail dari ${command} bernama ${text}\n\n`
+            db = `*detail ${command + text}:*\n\n`
             for (let i = 0; i < array.length; i++) {
               db += `-----------------------------------\nBoss: ${array[i].boss}\nDiff: ${array[i].diff}\nLevel: ${array[i].lv}\nHP: ${array[i].hp}\nEXP: ${array[i].exp}\nElement: ${array[i].element}\nTamable: ${array[i].tamable}\nLocation: ${array[i].map}\nDrop: ${array[i].drop}\n`
             }
@@ -520,37 +488,42 @@ case 'boss':
         }
     
  })
+  } catch (err) {
+    console.log(err)
+    m.reply(lang.
+      eror())
+  }
   break
 
   case 'farm':
   case 'farming':
-  if (!text) return reply("Mau farming apa?\n\n/logam\n/kayu\n/fauna\n/obat\n/kain _(Comming Soon)_\n/lainnya _(Comming Soon)_")
-    if(text == "logam") {
-      db = `*Berikut ini list Spot Farming ${text} yang saya ketahui:*\n`
+  if (!text) return reply(lang.format(prefix, command))
+    if(text == "logam" || text == "metal") {
+      db = await lang.head(text)
       for(let i = 0; i < mobs.mats.metal.length; i++) {
          db += `\n------------------\nMonster: ${mobs.mats.metal[i].monster}\nLevel: ${mobs.mats.metal[i].lv}\nElement: ${mobs.mats.metal[i].element}\nHP: ${mobs.mats.metal[i].hp}\nEXP: ${mobs.mats.metal[i].exp}\nLokasi: ${mobs.mats.metal[i].map}`
       }
       client.sendText(from, db, mek)
-    } else if(text == "kayu") {
-      db = `*Berikut ini list Spot Farming ${text} yang saya ketahui:*\n`
+    } else if(text == "kayu" || text == "wood") {
+      db = await lang.head(text)
       for(let i = 0; i < mobs.mats.wood.length; i++) {
          db += `\n------------------\nMonster: ${mobs.mats.wood[i].monster}\nLevel: ${mobs.mats.wood[i].lv}\nElement: ${mobs.mats.wood[i].element}\nHP: ${mobs.mats.wood[i].hp}\nEXP: ${mobs.mats.wood[i].exp}\nLokasi: ${mobs.mats.wood[i].map}`
       }
       client.sendText(from, db, mek)
-    } else if(text == 'fauna') {
-      db = `*Berikut ini list Spot Farming ${text} yang saya ketahui:*\n`
+    } else if(text == 'fauna' || text == "beast") {
+      db = await lang.head(text)
       for(let i = 0; i < mobs.mats.beast.length; i++) {
          db += `\n------------------\nMonster: ${mobs.mats.beast[i].monster}\nLevel: ${mobs.mats.beast[i].lv}\nElement: ${mobs.mats.beast[i].element}\nHP: ${mobs.mats.beast[i].hp}\nEXP: ${mobs.mats.beast[i].exp}\nLokasi: ${mobs.mats.beast[i].map}`
       }
       client.sendText(from, db, mek)
-    } else if(text == 'obat') {
-      db = `*Berikut ini list Spot Farming ${text} yang saya ketahui:*\n`
+    } else if(text == 'obat' || text == "medic" || text == "medicine") {
+      db = await lang.head(text)
       for(let i = 0; i < mobs.mats.medic.length; i++) {
          db += `\n------------------\nMonster: ${mobs.mats.medic[i].monster}\nLevel: ${mobs.mats.medic[i].lv}\nElement: ${mobs.mats.medic[i].element}\nHP: ${mobs.mats.medic[i].hp}\nEXP: ${mobs.mats.medic[i].exp}\nLokasi: ${mobs.mats.medic[i].map}`
       }
       client.sendText(from, db, mek)
-    } else if(text == 'kain') {
-      db = `*Berikut ini list Spot Farming ${text} yang saya ketahui:*\n`
+    } else if(text == 'kain' || text == "cloth") {
+      db = await lang.head(text)
       for(let i = 0; i < mobs.mats.cloth.length; i++) {
          db += `\n------------------\nMonster: ${mobs.mats.cloth[i].monster}\nLevel: ${mobs.mats.cloth[i].lv}\nElement: ${mobs.mats.cloth[i].element}\nHP: ${mobs.mats.cloth[i].hp}\nEXP: ${mobs.mats.cloth[i].exp}\nLokasi: ${mobs.mats.cloth[i].map}`
       }
@@ -560,7 +533,7 @@ case 'boss':
 
   case 'logam':
   case 'metal':
-     db = `*Berikut ini list Spot Farming ${text} yang saya ketahui:*\n`
+     db = await lang.head(command)
       for(let i = 0; i < mobs.mats.metal.length; i++) {
          db += `\n------------------\nMonster: ${mobs.mats.metal[i].monster}\nLevel: ${mobs.mats.metal[i].lv}\nElement: ${mobs.mats.metal[i].element}\nHP: ${mobs.mats.metal[i].hp}\nEXP: ${mobs.mats.metal[i].exp}\nLokasi: ${mobs.mats.metal[i].map}`
       }
@@ -569,7 +542,7 @@ case 'boss':
 
   case 'kayu':
   case 'wood':
-     db = `*Berikut ini list Spot Farming ${text} yang saya ketahui:*\n`
+     db = await lang.head(command)
       for(let i = 0; i < mobs.mats.wood.length; i++) {
          db += `\n------------------\nMonster: ${mobs.mats.wood[i].monster}\nLevel: ${mobs.mats.wood[i].lv}\nElement: ${mobs.mats.wood[i].element}\nHP: ${mobs.mats.wood[i].hp}\nEXP: ${mobs.mats.wood[i].exp}\nLokasi: ${mobs.mats.wood[i].map}`
       }
@@ -578,7 +551,7 @@ case 'boss':
 
 case 'fauna':
   case 'beast':
-    db = `*Berikut ini list Spot Farming ${text} yang saya ketahui:*\n`
+    db = await lang.head(command)
       for(let i = 0; i < mobs.mats.beast.length; i++) {
          db += `\n------------------\nMonster: ${mobs.mats.beast[i].monster}\nLevel: ${mobs.mats.beast[i].lv}\nElement: ${mobs.mats.beast[i].element}\nHP: ${mobs.mats.beast[i].hp}\nEXP: ${mobs.mats.beast[i].exp}\nLokasi: ${mobs.mats.beast[i].map}`
       }
@@ -588,7 +561,7 @@ case 'fauna':
   case 'obat':
   case 'medic':
   case 'medicine':
-     db = `*Berikut ini list Spot Farming ${text} yang saya ketahui:*\n`
+     db = await lang.head(command)
       for(let i = 0; i < mobs.mats.medic.length; i++) {
          db += `\n------------------\nMonster: ${mobs.mats.medic[i].monster}\nLevel: ${mobs.mats.medic[i].lv}\nElement: ${mobs.mats.medic[i].element}\nHP: ${mobs.mats.medic[i].hp}\nEXP: ${mobs.mats.medic[i].exp}\nLokasi: ${mobs.mats.medic[i].map}`
       }
@@ -597,7 +570,7 @@ case 'fauna':
 
 case 'kain':
   case 'cloth':
-    db = `*Berikut ini list Spot Farming ${text} yang saya ketahui:*\n`
+    db = await lang.head(command)
       for(let i = 0; i < mobs.mats.cloth.length; i++) {
          db += `\n------------------\nMonster: ${mobs.mats.cloth[i].monster}\nLevel: ${mobs.mats.cloth[i].lv}\nElement: ${mobs.mats.cloth[i].element}\nHP: ${mobs.mats.cloth[i].hp}\nEXP: ${mobs.mats.cloth[i].exp}\nLokasi: ${mobs.mats.cloth[i].map}`
       }
@@ -605,103 +578,114 @@ case 'kain':
   break;
 
   case 'event': 
-    if(!text) return reply("Event apa yang anda cari?\n- valentine")
+    if(!text) return reply(lang.format(prefix,command))
       if(text == "valentine") {
         valen = event(text)
-        db = `Berikut ini adalah list quest ${text} yang saya ketahui:\n\n`
+        db = lang.quest(command, text)
         for (let i = 0; i < valen.quest.length; i++) {
           db += `\n------------------\n*${valen.quest[i].name}*\nSyarat: ${valen.quest[i].req}\nNPC: ${valen.quest[i].npc}\nQuest Level: ${valen.quest[i].lv}\nBahan Quest: \n${valen.quest[i].mats}\nBoss: ${valen.quest[i].boss}\nUnsur Boss: ${valen.quest[i].element}\nEXP: \n${valen.quest[i].exp}\nReward: ${valen.quest[i].reward}`
         }
-      }
       client.sendText(from, db,mek)
+      }
+      if (text == "natal" || text == "christmas") {
+        cris = event(text)
+        client.sendText(from, cris, mek)
+      }
       break;
 
     case 'valentine':
-      valen = event(text)
-        db = `Berikut ini adalah list quest ${text} yang saya ketahui:\n\n`
+      valen = await event(command)
+        db = await lang.quest(command)
         for (let i = 0; i < valen.quest.length; i++) {
           db += `\n------------------\n*${valen.quest[i].name}*\nSyarat: ${valen.quest[i].req}\nNPC: ${valen.quest[i].npc}\nQuest Level: ${valen.quest[i].lv}\nBahan Quest: \n${valen.quest[i].mats}\nBoss: ${valen.quest[i].boss}\nUnsur Boss: ${valen.quest[i].element}\nEXP: \n${valen.quest[i].exp}\nReward: ${valen.quest[i].reward}`
         }
+        client.sendText(from, db, mek)
         break
+
+    case 'natal':
+    case 'christmas':
+      cris = await event(command)
+      client.sendText(from, cris, mek)
+    break
 
     case 'maintenance':
     case 'mt':
-      reply('mohon tunggu sebentar...')
       maint = await mt()
       client.sendText(from, maint, mek)
     break
 
   case "push":
-    if(!m.isGroup) return reply("hanya bisa di lakukan di group!")
-    if(!isMyGuild) return reply("Tidak bisa di gunakan di grup ini!")
-    if(!isGroupAdmins) return reply("Minta admin untuk menambahkan!")
-    if(!text) return reply(`Cara penggunan ${prefix}${command} ign|buffland`)
-    if(!text.includes('|')) return reply('Format salah!!')
+  case "add":
+    if(!m.isGroup) return reply(lang.onGroup())
+    if(!isMyGuild) return reply(lang.onGuild())
+    if(!isGroupAdmins) return reply(lang.onAdmin())
+    if(!text) return reply(lang.format(prefix,command))
+    if(!text.includes('|')) return reply(lang.format(prefix,command))
       ign = q.split('|')[0]
       buff = q.split('|')[1]
       validation = checkName(ign)
       if(validation === true) {
-        return reply(`${ign} sudah ada dalam list buff serikat!!`)
+        return reply(lang.bump(ign))
       } else {  
       await addBuff(ign, buff)
-      client.sendText(from, 'Buff telah ditambahkan ke dalam list buff serikat!!', mek)
+      m.reply(lang.success())
       }
     break
 
   case 'change':
-    if(!m.isGroup) return reply("hanya bisa di lakukan di group!")
-    if(!isMyGuild) return reply("Tidak bisa di gunakan di grup ini!")
-    if(!isGroupAdmins) return reply("Minta admin untuk mengganti!")
-    if(!text) return reply(`Cara penggunan ${prefix}${command} ign|buffland`)
-    if(!text.includes('|')) return reply('Format salah!!')
+    if(!m.isGroup) return reply(lang.onGroup())
+    if(!isMyGuild) return reply(lang.onGuild())
+    if(!isGroupAdmins) return reply(lang.onAdmin())
+    if(!text) return reply(lang.format(prefix,command))
+    if(!text.includes('|')) return reply(lang.format(prefix,command))
       ign = q.split('|')[0]
       buff = q.split('|')[1]
       validation = checkName(ign)
       if(validation === true) {
       await changeBuff(ign, buff)
-      client.sendText(from, 'Buff telah diganti!!', mek)
+      m.reply(lang.success())
       } else {
-        reply(`${ign} tidak ada dalam list buff serikat!!`)
+        reply(lang.unreg(ign))
       }
     break 
 
     case 'cn':
-    if(!m.isGroup) return reply("hanya bisa di lakukan di group!")
-    if(!isMyGuild) return reply("Tidak bisa di gunakan di grup ini!")
-    if(!isGroupAdmins) return reply("Minta admin untuk mengganti!")
-    if(!text) return reply(`Cara penggunan ${prefix}${command} ign lama|ign baru`)
-    if(!text.includes('|')) return reply('Format salah!!')
+    if(!m.isGroup) return reply(lang.onGroup())
+    if(!isMyGuild) return reply(lang.onGuild())
+    if(!isGroupAdmins) return reply(lang.onAdmin())
+    if(!text) return reply(lang.format(prefix,command))
+    if(!text.includes('|')) return reply(lang.format(prefix,command))
       ign = q.split('|')[0]
       buff = q.split('|')[1]
       validation = checkName(ign)
       if(validation === true) {
       await changeName(ign, buff)
-      client.sendText(from, 'IGN telah diganti!!', mek)
+      m.reply(lang.success())
       } else {
-        reply(`${ign} tidak ada dalam list buff serikat!!`)
+        reply(lang.unreg(ign))
       }
     break 
 
   case 'getbuff':
-    if(!m.isGroup) return reply("hanya bisa di lakukan di group!")
-    if(!isMyGuild) return reply("Tidak bisa di gunakan di grup ini!")
-    if(!text) return reply(`Cara penggunan ${prefix}${command} ign`)
+    if(!m.isGroup) return reply(lang.onGroup())
+    if(!isMyGuild) return reply(lang.onGuild())
+    if(!text) return reply(lang.format(prefix, command))
       validation = checkName(text)
       if(validation === true) {
         db = await getBuff(text)
       client.sendText(from, db, mek)
       } else {
-        reply(`${text} tidak ada dalam list buff serikat!!`)
+        reply(lang.unreg(text))
       }
     break 
 
   case 'gmbuff':
-    if(!m.isGroup) return reply("hanya bisa di lakukan di group!")
-    if(!isMyGuild) return reply("Tidak bisa di gunakan di grup ini!")
-    if(!text) return reply(`Cara penggunan ${prefix}${command} buffland`)
+    if(!m.isGroup) return reply(lang.onGroup())
+    if(!isMyGuild) return reply(lang.onGuild())
+    if(!text) return reply(lang.format(prefix, command))
       validation = multipleBuff(text)
       if(validation === "tidak ada") {
-      return reply(`${text} tidak ada dalam list buff serikat!!`)
+      return reply(lang.unreg(text))
       } else {
         db = `List member yang masak ${text} adalah :\n\n`
       for(let i = 0; i < validation.length; i++) {
@@ -712,22 +696,22 @@ case 'kain':
     break 
 
   case 'delete':
-    if(!m.isGroup) return reply("hanya bisa di lakukan di group!")
-    if(!isMyGuild) return reply("Tidak bisa di gunakan di grup ini!")
-    if(!isGroupAdmins) return reply("Minta admin untuk menghapus!")
-    if(!text) return reply(`Cara penggunan ${prefix}${command} ign`)
+    if(!m.isGroup) return reply(lang.onGroup())
+    if(!isMyGuild) return reply(lang.onGuild())
+    if(!isGroupAdmins) return reply(lang.onAdmin())
+    if(!text) return reply(lang.format(prefix, command))
     validation = checkName(text)
   if (validation === true) {
     await delBuff(text)
-    client.sendText(from, 'Buff sukses dihapus!!', mek)
+    m.reply(lang.success())
   } else {
-    reply(`${text} memang tidak adaa dalam list buff serikat!!`)
+    reply(lang.unreg(text))
   }
   break
 
 case "buff":
-  if(!m.isGroup) return reply("hanya bisa di lakukan di group!")
-  if(!isMyGuild) return reply("Tidak bisa di gunakan di grup ini!")
+  if(!m.isGroup) return reply(lang.onGroup())
+    if(!isMyGuild) return reply(lang.onGuild())
   db = `*List Buff Member ⚔️👑SHINRA_TENSEI👑⚔️*\n\n`
   for (let i = 0; i < guild.length; i++) {
   db += `${i + 1}. ${guild[i].id} / ${guild[i].buff}\n`
@@ -735,8 +719,6 @@ case "buff":
   db += `\nJika ada perubahan/mau ditambahkan, tag admin/pengurus guild🙏👍`
   client.sendText(from, db, mek)
   break
-
-
 
 
   case 'meta':
