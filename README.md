@@ -43,9 +43,9 @@ This project require :
 ## Setting Up
 - Make your ApiKey first [Here](https://beta.openai.com/account/api-keys)
 - Change your ApiKey on File [key.json](https://github.com/Keito-Klein/Vertibus/blob/6f6142fe6f37065663d9051ffda096826697e83e/key.json#L2)
-- Change name file session [Here](https://github.com/Keito-Klein/Vertibus/blob/6f6142fe6f37065663d9051ffda096826697e83e/index.js#L1) this is optional
+- Change name file session [Here](https://github.com/Keito-Klein/Vertibus/blob/6f6142fe6f37065663d9051ffda096826697e83e/index.js#L1). this is optional
 - Change owner number [Herei](https://github.com/Keito-Klein/Vertibus/blob/6f6142fe6f37065663d9051ffda096826697e83e/index.js#L3)
-- Change your language [Here](https://github.com/Keito-Klein/Vertibus/blob/88f5eaf126f8c11916c68c995b63749d506eca4c/sansekai.js#L18)
+- Change your language [Here](https://github.com/Keito-Klein/Vertibus/blob/88f5eaf126f8c11916c68c995b63749d506eca4c/sansekai.js#L18), there's only 2 language at now. just Indonesia (ind) & English (eng)
 
 ## Install
 **Install on RDP/Windows ✅**
