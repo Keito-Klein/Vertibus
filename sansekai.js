@@ -15,7 +15,7 @@ var author = "MiKako"
 const guild = JSON.parse(fs.readFileSync('./db/guild.json'))
 
 /*Change Your Language Here!*/
-lang = eng
+lang = ind
 
 //Buff Function
 //OK
