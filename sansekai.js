@@ -5,6 +5,7 @@ const chalk = require("chalk");
 const { Configuration, OpenAIApi } = require("openai");
 const cheerio = require("cheerio");
 const axios = require("axios")
+const { doing } = require('./lib/translate')
 const { event } = require("./lib/event.js")
 const { mt } = require("./lib/mt.js")
 const { ind } =require("./language")
@@ -490,8 +491,7 @@ case 'monster':
  })
   } catch (err) {
     console.log(err)
-    m.reply(lang.
-      eror())
+    m.reply(lang.eror())
   }
   break
 
@@ -769,6 +769,20 @@ fs.unlinkSync(owgi)
 m.reply('Gunakan foto/stiker!')
 }
 break
+
+                        case 'translate':
+                        case "tl":
+                        if (mek.message.extendedTextMessage === undefined || mek.message.extendedTextMessage === null) {
+                            tolang = q.split("/")[0]
+                            entah = q.split("/")[1]
+                            doing(entah, tolang)
+                            .then((res) => { reply(`${res}`) })
+                        } else {
+                            entah = mek.message.extendedTextMessage.contextInfo.quotedMessage.conversation
+                            doing(q, tolang)
+                            .then((res) => { reply(`${res}`) })
+                        }
+                        break
 
         default: {
           if (isCmd2 && budy.toLowerCase() != undefined) {
