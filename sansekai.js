@@ -772,14 +772,17 @@ break
 
                         case 'translate':
                         case "tl":
-                        if (mek.message.extendedTextMessage === undefined || mek.message.extendedTextMessage === null) {
-                            tolang = q.split("/")[0]
-                            entah = q.split("/")[1]
+                        if (mek.message.extendedTextMessage === undefined || mek.message.extendedTextMessage === null && args[0].length == 2) {
+                            tolang = args[0]
+                            entah = body.slice(3+args[0].length+1)
                             doing(entah, tolang)
+                            .then((res) => { reply(`${res}`) })
+                        } else if (mek.message.extendedTextMessage === undefined || mek.message.extendedTextMessage === null ) {
+                          doing(q)
                             .then((res) => { reply(`${res}`) })
                         } else {
                             entah = mek.message.extendedTextMessage.contextInfo.quotedMessage.conversation
-                            doing(q, tolang)
+                            doing(entah, tolang)
                             .then((res) => { reply(`${res}`) })
                         }
                         break
