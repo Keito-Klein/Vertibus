@@ -1,0 +1,82 @@
+{
+  "name": "Vertibus",
+  "version": "1.4.5",
+  "description": "WhatsApp Bot with Toram Online DB",
+  "main": "index.js",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node index.js",
+    "test": "npm i youtubedl-core@4.11.5 && npm i ytdl-core@4.11.5 && npm i youtube-yts@2.0.0 && npm i yt-search@2.10.4 && npm i node-youtube-music@0.8.3"
+  },
+  "keywords": [
+    "termux",
+    "whatsapp-openai",
+    "whatsapp-openai",
+    "whatsapp-bot",
+    "whatsapp-baileys",
+    "baileys-md",
+    "bot-wa",
+    "bot-md",
+    "whatsapp-multi-device"
+  ],
+  "base": "https://github.com/Sansekai/Wa-OpenAI",
+  "author": "MiKako",
+  "license": "MIT",
+  "dependencies": {
+    "@adiwajshing/keyed-db": "^0.2.4",
+    "@hapi/boom": "^10.0.0",
+    "@vitalets/google-translate-api": "^7.0.0",
+    "@whiskeysockets/baileys": "^6.5.0",
+    "awesome-phonenumber": "^2.64.0",
+    "chalk": "^4.1.2",
+    "cheerio": "^1.0.0-rc.12",
+    "crypto": "^1.0.1",
+    "fbvideos": "^1.0.2",
+    "figlet": "^1.5.2",
+    "file-type": "^16.3.0",
+    "fluent-ffmpeg": "^2.1.2",
+    "fs": "0.0.1-security",
+    "http": "0.0.1-security",
+    "human-readable": "^0.2.1",
+    "imgbb-uploader": "^1.5.0",
+    "jsdom": "^22.1.0",
+    "lodash": "^4.17.21",
+    "lolis.life": "^4.0.0",
+    "moment": "^2.29.4",
+    "moment-timezone": "^0.5.40",
+    "nekos.life": "^3.0.0",
+    "node-fetch": "^2.6.1",
+    "node-id3": "^0.2.6",
+    "node-webpmux": "^3.1.3",
+    "node-youtube-music": "^0.8.3",
+    "npm": "^9.6.6",
+    "ocr-space-api-wrapper": "^2.3.0",
+    "openai": "^3.1.0",
+    "os": "^0.1.2",
+    "perf_hooks": "^0.0.1",
+    "performance-now": "^2.1.0",
+    "pino": "^7.11.0",
+    "qrcode-terminal": "^0.12.0",
+    "qs": "^6.11.2",
+    "readline": "^1.3.0",
+    "replicate": "^0.25.2",
+    "sharp": "^0.32.6",
+    "util": "^0.12.4",
+    "youtube-yts": "^2.0.0",
+    "youtubedl-core": "^4.11.5",
+    "yt-search": "^2.10.4",
+    "ytdl-core": "^4.11.5"
+  },
+  "directories": {
+    "lib": "lib",
+    "src": "src"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Keito-Klein/t-bot.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Keito-Klein/t-bot/issues"
+  },
+  "homepage": "https://github.com/Keito-Klein/t-bot#readme"
+}
