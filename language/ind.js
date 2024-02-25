@@ -3,16 +3,16 @@ const moment = require('moment-timezone');
 date = moment().tz('Asia/Tokyo').format('dddd')
 //dayName = date.toLocaleDateString("in-ID", {weekday: 'long'})
 
-exports.menu = (client, prefix, botNumber) => {
+exports.menu = (prefix) => {
 
 return `
-❏*${global.botName} Toram DB*❏
+❏ *${global.botName} Toram DB* ❏
 
 
  *${prefix}info*
  *${prefix}donasi*
 
-❏*Toram Online DB*
+❏ *Toram Online DB*
  │•${prefix}maintenance
  │•${prefix}leveling
  │•${prefix}farming
@@ -28,7 +28,7 @@ return `
  │•${prefix}mobs
  ╰•${prefix}mq
 
- ❏*Media Menu*
+ ❏ *Media Menu*
  │•${prefix}sticker
  │•${prefix}smeme
  │•${prefix}toimg
@@ -39,7 +39,7 @@ return `
  │•${prefix}ytmp3
  ╰•${prefix}ytmp4
  
-❏*Other Menu*
+❏ *Other Menu*
  │•${prefix}menu
  │•${prefix}wallpaper
  │•${prefix}bahasa
@@ -53,6 +53,9 @@ return `
  │•${prefix}promote
  │•${prefix}report
  ╰•${prefix}donasi
+
+ 🌐 *Join Group Bot* 🌐
+ https://chat.whatsapp/GhGhNeX8p3MKwc8KsmaWph
  
 💰 *Bantu donasi di :*
 💲 Saweria : https://saweria.co/mikako
@@ -110,6 +113,11 @@ exports.changelog = () => {
 - *Add ytmp4 at list*
 - *Add ytmp3 at list*
 - *Custom Menu*
+
+===== *25 - 02 - 2024* =====
+- *Fix tovideo (url status code 429: too many request)*
+- *Fix packname & author animated sticker*
+- *Extend animated sticker duration*
 `
 }
 

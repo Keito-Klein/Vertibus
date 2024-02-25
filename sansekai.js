@@ -524,7 +524,7 @@ module.exports = sansekai = async (client, m, chatUpdate, store) => {
       switch (command) {
         case "help":
         case "menu":
-          m.reply(lang.menu(client, prefix, botNumber))
+          m.reply(lang.menu(prefix))
           break;
 
         
@@ -876,6 +876,10 @@ case 'kain':
   
 
 case 'address':
+case 'code':
+case 'adres':
+case 'addres':
+case 'adress'
   if(!isMyGuild) return reply(lang.onGuild())
     reply(lang.buff(q))
   break
@@ -905,7 +909,7 @@ case 'address':
              } else if (/video/.test(mime)) {
                   if (qms.seconds > 11) return reply('Maksimal 10 detik!')
                  let media = await client.downloadMediaMessage(qms)
-                 let encmedia = await client.sendVideoAsSticker(from, media, m, { packname: packName, author: author })
+                 let encmedia = await client.sendVideoAsSticker(from, media, m, { packname: q.split('|')[0] ? ipackName : global.packName, author: q.split('|')[1] ? iauthor : global.author })
                   await fs.unlinkSync(encmedia)
                   proses("✔")
               } else {
@@ -995,6 +999,27 @@ proses("✔")
   console.log(err);
 }
 break
+
+/*case 'tovid':
+if (!isQuotedSticker) return reply('𝗥𝗲𝗽𝗹𝘆/𝘁𝗮𝗴 𝘀𝘁𝗶𝗰𝗸𝗲𝗿 !')
+  if (m.msg.contextInfo.quotedMessage.stickerMessage.isAnimated === false) return reply(" Gunakan sticker animated !")
+    try {
+proses("⏳")
+if (m.msg.contextInfo.quotedMessage.stickerMessage.isAnimated === true) {
+const { tovid } = require("./lib/exif")
+ran = getRandom("99")
+media = await client.downloadAndSaveMediaMessage(qms, ran)
+let webpToMp4 = await toVideo(media, )
+await client.sendMessage(from, { video: { url: webpToMp4.result, caption: 'Convert Webp To Video' } }, {quoted:m})
+await fs.unlinkSync(media)
+proses("✔")
+}
+} catch(err) {
+  proses("❌")
+  console.log(err);
+}
+  break*/
+
 
 case 'replicate': 
   const replicate = new Replicate({

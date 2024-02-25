@@ -2,124 +2,64 @@ const moment = require('moment-timezone');
 date = moment().tz('Asia/Tokyo').format('dddd')
 //dayName = date.toLocaleDateString("in-ID", {weekday: 'long'})
 
-exports.menu = (prefix, botName) => {
-return `*${botName} Toram DB*
+exports.menu = (prefix) => {
+return `
+❏ *${global.botName} Toram DB* ❏
 
-💰 *Donate me on :*
+
+ *${prefix}info*
+ *${prefix}donasi*
+
+❏ *Toram Online DB*
+ │•${prefix}maintenance
+ │•${prefix}leveling
+ │•${prefix}farming
+ │•${prefix}ailment
+ │•${prefix}address
+ │•${prefix}event
+ │•${prefix}panah
+ │•${prefix}boss
+ │•${prefix}maze
+ │•${prefix}watk
+ │•${prefix}cdmg
+ │•${prefix}food
+ │•${prefix}mobs
+ ╰•${prefix}mq
+
+ ❏ *Media Menu*
+ │•${prefix}sticker
+ │•${prefix}smeme
+ │•${prefix}toimg
+ │•${prefix}tovideo
+ │•${prefix}fb
+ │•${prefix}ig
+ │•${prefix}tiktok
+ │•${prefix}ytmp3
+ ╰•${prefix}ytmp4
+ 
+❏ *Other Menu*
+ │•${prefix}menu
+ │•${prefix}wallpaper
+ │•${prefix}bahasa
+ │•${prefix}changelog
+ │•${prefix}status
+ │•${prefix}ocr
+ │•${prefix}neko
+ │•${prefix}loli
+ │•${prefix}hidetag
+ │•${prefix}translate
+ │•${prefix}promote
+ │•${prefix}report
+ ╰•${prefix}donasi
+
+ 🌐 *Join Group Bot* 🌐
+ https://chat.whatsapp/GhGhNeX8p3MKwc8KsmaWph
+ 
+💰 *Bantu donasi di :*
 💲 Saweria : https://saweria.co/mikako
 💳 dana : 083831853737
 💳 GoPay : 083831853737
 💳 ShopeePay : 083831853737
-            
-
-*(Toram Online DB)*
-Cmd: ${prefix}lvl
-List Leveling character
-
-Cmd: ${prefix}farming
-List recommend farming
-
-Cmd: ${prefix}event 
-list event
-*(On Development)*
-
-Cmd: ${prefix}maintenance
-Show the latest of maintenance
-
-Cmd: ${prefix}boss
-Show details about boss
-
-Cmd: ${prefix}mobs
-Show details about monsters
-
-Cmd: ${prefix}arrow
-Show list Arrow with Elemental
-
-Cmd: ${prefix}mq
-Show list of MQ material
-
-Cmd: ${prefix}maze
-Show guide about guild maze
-
-Cmd: ${prefix}watk
-Calculating highest watk/deff some equipment
-
-Cmd: ${prefix}cdmg
-Calculating total Critical Damage some char
-
-Cmd: ${prefix}ailment
-Show details about ailment
-
-Cmd: ${prefix}food
-Show details about EXP needed to level up food buff
-
-Cmd: ${prefix}address
-Show code food buff
-
-*(Guild DB)*
-Cmd: ${prefix}buff
-Showing all buf guild
-
-Cmd: ${prefix}push
-add buff to the guild buff list
-
-Cmd: ${prefix}change
-Replace one of the buffs in the guild buff list
-
-Cmd: ${prefix}delete
-Removes one of the buffs in the guild buff list
-
-*(OTHER)*
-Cmd: ${prefix}language
-Setting bot Language
-
-Cmd: ${prefix}changelog
-Checking new update 
-
-Cmd: ${prefix}reminder
-Turn On/Off reminder
-
-Cmd: ${prefix}welcome
-Turn on/off welcome
-
-Cmd: ${prefix}status
-Show all of toggle data
-
-Cmd: ${prefix}sticker
-Make stickers from the images sent
-*Image only*
-
-Cmd: ${prefix}smeme
-Create stickers with text
-
-Cmd: ${prefix}toimg 
-Convert sticker into image
-
-Cmd: ${prefix}ocr
-Extract text on the image
-
-Cmd: ${prefix}neko
-Random neko image
-
-Cmd: ${prefix}loli
-Random loli image
-
-Cmd: ${prefix}report
-reporting error to owner
-
-Cmd: ${prefix}hidetag
-Tagging all member but hidden with text
-
-Cmd: ${prefix}translate
-Translating a text into your language
-
-Cmd: ${prefix}promote
-Promote a member to admin
-
-CMD: ${prefix}donate
-Wanna donate me?
-
-
 `
 }
 
@@ -163,6 +103,19 @@ exports.changelog = () => {
 ===== *11 - 11 - 2023* =====
 - *Add neko at list*
 - *Add loli at ist*
+
+===== *05 - 02 - 2024* =====
+- *Add fbdl at list*
+- *Add ig at list*
+- *Add tiktok at list*
+- *Add ytmp4 at list*
+- *Add ytmp3 at list*
+- *Custom Menu*
+
+===== *25 - 02 - 2024* =====
+- *Fix tovideo (url status code 429: too many request)*
+- *Fix packname & author animated sticker*
+- *Extend animated sticker duration*
 `
 }
 
