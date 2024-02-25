@@ -22,7 +22,7 @@
 <p> Pls Help me build this bot. I want to add any feature about toram online</p>
 
 
-***WhatsApp OpenAI Create with NodeJS Using Library [Baileys](https://github.com/adiwajshing/Baileys)***
+***Bot WhatsApp with Toram Online Guide Create with NodeJS Using Library [Baileys](https://github.com/WhiskeySockets/Baileys)***
 
 <p align="center">
 
@@ -41,17 +41,22 @@ This project require :
 - [FFmpeg](https://www.gyan.dev/ffmpeg/builds/) 
 
 ## Setting Up
-- Make your ApiKey first [Here](https://beta.openai.com/account/api-keys)
-- Change your ApiKey on File [key.json](https://github.com/Keito-Klein/Vertibus/blob/6f6142fe6f37065663d9051ffda096826697e83e/key.json#L2)
-- Change name file session [Here](https://github.com/Keito-Klein/Vertibus/blob/6f6142fe6f37065663d9051ffda096826697e83e/index.js#L1). this is optional
-- Change owner number [Herei](https://github.com/Keito-Klein/Vertibus/blob/6f6142fe6f37065663d9051ffda096826697e83e/index.js#L3)
-- Change your language [Here](https://github.com/Keito-Klein/Vertibus/blob/88f5eaf126f8c11916c68c995b63749d506eca4c/sansekai.js#L18), there's only 2 language at now. just Indonesia (ind) & English (eng)
+- Make your OcrSpace ApiKey [Here](https://ocr.space/ocrapi)
+- Make your Imgbb ApiKey [Here](https://api.imgbb.com)
+- Change your ApiKey at setting.js line 14 & 15.
+- Change name file session at setting.js line 6. this is optional
+- Change owner number at setting.js line 2
+- Change your language at sansekai.js line 39, there's only 2 language at now. just Indonesia (ind) & English (eng)
 
 ## Install
 **Install on RDP/Windows ✅**
 
-Install [NodeJS](https://nodejs.org/en/download/)
- and [Git Bash](https://git-scm.com/downloads) first
+Install:
+[NodeJS](https://nodejs.org/en/download/)
+[Git Bash](https://git-scm.com/downloads)
+[FFMPEG](https://www.gyan.dev/ffmpeg/builds/)
+
+Then:
 ```bash
 $ git clone https://github.com/Keito-Klein/Vetibus
 $ cd Vertibus
@@ -60,23 +65,17 @@ $ node index.js
 ```
 **Install on Termux ✅**
 
-Please install manually ```node_modules``` first, because if you automatical install on termux via ```npm install``` an error will occur.
-<br>Link ```node_modules```: [Click Here](https://drive.google.com/file/d/1gKGjseRirX6mQ5LOFULpmnDs7q3Svm8y/view?usp=sharing)
 ```bash
-$ pkg install git nodejs -y
+$ pkg install git nodejs ffmpeg-y
 $ git clone https://github.com/Keito-Klein/Vetibus
 $ cd Vertibus
+$ npm install
+$ npm start
 ```
 
-After installing file node_modules, then extract file ```node_modules.zip``` and put it on folder Vertibus.
-
-**Run**
-```bash
-$ node index.js
-```
 
 ## Donate
-<a href="https://saweria.co/Sansekai" target="_blank"><img src="https://user-images.githubusercontent.com/26188697/180601310-e82c63e4-412b-4c36-b7b5-7ba713c80380.png" alt="Donate For Yusril" height="41" width="174"></a>
+<a href="https://saweria.co/mikako" target="_blank"><img src="https://user-images.githubusercontent.com/26188697/180601310-e82c63e4-412b-4c36-b7b5-7ba713c80380.png" alt="Donate For MiKako" height="41" width="174"></a>
 
 ## License
 [MIT License](https://github.com/Keito-Klein/Vertibus/blob/main/LICENSE)
