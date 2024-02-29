@@ -12,7 +12,7 @@ global.raid = false
 
 /*ApiKey*/
 global.ocr = "816e2ac3f588957";
-global.imgbb = "33270f0a84f041ee046f429d7e6f3c6f";
+global.imgbb = "bfe53fe15a978cf1938d96123f065216";
 
 
 /*Info*/

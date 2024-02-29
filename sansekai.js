@@ -19,6 +19,7 @@ const Replicate = require("replicate");
 const { ocrSpace } = require('ocr-space-api-wrapper');
 const { doing } = require('./lib/translate')
 const { event } = require("./lib/event.js")
+const { processing } = require("./lib/remini")
 const { mt } = require("./lib/mt.js")
 const { ind } =require("./language")
 const { eng } = require("./language")
@@ -890,6 +891,18 @@ case 'adress'
     console.log(groupMetadata)
     break
 
+    case 'remini': 
+    case 'tohd':
+  if (!/image/.test(mime)) return reply('gunakan foto!')
+  if (!/image\/(jpe?g|png)/.test(mime)) return reply('Format gambar tidak didukung!')
+    if (/image/.test(mime)) {
+      proses("⏳")
+      let media = await client.downloadMediaMessage(qms)
+      let encmedia = await processing(media, 'enhance')
+      client.sendImage(from, encmedia, 'Done!', mek)
+      proses("✔")
+    }
+    break
 
   case 'sticker': case 's': case 'stickergif': case 'sgif': 
     try {
@@ -999,6 +1012,7 @@ proses("✔")
   console.log(err);
 }
 break
+
 
 /*case 'tovid':
 if (!isQuotedSticker) return reply('𝗥𝗲𝗽𝗹𝘆/𝘁𝗮𝗴 𝘀𝘁𝗶𝗰𝗸𝗲𝗿 !')

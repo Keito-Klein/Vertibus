@@ -32,6 +32,7 @@ return `
  │•${prefix}sticker
  │•${prefix}smeme
  │•${prefix}toimg
+ │•${prefix}remini
  │•${prefix}tovideo
  │•${prefix}fb
  │•${prefix}ig
@@ -118,6 +119,12 @@ exports.changelog = () => {
 - *Fix tovideo (url status code 429: too many request)*
 - *Fix packname & author animated sticker*
 - *Extend animated sticker duration*
+
+===== *26 - 02 - 2024* =====
+- Update quest Valentine
+
+===== *29 - 02 - 2024* =====
+- *Add remini at list*
 `
 }
 
