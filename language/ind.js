@@ -43,12 +43,15 @@ return `
 ❏ *Other Menu*
  │•${prefix}menu
  │•${prefix}wallpaper
+ │•${prefix}pixiv
  │•${prefix}bahasa
  │•${prefix}changelog
  │•${prefix}status
  │•${prefix}ocr
+ │•${prefix}anime
  │•${prefix}neko
  │•${prefix}loli
+ │•${prefix}milf
  │•${prefix}hidetag
  │•${prefix}translate
  │•${prefix}promote
@@ -125,6 +128,11 @@ exports.changelog = () => {
 
 ===== *29 - 02 - 2024* =====
 - *Add remini at list*
+
+===== *10 - 03 - 2024* =====
+- *Add anime at list*
+- *Add milf at list*
+- *Add pixiv at list*
 `
 }
 
@@ -938,6 +946,7 @@ exports.format = (prefix, command) => {
     case 'ig':
     case 'tiktok':
         case 'fb': 
+        case 'pixiv':
   			return `mohon masukan query!!\nContoh: ${prefix + command} masukan query disini`
   		break;
 

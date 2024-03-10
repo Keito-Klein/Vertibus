@@ -39,6 +39,7 @@
     "http": "0.0.1-security",
     "human-readable": "^0.2.1",
     "imgbb-uploader": "^1.5.0",
+    "jimp": "^0.16.13",
     "jsdom": "^22.1.0",
     "lodash": "^4.17.21",
     "lolis.life": "^4.0.0",

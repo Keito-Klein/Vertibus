@@ -553,14 +553,73 @@ module.exports = sansekai = async (client, m, chatUpdate, store) => {
 
           
 
-        case 'loli':
+        case 'anime':
+          try {
+          proses("⏳")
           url = 'https://loli-api.glitch.me/api/v1/twintails'
           response = await axios.get(url)
           res = await fetch(response.data.url)
           data = await res.buffer()
           client.sendImage(from, data, " ", mek)
+          proses("✔")
+        } catch(err) {
+          proses("❌")
+          console.log(err)
+        }
           break
           
+
+          case 'loli':
+          case 'milf':
+            try{
+              proses("⏳")
+                res = await axios({
+                  method: 'get',
+                  url: `https://api.lolicon.app/setu/v2?tag=${command == 'loli' ? '萝莉' : 'milf'}&r18=${text == 'nsfw' ? '1' : '0'}`,
+                  headers: {
+                    'DNT': 1,
+                    'Upgrade-Insecure-Request': 1
+                  },
+                  responseType: 'json'
+                })
+                teks = `*Detail:*\n- Title: ${res.data.data[0].title}\n- Author: ${res.data.data[0].author}\nTags:`
+                for (let i = 0; i < res.data.data[0].tags.length; i++) {
+                  teks += `\n- ${i+1}. ${res.data.data[0].tags[i]}`
+                }
+                client.sendImage(from, res.data.data[0].urls.original, teks, mek)
+                proses("✔")
+            } catch(err) {
+              proses("❌")
+              console.log(err)
+            }
+            break
+
+          case 'pixiv':
+            if(!text) return reply(lang.format(prefix, command))
+              try{
+              proses("⏳")
+                res = await axios({
+                  method: 'get',
+                  url: `https://api.lolicon.app/setu/v2?keyword=${encodeURIComponent(text)}`,
+                  headers: {
+                    'DNT': 1,
+                    'Upgrade-Insecure-Request': 1
+                  },
+                  responseType: 'json'
+                })
+                if(res.data.error) return proses("❌")
+                if(res.data.data.length === 0) return reply('Not Found!')
+                teks = `*Detail:*\n- Title: ${res.data.data[0].title}\n- Author: ${res.data.data[0].author}\nTags:`
+                for (let i = 0; i < res.data.data[0].tags.length; i++) {
+                  teks += `\n- ${i+1}. ${res.data.data[0].tags[i]}`
+                }
+                client.sendImage(from, res.data.data[0].urls.original, teks, mek)
+                proses("✔")
+            } catch(err) {
+              proses("❌")
+              console.log(err)
+            }
+            break
 
 
         case 'watk':
@@ -880,7 +939,7 @@ case 'address':
 case 'code':
 case 'adres':
 case 'addres':
-case 'adress'
+case 'adress':
   if(!isMyGuild) return reply(lang.onGuild())
     reply(lang.buff(q))
   break
@@ -1034,22 +1093,6 @@ proses("✔")
 }
   break*/
 
-
-case 'replicate': 
-  const replicate = new Replicate({
-    auth: "r8_FhOAQ6ruFNaZaoDMJfuYDyXJXfWyS560gkxX0"
-  })
-
-  const output = await replicate.run(
-  "xinntao/realesrgan:1b976a4d456ed9e4d1a846597b7614e79eadad3032e9124fa63859db0fd59b56",
-  {
-    input: {
-      img: "https://example.com/path/to/file/img"
-    }
-  }
-);
-console.log(output);
-  break
 
   case 'togif':
   if (!isQuotedSticker) return reply('𝗥𝗲𝗽𝗹𝘆/𝘁𝗮𝗴 𝘀𝘁𝗶𝗰𝗸𝗲𝗿 !')
