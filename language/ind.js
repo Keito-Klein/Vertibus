@@ -44,6 +44,7 @@ return `
  │•${prefix}menu
  │•${prefix}wallpaper
  │•${prefix}pixiv
+ │•${prefix}pinterest
  │•${prefix}bahasa
  │•${prefix}changelog
  │•${prefix}status
@@ -133,6 +134,9 @@ exports.changelog = () => {
 - *Add anime at list*
 - *Add milf at list*
 - *Add pixiv at list*
+
+===== *11 - 03 - 2024* =====
+- *Add pinterest at list*
 `
 }
 
@@ -947,6 +951,7 @@ exports.format = (prefix, command) => {
     case 'tiktok':
         case 'fb': 
         case 'pixiv':
+        case 'pinterest':
   			return `mohon masukan query!!\nContoh: ${prefix + command} masukan query disini`
   		break;
 
