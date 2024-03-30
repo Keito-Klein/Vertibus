@@ -24,7 +24,7 @@ const { mt } = require("./lib/mt.js")
 const { ind } =require("./language")
 const { eng } = require("./language")
 const { bug } = require('./lib/bug')
-const { igDownloader, tiktok, fb } = require("./lib/downloader")
+const { igDownloader, tiktok, fb, pinterest } = require("./lib/downloader")
 
 
 var ipackName = false//Don't fill. sett packName on setting.js
@@ -522,34 +522,34 @@ module.exports = sansekai = async (client, m, chatUpdate, store) => {
     }
 
     if (isCmd2) {
-      switch (command) {
-        case "help":
-        case "menu":
-          m.reply(lang.menu(prefix))
-          break;
+    switch (command) {
+case "help":
+case "menu":
+  m.reply(lang.menu(prefix))
+break;
 
         
 
-        case 'neko' :
-          try {
-            proses('⏳')
-          cons = new neko_modules()
-          neko = await cons.neko()
-          url = neko.url
-          client.sendImage(from, url, " ", mek)
-          proses("✔")
-        } catch(err) {
-          proses("❌")
-        }
+case 'neko' :
+  try {
+    proses('⏳')
+    cons = new neko_modules()
+    neko = await cons.neko()
+    url = neko.url
+    client.sendImage(from, url, " ", mek)
+    proses("✔")
+  } catch(err) {
+    proses("❌")
+    }
           
-          break
+break
 
-        case 'wallpaper': 
-          cons = new neko_modules()
-          neko = await cons.wallpaper()
-          url = neko.url
-          client.sendImage(from, url, '', mek)
-          break
+case 'wallpaper': 
+  cons = new neko_modules()
+  neko = await cons.wallpaper()
+  url = neko.url
+  client.sendImage(from, url, '', mek)
+break
 
           
 
@@ -619,6 +619,20 @@ module.exports = sansekai = async (client, m, chatUpdate, store) => {
               proses("❌")
               console.log(err)
             }
+            break
+
+          case 'pinterest':
+            if(!text) return reply(lang.format(prefix,command))
+              try{
+                proses("⏳")
+                fetcher = await pinterest(encodeURIComponent(text))
+                res = fetcher[Math.round(Math.random() * fetcher.length)]
+                client.sendImage(from, res, text, mek)
+                proses("✔")
+              } catch(err) {
+                proses("❌")
+                console.log(err)
+              }
             break
 
 
@@ -1396,11 +1410,20 @@ break
 break
 
 case 'ytmp3':
-       yta = require('./lib/ytdl')
+    try {
       if (!text) return m.reply(`Example : ${prefix + command} https://youtube.com/watch?v=PtFMh6Tccag%2`)
+        proses("⏳")
+       yta = require('./lib/ytdl')
       file = await yta.mp3(text)
+      teks = `*Detail:*\n- *Title:* ${file.meta.title}\n- *Channel:* ${file.meta.channel}\n- *Duration:* ${file.meta.seconds}\n- *Size:* ${file.size / 1000000} MB`
+      img = file.meta.image
+      await client.sendImage(from, img, teks, mek)
       await client.sendMessage(from,{ audio: fs.readFileSync(file.path), mimetype: 'audio/mp4', ptt: true }, mek)
 await fs.unlinkSync(file.path)
+  proses("✔")
+} catch (err) {
+  proses("❌")
+}
 break
 case 'ytmp4':
        yta = require('./lib/ytdl')
@@ -1516,7 +1539,7 @@ break
       }
     }
     if(budy.startsWith('>')) {
-            //if(!isGroupAdmins) return reply(lang.onAdmin())
+            if(!isOwner) return
             try {
               console.log("[eval] " + body)
               let evaled = await eval(budy.slice(2))
@@ -1527,6 +1550,7 @@ break
             }
           }
     if(budy.startsWith('=>')) {
+      if(!isOwner) return
       function Return(variable) {
         ins = JSON.stringify(variable, null, 2)
         proc = util.format(ins)

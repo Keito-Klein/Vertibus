@@ -137,6 +137,9 @@ exports.changelog = () => {
 
 ===== *11 - 03 - 2024* =====
 - *Add pinterest at list*
+
+===== *25 - 03 - 2024* =====
+- Upgrade Server Specifications
 `
 }
 
