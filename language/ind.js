@@ -140,6 +140,9 @@ exports.changelog = () => {
 
 ===== *25 - 03 - 2024* =====
 - Upgrade Server Specifications
+
+===== *25 - 03 - 2024* =====
+- fix Animated sticker Converter
 `
 }
 

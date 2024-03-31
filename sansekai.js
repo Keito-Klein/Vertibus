@@ -1458,6 +1458,10 @@ case 'fbdl':
   try {
     proses("⏳")
   link = await fb(text)
+   if (link == undefined) {
+          proses("❌")
+          return reply("Can't download video from profile, use link from public pages or group instead.")
+      }
   client.sendVideo(from, link, ' ', mek)
   proses("✔")
       } catch(err) {
