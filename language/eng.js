@@ -141,6 +141,16 @@ exports.changelog = () => {
 
 ===== *25 - 03 - 2024* =====
 - fix Animated sticker Converter
+
+===== *08 - 04 - 2024* =====
+- Add Update broadcaster
+`
+}
+
+exports.update = (pushname) => {
+return `
+*New Update V. 1.0.32a*
+Hi ${pushname}, from i'll send you about new update from us via once message since a first command.\ntype !changelog to see all update!
 `
 }
 
@@ -1742,3 +1752,7 @@ break
 
 	}
 } 
+
+exports.bag = () => {
+	return`Comming Soon!`
+}

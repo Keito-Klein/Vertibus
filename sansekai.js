@@ -35,9 +35,16 @@ const guild = JSON.parse(fs.readFileSync('./db/guild.json'));
 const inRaid = JSON.parse(fs.readFileSync("./lib/guild.json"));
 const welkom = JSON.parse(fs.readFileSync('./db/welcome.json'));
 const usage = JSON.parse(fs.readFileSync("./db/usage.json"))
+const register = JSON.parse(fs.readFileSync("./db/register.json"))
 
 /*Change Your Language Here!*/
 lang = ind
+
+//Regist Function
+const addUser = (id) => {
+  register.push(id)
+  fs.writeFileSync('./db/register.json' , JSON.stringify(register));
+}
 
 //Buff Function
 //OK
@@ -387,6 +394,8 @@ module.exports = sansekai = async (client, m, chatUpdate, store) => {
       return reply("Bot is Under Maintenance! 🛠")
     }
 
+
+
     //Proccess
     const proses = (reaction) => {
        const reactions = {
@@ -423,10 +432,18 @@ module.exports = sansekai = async (client, m, chatUpdate, store) => {
     let argsLog = budy.length > 30 ? `${q.substring(0, 30)}...` : budy;
 
     if (isCmd2 && !m.isGroup) {
+      if (!register.includes(sender)) {
+        reply(lang.update(pushname))
+        addUser(sender)
+      }
       usage.usage_private++
       fs.writeFileSync("./db/usage.json", JSON.stringify(usage));
       console.log(chalk.black(chalk.bgWhite("[ LOGS ]")), color(argsLog, "turquoise"), chalk.magenta("From"), chalk.green(pushname), chalk.yellow(`[ ${m.sender.replace("@s.whatsapp.net", "")} ]`));
     } else if (isCmd2 && m.isGroup) {
+      if (!register.includes(groupMetadata.id)) {
+        reply(lang.update(pushname))
+        addUser(groupMetadata.id)
+      }
       usage.usage_group++
       fs.writeFileSync("./db/usage.json", JSON.stringify(usage));
       console.log(
@@ -695,6 +712,12 @@ case 'panah':
   client.sendText(from, arrow, mek)
 break
 
+case 'tas':
+case 'bag':
+  tas = await lang.bag()
+  client.sendText(from, tas, mek)
+break
+
 case 'ailment':
   ail = await lang.ailment();
   client.sendText(from, ail, mek)
@@ -896,7 +919,11 @@ case 'adress':
     }
     break
 
-  case 'sticker': case 's': case 'stickergif': case 'sgif': 
+  case 'sticker':
+  case 's':
+  case 'stickergif':
+  case 'sgif': 
+  case 'stiker':
     try {
      if(q.split('|')[0]) {
       ipackName = q.split('|')[0]
