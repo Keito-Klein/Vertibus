@@ -1045,11 +1045,9 @@ exports.head = (command, text = '') => {
 exports.quest = (command, text = '') => {
 	switch(command) {
 	case 'valentine':
-		return `Berikut ini list quest ${command} yang saya ketahui:\n\n`
-	break;
-
 	case 'summer':
 	case 'sumer':
+	case 'hanami'
 		return `Berikut ini list quest ${command} yang saya ketahui:\n\n`
 	break;
 
