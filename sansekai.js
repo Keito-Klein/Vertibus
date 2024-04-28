@@ -42,7 +42,18 @@ lang = ind
 
 //Regist Function
 const addUser = (id) => {
-  register.push(id)
+  let userIndex = register.findIndex(user => user.id === id);
+  if (userIndex === -1) {
+    const ovj = {
+      id,
+      latest: true
+    }
+    register.push(ovj)
+  } else {
+    if (!register[userIndex].latest) {
+      register[userIndex].latest = true
+    }
+  }
   fs.writeFileSync('./db/register.json' , JSON.stringify(register));
 }
 
@@ -432,18 +443,12 @@ module.exports = sansekai = async (client, m, chatUpdate, store) => {
     let argsLog = budy.length > 30 ? `${q.substring(0, 30)}...` : budy;
 
     if (isCmd2 && !m.isGroup) {
-      if (!register.includes(sender)) {
-        reply(lang.update(pushname))
-        addUser(sender)
-      }
+      addUser(sender)
       usage.usage_private++
       fs.writeFileSync("./db/usage.json", JSON.stringify(usage));
       console.log(chalk.black(chalk.bgWhite("[ LOGS ]")), color(argsLog, "turquoise"), chalk.magenta("From"), chalk.green(pushname), chalk.yellow(`[ ${m.sender.replace("@s.whatsapp.net", "")} ]`));
     } else if (isCmd2 && m.isGroup) {
-      if (!register.includes(groupMetadata.id)) {
-        reply(lang.update(pushname))
-        addUser(groupMetadata.id)
-      }
+      addUser(groupMetadata.id)
       usage.usage_group++
       fs.writeFileSync("./db/usage.json", JSON.stringify(usage));
       console.log(
@@ -621,7 +626,7 @@ break
             if( isNaN(bexp)) return m.reply(lang.format(prefix, command))
               proses("⏳")
         
-    axios.get(`https://toram-id.info/leveling?level=${lvl}&bonusexp=${bexp}&range=5`)
+    axios.get(`https://toram-id.com/leveling?level=${lvl}&bonusexp=${bexp}&range=5`)
   .then((response) => {
     if (response.status === 200) {
       const html = response.data;
