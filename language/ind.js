@@ -1,4 +1,5 @@
 const moment = require('moment-timezone');
+const fs = require('fs');
 
 date = moment().tz('Asia/Tokyo').format('dddd')
 //dayName = date.toLocaleDateString("in-ID", {weekday: 'long'})
@@ -864,39 +865,102 @@ exports.raid = () => {
 Malam ini akan di adakan Raid Rutin malam Minggu Jam 19.30 WIB Member dan Pengurus Guild mohon tepat waktu agar waktu tidak molor.`
 }
 
-exports.eventguild = () => {
-  return `
-*Announcement*
+exports.bs = () => {
+	const db = JSON.parse(fs.readFileSync("./db/guide-data/bs-ind.json"));
+		return `
+*List Leveling BlackSmith*
 
-Halo para member guild tercinta sebentar lagi guild kita akan mengadakan event collab bersama guild aliansi Shinra Tensei & Log Horizon yang akan diadakan pada tanggal 4 juni jam 7.30 malam.
+*0 - 5*
+*Craft:* ${db.five.craft} 
+*Bahan:*
+${db.five.mats}
+*Location:*
+${db.five.location}
+*Mob:* 
+${db.five.mob}
 
-Tempat : Einklang (tempat awal masuk), inter 3
+*5 - 10*
+*Craft:* ${db.ten.craft}
+*Bahan:*
+${db.ten.mats}
+*Location:*
+${db.ten.location}
+*Mob:* 
+${db.ten.mob}
 
-Event kali ini adalah cosplay yang bertemakan isekai/petualangan, jadi kalian bisa berkreasi sepuasnya sesuai dengan tema yang ada mau itu karakter game,anime dan sebagainya.
+*10 - 50*
+*Craft:* ${db.fifty.craft}
+*Bahan:*
+${db.fifty.mats}
+*Location:*
+${db.fifty.location}
+*Mob:* 
+${db.fifty.mob}
 
- *Berikut rulesnya*
+*50 - 90*
+*Craft:* ${db.ninety.craft}
+*Bahan:*
+${db.ninety.mats}
+*Location:*
+${db.ninety.location}
+*Mob:* 
+${db.ninety.mob}
 
- *1* . Tidak boleh memakai lebih dari 1 ava/kostume
+*90 - 120*
+*Craft:* ${db.one_hundred_twenty.craft}
+*Bahan:*
+${db.one_hundred_twenty.mats}
+*Location:*
+${db.one_hundred_twenty.location}
+*Mob:* 
+${db.one_hundred_twenty.mob}
 
-*2* . Dilarang chat teriak selain juri
+*120 - 140*
+*Craft:* ${db.one_hundred_fourty.craft}
+*Bahan:*
+${db.one_hundred_fourty.mats}
+*Location:*
+${db.one_hundred_fourty.location}
+*Mob:* 
+${db.one_hundred_fourty.mob}
 
-*3* . Wajib menggunakan pesan mood sesuai dengan karakter/tema yang sedang di cosplay
+*140 - 170*
+*Craft:* ${db.one_hundred_seventy.craft}
+*Bahan:*
+${db.one_hundred_seventy.mats}
+*Location:*
+${db.one_hundred_seventy.location}
+*Mob:* 
+${db.one_hundred_seventy.mob}
 
- *Note : keputusan juri mutlak* 
+*170 - 200*
+*Craft:* ${db.two_hundred.craft}
+*Bahan:*
+${db.two_hundred.mats}
+*Location:*
+${db.two_hundred.location}
+*Mob:* 
+${db.two_hundred.mob}
 
-Berikut hadiah bagi yang juara :
- *1* .  *20m spina* 
- *2* .  *10m spina* 
- *3* .  *6m spina*  
+*200 - 250*
+*Craft:* ${db.two_hundred_fifty.craft}
+*Bahan:*
+${db.two_hundred_fifty.mats}
+*Location:*
+${db.two_hundred_fifty.location}
+*Mob:* 
+${db.two_hundred_fifty.mob}
 
-*Juara harapan 1-3 dapat 1m*
-
- yg ikutan tapi tidak juara dpt hadiah partisipasi juga loh.
-
-
-Terimakasih .`
+*250 - 260*
+*Craft:* ${db.two_hundred_sixty.craft}
+*Bahan:*
+${db.two_hundred_sixty.mats}
+*Location:*
+${db.two_hundred_sixty.location}
+*Mob:* 
+${db.two_hundred_sixty.mob}
+`
 }
-
 exports.donate = () => {
   return `
 💰 *Bantu donasi di :*

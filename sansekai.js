@@ -619,6 +619,7 @@ break
          lvl = q.split('|')[0]
          bexp = q.split('|')[1]
          if (!lvl) return m.reply(lang.format(prefix, command))
+          if (q.toLowerCase() == 'bs') return reply(lang.bs())
            if (!bexp) {
             bexp = '0'
            }
@@ -661,7 +662,7 @@ case 'monster':
   if(!text) return reply(lang.format(prefix,command))
     proses("⏳")
 
-  axios.get(`https://coryn.club/monster.php?name=${text}#`)
+  axios.get(`https://coryn.club/monster.php?name=${text}`)
  .then((response) => {
     if(response.status === 200) {
         const html = response.data;
@@ -693,6 +694,12 @@ case 'monster':
     proses('❌')
     m.reply(lang.eror())
   }
+  break
+
+case 'bs':
+case 'blacksmith':
+  db = await lang.bs()
+  reply(db)
   break
 
 case 'food': 
