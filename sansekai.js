@@ -34,8 +34,9 @@ var iauthor = false//Don't fill. sett author on setting.js
 const guild = JSON.parse(fs.readFileSync('./db/guild.json'));
 const inRaid = JSON.parse(fs.readFileSync("./lib/guild.json"));
 const welkom = JSON.parse(fs.readFileSync('./db/welcome.json'));
-const usage = JSON.parse(fs.readFileSync("./db/usage.json"))
-const register = JSON.parse(fs.readFileSync("./db/register.json"))
+const usage = JSON.parse(fs.readFileSync("./db/usage.json"));
+const register = JSON.parse(fs.readFileSync("./db/register.json"));
+const akronim = JSON.parse(fs.readFileSync("./db/guide-data/akronim.json"));
 
 /*Change Your Language Here!*/
 lang = ind
@@ -56,6 +57,17 @@ const addUser = (id) => {
   }
   fs.writeFileSync('./db/register.json' , JSON.stringify(register));
 }
+
+//Akronim Function
+const acronime = (query) => {
+  let position = false
+  Object.keys(akronim).forEach((i) => {
+                if (akronim[i].akronim === query.toLowerCase()) {
+                    position = akronim[i].mean
+                }
+            })
+            return position
+        }
 
 //Buff Function
 //OK
@@ -653,6 +665,25 @@ break
       m.reply(lang.eror(err))
     }
   break;
+
+  case "istilah":
+  case "singkatan":
+  case "akronim":
+    if (q) {
+      mean = acronime(q)
+      if (mean !== false) {
+        client.sendMessage(from, mean, mek)
+      } else if (!mean) {
+        reply(`acronym not available, pm owner for added it`)
+      }
+    } else {
+      db = `*Berikut istilah-istilah dalam Toram Online:*\n\n`
+      Object.keys(akronim).forEach((i) => {
+        db += `*Istilah:* ${akronim[i].akronim}\n*Arti:* ${akronim[i].mean}\n\n` 
+      })
+      client.sendMessage(from, db, mek)
+    }
+    break
 
   case 'mobs':
 case 'boss':

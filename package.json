@@ -1,12 +1,12 @@
 {
-  "name": "Vertibus",
+  "name": "vertibus",
   "version": "1.4.5",
   "description": "WhatsApp Bot with Toram Online DB",
   "main": "index.js",
   "type": "commonjs",
   "scripts": {
     "start": "node index.js",
-    "test": "npm i youtubedl-core@4.11.5 && npm i ytdl-core@4.11.5 && npm i youtube-yts@2.0.0 && npm i yt-search@2.10.4 && npm i node-youtube-music@0.8.3"
+    "test": ""
   },
   "keywords": [
     "termux",
@@ -74,10 +74,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Keito-Klein/t-bot.git"
+    "url": "git+https://github.com/Keito-Klein/vertibus.git"
   },
   "bugs": {
-    "url": "https://github.com/Keito-Klein/t-bot/issues"
+    "url": "https://github.com/Keito-Klein/vertibust/issues"
   },
-  "homepage": "https://github.com/Keito-Klein/t-bot#readme"
+  "homepage": "https://github.com/Keito-Klein/vertibus#readme"
 }

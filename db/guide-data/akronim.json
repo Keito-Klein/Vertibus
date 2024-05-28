@@ -1,0 +1,90 @@
+[
+        {
+            "akronim" : "a",
+            "mean" : "ATK"
+        }, {
+            "akronim" : "atk",
+            "mean" : "Attack"
+        }, {
+            "akronim" : "app",
+            "mean" : "Appearance"
+        }, {
+            "akronim" : "arm",
+            "mean" : "Armor"
+        }, {
+            "akronim" : "b",
+            "mean" : "Buy"
+        }, {
+            "akronim" : "cd",
+            "mean" : "Critical Damage"
+        }, {
+            "akronim" : "cr",
+            "mean" : "Critical Rate"
+        }, {
+            "akronim" : "dps",
+            "mean" : "Damage per Second"
+        }, {
+            "akronim" : "dte",
+            "mean" : "Damage to Element"
+        }, {
+            "akronim" : "fb",
+            "mean" : "Full Break"
+        }, {
+            "akronim" : "fk",
+            "mean" : "Fast Kill"
+        }, {
+            "akronim" : "hb",
+            "mean" : "Halberd"
+        }, {
+            "akronim" : "kmd",
+            "mean" : "Knuckle Magic Device"
+        }, {
+            "akronim" : "knk",
+            "mean" : "Knuckle"
+        }, {
+            "akronim" : "lfp",
+            "mean" : "Looking For Party"
+        }, {
+            "akronim" : "matk",
+            "mean" : "Magic Attack"
+        }, {
+            "akronim" : "mk",
+            "mean" : "Max Key"
+        }, {
+            "akronim" : "mpw",
+            "mean" : "Mischievous Pocket Watch"
+        }, {
+            "akronim" : "ohs",
+            "mean" : "One Handed Sword"
+        }, {
+            "akronim" : "pcr",
+            "mean" : "Piercer/Proto Clarity Rose"
+        }, {
+            "akronim" : "pp",
+            "mean" : "Physical Pierce"
+        }, {
+            "akronim" : "rgm",
+            "mean" : "Recruiting Guild Member"
+        }, {
+            "akronim" : "s",
+            "mean" : "Sell"
+        }, {
+            "akronim" : "sh",
+            "mean" : "Soul Hunter"
+        }, {
+            "akronim" : "ss",
+            "mean" : "Summer Shell"
+        }, {
+            "akronim" : "ths",
+            "mean" : "Two Handed Sword"
+        }, {
+            "akronim" : "thunt",
+            "mean" : "Treasure Hunt"
+        }, {
+            "akronim" : "ucb",
+            "mean" : "Under Consigment Board"
+        }, {
+            "akronim" : "vgm",
+            "mean" : "Vice Guild Master"
+        }
+]
