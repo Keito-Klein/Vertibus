@@ -151,13 +151,22 @@ exports.changelog = () => {
 
 ===== *10 - 04 - 2024* =====
 - Add Bag expansion at List
+
+===== *12 - 05 - 2024* =====
+- Add Leveling BlackSmith
+
+===== *21 - 05 - 2024* =====
+- Fix connection denied by WhatsApp
+
+===== *28 - 05 - 2024* =====
+- Add !acronym at list
 `
 }
 
 exports.update = (pushname) => {
 return `
-*New Update V. 1.42.32b*
-Hi ${pushname}. Jika kamu player Toram Online, Kami telah menambahkan fitur *!tas* untuk melihat list/guide perluas/expansi tas pada Toram Online!\n\n*fitur ini hanya tersedia dalam bahasa Indonesia, untuk bahasa Inggris akan segera dibuat.
+*New Update V. 2.43.33a*
+Hi ${pushname}. Jika kamu player Toram Online, Kami telah menambahkan fitur *!istilah* untuk melihat list singkatan yang ada pada Toram Online!\n\njika istilah yang anda cari tidak ada, silahkan pm owner untuk menambahkan.
 `
 }
 

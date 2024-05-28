@@ -144,13 +144,19 @@ exports.changelog = () => {
 
 ===== *08 - 04 - 2024* =====
 - Add Update broadcaster
+
+===== *21 - 05 - 2024* =====
+- fix closed conection to whatsapp
+
+===== *28 - 05 - 2024* =====
+- Add !acronym at list
 `
 }
 
 exports.update = (pushname) => {
 return `
-*New Update V. 1.0.32a*
-Hi ${pushname}, from i'll send you about new update from us via once message since a first command.\ntype !changelog to see all update!
+*New Update V. 2.43.33a*
+Hi ${pushname}, if you're Toram Online Player, we've been add *!acronym* to see every acronym on Toram Online!\n\nIf acronym you've search isn't available, please pm owner to added it.
 `
 }
 

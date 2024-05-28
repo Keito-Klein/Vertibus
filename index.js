@@ -174,6 +174,7 @@ async function startHisoka() {
   );
   const msgRetryCounterCache = new NodeCache() // for retry message, "waiting message"
   const client = sansekaiConnect({
+    version: [2, 2413, 1],
     logger: pino({ level: "silent" }),
     printQRInTerminal: !pairingCode,
     mobile: useMobile, // mobile api (prone to bans)

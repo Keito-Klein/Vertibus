@@ -669,6 +669,7 @@ break
   case "istilah":
   case "singkatan":
   case "akronim":
+  case 'acronym':
     if (q) {
       mean = acronime(q)
       if (mean !== false) {
