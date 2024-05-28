@@ -672,7 +672,7 @@ break
     if (q) {
       mean = acronime(q)
       if (mean !== false) {
-        client.sendMessage(from, mean, mek)
+        client.sendText(from, mean, mek)
       } else if (!mean) {
         reply(`acronym not available, pm owner for added it`)
       }
@@ -681,7 +681,7 @@ break
       Object.keys(akronim).forEach((i) => {
         db += `*Istilah:* ${akronim[i].akronim}\n*Arti:* ${akronim[i].mean}\n\n` 
       })
-      client.sendMessage(from, db, mek)
+      client.sendText(from, db, mek)
     }
     break
 
