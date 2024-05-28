@@ -455,12 +455,26 @@ module.exports = sansekai = async (client, m, chatUpdate, store) => {
     let argsLog = budy.length > 30 ? `${q.substring(0, 30)}...` : budy;
 
     if (isCmd2 && !m.isGroup) {
-      addUser(sender)
+      let userIndex = register.findIndex(user => user.id === sender);
+      if (userIndex == -1) {
+          reply(lang.update(pushname))
+          addUser(sender)
+      } else if (!register[userIndex].latest) {
+        reply(lang.update(pushname))
+        addUser(sender)
+      }
       usage.usage_private++
       fs.writeFileSync("./db/usage.json", JSON.stringify(usage));
       console.log(chalk.black(chalk.bgWhite("[ LOGS ]")), color(argsLog, "turquoise"), chalk.magenta("From"), chalk.green(pushname), chalk.yellow(`[ ${m.sender.replace("@s.whatsapp.net", "")} ]`));
     } else if (isCmd2 && m.isGroup) {
-      addUser(groupMetadata.id)
+      let userIndex = register.findIndex(user => user.id === groupMetadata.id);
+      if (userIndex == -1) {
+          reply(lang.update(pushname))
+          addUser(groupMetadata.id)
+      } else if (!register[userIndex].latest) {
+        reply(lang.update(pushname))
+        addUser(groupMetadata.id)
+      }
       usage.usage_group++
       fs.writeFileSync("./db/usage.json", JSON.stringify(usage));
       console.log(
@@ -1510,6 +1524,16 @@ case 'report':
   client.sendText(global.owner + '@s.whatsapp.net', `*Report error*\nFrom: wa.me/${sender.split('@')[0]}\nError: ${q}`)
   reply(lang.success())
 break
+
+case 'reset':
+  if(!isOwner) return
+  proses("⌛")
+  Object.keys(register).forEach((i) => {
+    register[i].latest = false
+  })
+  proses("✔")
+  reply("success!")
+  break
 
 
 
