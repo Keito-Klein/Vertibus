@@ -1531,6 +1531,7 @@ case 'reset':
   Object.keys(register).forEach((i) => {
     register[i].latest = false
   })
+  fs.writeFileSync('./db/register.json', JSON.stringify(register))
   proses("✔")
   reply("success!")
   break
