@@ -12,10 +12,12 @@ return `
 
 ❏ *Toram Online DB*
  │•${prefix}maintenance
+ │•${prefix}blacksmith
  │•${prefix}leveling
  │•${prefix}farming
  │•${prefix}ailment
  │•${prefix}address
+ │•${prefix}acronym
  │•${prefix}event
  │•${prefix}panah
  │•${prefix}boss
@@ -24,6 +26,7 @@ return `
  │•${prefix}cdmg
  │•${prefix}food
  │•${prefix}mobs
+ │•${prefix}bag
  ╰•${prefix}mq
 
  ❏ *Media Menu*
@@ -39,6 +42,7 @@ return `
  ╰•${prefix}ytmp4
  
 ❏ *Other Menu*
+ │•${prefix}owner
  │•${prefix}menu
  │•${prefix}wallpaper
  │•${prefix}pixiv
@@ -150,13 +154,19 @@ exports.changelog = () => {
 
 ===== *28 - 05 - 2024* =====
 - Add !acronym at list
+
+===== *01 - 06 - 2024* =====
+- Add !owner at list
+- Change resolution of sticker(auto)
 `
 }
 
 exports.update = (pushname) => {
 return `
-*New Update V. 2.43.33a*
-Hi ${pushname}, if you're Toram Online Player, we've been add *!acronym* to see every acronym on Toram Online!\n\nIf acronym you've search isn't available, please pm owner to added it.
+*New Update V. 2.4.33a*
+Hi ${pushname}, we have added *!owner* because many users PM/asking to the bot number. Please note, that the owner wil not reply/read private chatss via bot, if there is an error/ask something please chat to the owner provided🙏
+
+we have also changed the resolution of the sticker to the native resolution of the image.
 `
 }
 

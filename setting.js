@@ -1,5 +1,5 @@
 /* --Your Setting-- */
-global.owner = ["6283831853737"];
+global.owner = ["6283831853737", "62895329820760"];
 global.botName = "Vertibus";
 global.ownerName = "MiKako";
 global.donet = "https://saweria.co/mikako";
@@ -9,6 +9,10 @@ global.author = 'Vertibus';
 global.guild = ['6289675651966-1611471388@g.us', '120363023056066862@g.us']
 global.reminder = true
 global.raid = false
+
+/*SosMed*/
+global.facebook = 'https://facebook.com/taufik.qillah.73'
+global.instagram = 'https://instagram.com/fritz_icarius'
 
 /*ApiKey*/
 global.ocr = "816e2ac3f588957";

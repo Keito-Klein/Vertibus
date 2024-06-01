@@ -1314,6 +1314,17 @@ ${cpus.map((cpu, i) => `${i + 1}. ${cpu.model.trim()} (${cpu.speed} MHZ)\n${Obje
 
              break
 
+case 'owner':
+sosmed = `
+*Owner Contact*
+
+*WhatsApp:* wa.me/${global.owner[0]}
+*Facebook:* ${global.facebook}
+*Instagram:* ${global.instagram}
+`
+reply(sosmed)
+break
+
 case 'y' : 
   try {
 if (!ppl.includes(sender.split('@')[0])) return reply(lang.format(prefix, command))

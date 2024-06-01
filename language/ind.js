@@ -15,10 +15,12 @@ return `
 
 ❏ *Toram Online DB*
  │•${prefix}maintenance
+ │•${prefix}blacksmith
  │•${prefix}leveling
  │•${prefix}farming
  │•${prefix}ailment
  │•${prefix}address
+ │•${prefix}istilah
  │•${prefix}event
  │•${prefix}panah
  │•${prefix}boss
@@ -43,6 +45,7 @@ return `
  ╰•${prefix}ytmp4
  
 ❏ *Other Menu*
+ │•${prefix}owner
  │•${prefix}menu
  │•${prefix}wallpaper
  │•${prefix}pixiv
@@ -160,13 +163,19 @@ exports.changelog = () => {
 
 ===== *28 - 05 - 2024* =====
 - Add !acronym at list
+
+===== *01 - 06 - 2024* =====
+- Add !owner at list
+- Change resolution of sticker(auto)
 `
 }
 
 exports.update = (pushname) => {
 return `
-*New Update V. 2.43.33a*
-Hi ${pushname}. Jika kamu player Toram Online, Kami telah menambahkan fitur *!istilah* untuk melihat list singkatan yang ada pada Toram Online!\n\njika istilah yang anda cari tidak ada, silahkan pm owner untuk menambahkan.
+*New Update V. 2.4.33a*
+Hi ${pushname}. Kami telah menambahkan command *!owner* karena banyak pengguna yang PM/tanya tanya ke nomor bot. Perlu diketahui, bahwa owner tidak akan membalas/membaca chat pribadi melalui bot, jika ada error/tanya sesuatu mohon chat ke kontak owner yang telah disediakan🙏
+
+kami juga telah mengubah resolusi stiker menjadi resolusi asli dari gambar.
 `
 }
 

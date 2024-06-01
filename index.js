@@ -66,13 +66,20 @@ function smsg(conn, m, store) {
     m.mtype = getContentType(m.message);
     m.msg = m.mtype == "viewOnceMessage" ? m.message[m.mtype].message[getContentType(m.message[m.mtype].message)] : m.message[m.mtype];
     m.body =
-      m.message.conversation ||
-      m.msg.caption ||
-      m.msg.text ||
-      (m.mtype == "listResponseMessage" && m.msg.singleSelectReply.selectedRowId) ||
-      (m.mtype == "buttonsResponseMessage" && m.msg.selectedButtonId) ||
-      (m.mtype == "viewOnceMessage" && m.msg.caption) ||
-      m.text;
+    m.mtype === 'conversation' ? m.message.conversation :
+    m.mtype === 'imageMessage' ? m.message.imageMessage.caption :
+    m.mtype === 'videoMessage' ? m.message.videoMessage.caption :
+    m.mtype === 'extendedTextMessage' ? m.message.extendedTextMessage.text :
+    m.mtype === 'buttonsResponseMessage' ? m.message.buttonsResponseMessage.selectedButtonId :
+    m.mtype === 'listResponseMessage' ? m.message.listResponseMessage.singleSelectReply.selectedRowId :
+    m.mtype === 'InteractiveResponseMessage' ? JSON.parse(m.message.interactiveResponseMessage.nativeFlowResponseMessage.paramsJson)?.id :
+    m.mtype === 'templateButtonReplyMessage' ? m.message.templateButtonReplyMessage.selectedId :
+    m.mtype === 'messageContextInfo' ?
+      m.message.buttonsResponseMessage?.selectedButtonId || 
+      m.message.listResponseMessage?.singleSelectReply.selectedRowId ||
+      m.message.InteractiveResponseMessage.NativeFlowResponseMessage ||
+      m.text :
+    ''
     let quoted = (m.quoted = m.msg.contextInfo ? m.msg.contextInfo.quotedMessage : null);
     m.mentionedJid = m.msg.contextInfo ? m.msg.contextInfo.mentionedJid : [];
     if (m.quoted) {
@@ -186,10 +193,12 @@ async function startHisoka() {
       markOnlineOnConnect: true, // set false for offline
       generateHighQualityLinkPreview: true, // make high preview link
       getMessage: async (key) => {
-         let jid = jidNormalizedUser(key.remoteJid)
-         let msg = await store.loadMessage(jid, key.id)
+        if (store) {
+          let jid = jidNormalizedUser(key.remoteJid)
+          let msg = await store.loadMessage(jid, key.id)
 
-         return msg?.message || ""
+          return msg.message || ""
+        }
       },
       msgRetryCounterCache, // Resolve waiting messages
       defaultQueryTimeoutMs: undefined, // for this issues https://github.com/WhiskeySockets/Baileys/issues/276
