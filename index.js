@@ -563,13 +563,13 @@ console.log(err)
         return buffer
     }
 
-    client.sendImageAsSticker = async (jid, path, quoted, options = {}) => {
+    client.sendImageAsSticker = async (jid, path, quoted, resolution, options = {}) => {
         let buff = Buffer.isBuffer(path) ? path : /^data:.*?\/.*?;base64,/i.test(path) ? Buffer.from(path.split`,`[1], 'base64') : /^https?:\/\//.test(path) ? await (await getBuffer(path)) : fs.existsSync(path) ? fs.readFileSync(path) : Buffer.alloc(0)
         let buffer
         if (options && (options.packname || options.author)) {
-            buffer = await writeExifImg(buff, options)
+            buffer = await writeExifImg(buff, options, resolution)
         } else {
-            buffer = await imageToWebp(buff)
+            buffer = await imageToWebp(buff, resolution)
         }
 
         await client.sendMessage(jid, { sticker: { url: buffer }, ...options }, { quoted })

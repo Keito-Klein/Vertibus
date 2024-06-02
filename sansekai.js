@@ -993,7 +993,7 @@ case 'adress':
              if (/image/.test(mime)) {
 
                   let media = await client.downloadMediaMessage(qms)
-                  let encmedia = await client.sendImageAsSticker(from, media, m, { packname: q.split('|')[0] ? ipackName : global.packName, author: q.split('|')[1] ? iauthor : global.author })
+                  let encmedia = await client.sendImageAsSticker(from, media, m, text.toLowerCase() == "asli" ? true : false, { packname: q.split('|')[0] ? ipackName : global.packName, author: q.split('|')[1] ? iauthor : global.author })
                  await fs.unlinkSync(encmedia)
                  proses("✔")
              } else if (/video/.test(mime)) {
