@@ -158,15 +158,22 @@ exports.changelog = () => {
 ===== *01 - 06 - 2024* =====
 - Add !owner at list
 - Change resolution of sticker(auto)
+
+===== *04 - 06 - 2024* =====
+- fix food exp(*!food*)
+- give options sticker resolution
 `
 }
 
 exports.update = (pushname) => {
 return `
-*New Update V. 2.4.33a*
-Hi ${pushname}, we have added *!owner* because many users PM/asking to the bot number. Please note, that the owner wil not reply/read private chatss via bot, if there is an error/ask something please chat to the owner provided🙏
+*New Update V. 2.4.35b*
+Hi ${pushname}. 
+we have added the sticker resolution option to native resolution/_force stretch_(Square). When using the !sticker command, if the "asli" query is not added, the image will automatically become _stretched_/boxed.
 
-we have also changed the resolution of the sticker to the native resolution of the image.
+We have also improved the food exp(*!food*) feature _specifically for Toram Online players_.
+
+
 `
 }
 

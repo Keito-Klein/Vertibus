@@ -167,15 +167,20 @@ exports.changelog = () => {
 ===== *01 - 06 - 2024* =====
 - Add !owner at list
 - Change resolution of sticker(auto)
+
+===== *04 - 06 - 2024* =====
+- fix food exp(*!food*)
+- give options sticker resolution
 `
 }
 
 exports.update = (pushname) => {
 return `
-*New Update V. 2.4.33a*
-Hi ${pushname}. Kami telah menambahkan command *!owner* karena banyak pengguna yang PM/tanya tanya ke nomor bot. Perlu diketahui, bahwa owner tidak akan membalas/membaca chat pribadi melalui bot, jika ada error/tanya sesuatu mohon chat ke kontak owner yang telah disediakan🙏
+*New Update V. 2.4.35b*
+Hi ${pushname}. 
+kami telah menambahkan opsi resolusi stiker menjadi resolusi asli/_force stretch_(Kotak). pada saat menggunakan command !sticker jika tidak ditambahkan query "asli" maka otomatis gambar menjadi _stretch_/kotak.
 
-kami juga telah mengubah resolusi stiker menjadi resolusi asli dari gambar.
+kami juga telah memperbaiki fitur food exp(*!food*) _khusus player Toram Online_.
 `
 }
 
