@@ -749,7 +749,7 @@ case 'blacksmith':
   break
 
 case 'food': 
-  client.sendMessage(from, `
+  reply(from, `
 *List EXP Food Buff*
 lv = Exp Needed
 1 = 1
@@ -1024,7 +1024,6 @@ if ((isMedia && !m.message.videoMessage || isQuotedImage || isQuotedSticker) && 
 ger = isQuotedImage || isQuotedSticker ? JSON.parse(JSON.stringify(m).replace('quotedM','m')).message.extendedTextMessage.contextInfo : m
 ranp = getRandom('54')
 owgi = await  client.downloadAndSaveMediaMessage(qms,ranp)
-  console.log(ranp) 
  options = {
   apiKey: global.imgbb, // MANDATORY
 
@@ -1041,7 +1040,7 @@ anu = await imgbb(options)
 
 teks = `${anu.display_url}`
 anu1 = `https://api.memegen.link/images/custom/${q.split('|')[1] ? top : ' '}/${q.split('|')[1] ? bottom : top}.png?background=${teks}`
-encmedia = await client.sendImageAsSticker(from, `${anu1}`, m, { packname: global.packName, author: global.author })
+encmedia = await client.sendImageAsSticker(from, `${anu1}`, m, false, { packname: global.packName, author: global.author })
 fs.unlinkSync(owgi)
 fs.unlinkSync(encmedia)
 proses("✔")

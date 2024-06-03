@@ -609,7 +609,6 @@ let type = await fileType.fromBuffer(buffer)
 trueFileName = attachExtension ? (filename + '.' + type.ext) : filename
 // save to file
 await fs.writeFileSync(trueFileName, buffer)
-console.log(trueFileName)
 return trueFileName
 }
 
