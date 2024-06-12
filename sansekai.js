@@ -7,15 +7,12 @@ const { performance } = require('perf_hooks');
 const { runtime, formatp, getBuffer, sleep } = require("./lib/utils.js") 
 const util = require("util");
 const chalk = require("chalk");
-const { Configuration, OpenAIApi } = require("openai");
 const cheerio = require("cheerio");
 const axios = require("axios");
 const ytdl = require('ytdl-core');
-const fbdl = require('fbvideos');
 const fetch = require('node-fetch');
 const neko_modules = require('nekos.life');
 const moment = require('moment-timezone');
-const Replicate = require("replicate");
 const { ocrSpace } = require('ocr-space-api-wrapper');
 const { doing } = require('./lib/translate')
 const { event } = require("./lib/event.js")
@@ -37,26 +34,48 @@ const welkom = JSON.parse(fs.readFileSync('./db/welcome.json'));
 const usage = JSON.parse(fs.readFileSync("./db/usage.json"));
 const register = JSON.parse(fs.readFileSync("./db/register.json"));
 const akronim = JSON.parse(fs.readFileSync("./db/guide-data/akronim.json"));
+//Getting Database from mongoDB
+require('./mongoDB/db.js');
+const User = require('./models/user.js');
+const Usage = require('./models/usage.js');
+
+
+
 
 /*Change Your Language Here!*/
 lang = ind
 
 //Regist Function
-const addUser = (id) => {
-  let userIndex = register.findIndex(user => user.id === id);
-  if (userIndex === -1) {
+const addUser = async(id) => {
+  const userdb = await User.findOne({ id }).exec(); 
+   user = await User.find()
+  let userIndex = user.findIndex(user => user.id === id);
+  if (userdb === null) {
     const ovj = {
       id,
       latest: true
     }
-    register.push(ovj)
+    // register.push(ovj)
+    data = new User(ovj)
+    data.save().then(() => {
+      console.log(`add new data to mongoDB: ${id}`)
+    })
   } else {
-    if (!register[userIndex].latest) {
-      register[userIndex].latest = true
+    //latest = await User.findOne({ id }).exec()
+      //console.log(latest.latest)
+    if (!user[userIndex].latest) {
+        await User.updateOne({ id: id } , { latest: true })
+        
+      /*User.updateOne({ id }, {
+        $set: {
+          latest: true
+        }
+      })*/
     }
   }
-  fs.writeFileSync('./db/register.json' , JSON.stringify(register));
+  // fs.writeFileSync('./db/register.json' , JSON.stringify(register));
 }
+
 
 //Akronim Function
 const acronime = (query) => {
@@ -455,28 +474,45 @@ module.exports = sansekai = async (client, m, chatUpdate, store) => {
     let argsLog = budy.length > 30 ? `${q.substring(0, 30)}...` : budy;
 
     if (isCmd2 && !m.isGroup) {
-      let userIndex = register.findIndex(user => user.id === sender);
-      if (userIndex == -1) {
+      current = await Usage.find();
+       user = await User.find();
+      userDB = await User.findOne({ id: sender }).exec()
+      let userIndex = user.findIndex(user => user.id === sender);
+      if (userDB == null) {
           reply(lang.update(pushname))
           addUser(sender)
-      } else if (!register[userIndex].latest) {
+      } else if (!user[userIndex].latest) {
         reply(lang.update(pushname))
         addUser(sender)
       }
-      usage.usage_private++
-      fs.writeFileSync("./db/usage.json", JSON.stringify(usage));
+	await Usage.updateOne({}, {$inc: {usage_private: 1}})
+      /*Usage.updateOne({}, {
+          $set: {
+               usage_private: current.usage_private++,
+          }
+      })*/
+      //fs.writeFileSync("./db/usage.json", JSON.stringify(usage));
       console.log(chalk.black(chalk.bgWhite("[ LOGS ]")), color(argsLog, "turquoise"), chalk.magenta("From"), chalk.green(pushname), chalk.yellow(`[ ${m.sender.replace("@s.whatsapp.net", "")} ]`));
     } else if (isCmd2 && m.isGroup) {
-      let userIndex = register.findIndex(user => user.id === groupMetadata.id);
-      if (userIndex == -1) {
+       current = await Usage.find();
+       user = await User.find();
+       userDB = await User.findOne({ id: groupMetadata.id }).exec()
+      let userIndex = user.findIndex(user => user.id === groupMetadata.id);
+      if (userDB === null) {
           reply(lang.update(pushname))
           addUser(groupMetadata.id)
-      } else if (!register[userIndex].latest) {
+      } else if (!user[useIndex].latest) {
         reply(lang.update(pushname))
         addUser(groupMetadata.id)
       }
-      usage.usage_group++
-      fs.writeFileSync("./db/usage.json", JSON.stringify(usage));
+        await Usage.updateOne({}, {$inc: {usage_group: 1}})
+       /*Usage.updateOne({}, {
+          $set: {
+               usage_group: current.usage_group++,
+          }
+      })*/
+      // usage.usage_group++
+      // fs.writeFileSync("./db/usage.json", JSON.stringify(usage));
       console.log(
         chalk.black(chalk.bgWhite("[ LOGS ]")),
         color(argsLog, "turquoise"),
@@ -692,11 +728,11 @@ break
         reply(`acronym not available, pm owner for added it`)
       }
     } else {
-      db = `*Berikut istilah-istilah dalam Toram Online:*\n\n`
+      dbs = `*Berikut istilah-istilah dalam Toram Online:*\n\n`
       Object.keys(akronim).forEach((i) => {
-        db += `*Istilah:* ${akronim[i].akronim}\n*Arti:* ${akronim[i].mean}\n\n` 
+        dbs += `*Istilah:* ${akronim[i].akronim}\n*Arti:* ${akronim[i].mean}\n\n` 
       })
-      client.sendText(from, db, mek)
+      client.sendText(from, dbs, mek)
     }
     break
 
@@ -727,11 +763,11 @@ case 'monster':
                 drop: $(this).find(`.monster-drop > div > a`).text().trim()
             }
         })
-            db = `*detail ${command + text}:*\n\n`
+            dbs = `*detail ${command + text}:*\n\n`
             for (let i = 0; i < array.length; i++) {
-              db += `-----------------------------------\nBoss: ${array[i].boss}\nDiff: ${array[i].diff}\nLevel: ${array[i].lv}\nHP: ${array[i].hp}\nEXP: ${array[i].exp}\nElement: ${array[i].element}\nTamable: ${array[i].tamable}\nLocation: ${array[i].map}\nDrop: ${array[i].drop}\n`
+              dbs += `-----------------------------------\nBoss: ${array[i].boss}\nDiff: ${array[i].diff}\nLevel: ${array[i].lv}\nHP: ${array[i].hp}\nEXP: ${array[i].exp}\nElement: ${array[i].element}\nTamable: ${array[i].tamable}\nLocation: ${array[i].map}\nDrop: ${array[i].drop}\n`
             }
-            client.sendText(from, db, mek)
+            client.sendText(from, dbs, mek)
             proses("✔")
         }
     
@@ -744,8 +780,8 @@ case 'monster':
 
 case 'bs':
 case 'blacksmith':
-  db = await lang.bs()
-  reply(db)
+  dbs = await lang.bs()
+  reply(dbs)
   break
 
 case 'food': 
@@ -784,8 +820,8 @@ break
 case 'maze' :
   maze = args[0]
   if (!maze) return reply("masukan query !\contoh : /maze guide\n/maze build\n/maze drop")
-  db = await lang.maze(maze)
- client.sendText(from, db, mek)
+  dbs = await lang.maze(maze)
+ client.sendText(from, dbs, mek)
   break
 
 case 'mq' :
@@ -797,93 +833,93 @@ break
   case 'farming':
   if (!text) return reply(lang.format(prefix, command))
     if(text == "logam" || text == "metal") {
-      db = await lang.head(text)
+      dbs = await lang.head(text)
       for(let i = 0; i < mobs.mats.metal.length; i++) {
-         db += `\n------------------\nMonster: ${mobs.mats.metal[i].monster}\nLevel: ${mobs.mats.metal[i].lv}\nElement: ${mobs.mats.metal[i].element}\nHP: ${mobs.mats.metal[i].hp}\nEXP: ${mobs.mats.metal[i].exp}\nLokasi: ${mobs.mats.metal[i].map}`
+         dbs += `\n------------------\nMonster: ${mobs.mats.metal[i].monster}\nLevel: ${mobs.mats.metal[i].lv}\nElement: ${mobs.mats.metal[i].element}\nHP: ${mobs.mats.metal[i].hp}\nEXP: ${mobs.mats.metal[i].exp}\nLokasi: ${mobs.mats.metal[i].map}`
       }
-      client.sendText(from, db, mek)
+      client.sendText(from, dbs, mek)
     } else if(text == "kayu" || text == "wood") {
-      db = await lang.head(text)
+      dbs = await lang.head(text)
       for(let i = 0; i < mobs.mats.wood.length; i++) {
-         db += `\n------------------\nMonster: ${mobs.mats.wood[i].monster}\nLevel: ${mobs.mats.wood[i].lv}\nElement: ${mobs.mats.wood[i].element}\nHP: ${mobs.mats.wood[i].hp}\nEXP: ${mobs.mats.wood[i].exp}\nLokasi: ${mobs.mats.wood[i].map}`
+         dbs += `\n------------------\nMonster: ${mobs.mats.wood[i].monster}\nLevel: ${mobs.mats.wood[i].lv}\nElement: ${mobs.mats.wood[i].element}\nHP: ${mobs.mats.wood[i].hp}\nEXP: ${mobs.mats.wood[i].exp}\nLokasi: ${mobs.mats.wood[i].map}`
       }
-      client.sendText(from, db, mek)
+      client.sendText(from, dbs, mek)
     } else if(text == 'fauna' || text == "beast") {
-      db = await lang.head(text)
+      dbs = await lang.head(text)
       for(let i = 0; i < mobs.mats.beast.length; i++) {
-         db += `\n------------------\nMonster: ${mobs.mats.beast[i].monster}\nLevel: ${mobs.mats.beast[i].lv}\nElement: ${mobs.mats.beast[i].element}\nHP: ${mobs.mats.beast[i].hp}\nEXP: ${mobs.mats.beast[i].exp}\nLokasi: ${mobs.mats.beast[i].map}`
+         dbs += `\n------------------\nMonster: ${mobs.mats.beast[i].monster}\nLevel: ${mobs.mats.beast[i].lv}\nElement: ${mobs.mats.beast[i].element}\nHP: ${mobs.mats.beast[i].hp}\nEXP: ${mobs.mats.beast[i].exp}\nLokasi: ${mobs.mats.beast[i].map}`
       }
-      client.sendText(from, db, mek)
+      client.sendText(from, dbs, mek)
     } else if(text == 'obat' || text == "medic" || text == "medicine") {
-      db = await lang.head(text)
+      dbs = await lang.head(text)
       for(let i = 0; i < mobs.mats.medic.length; i++) {
-         db += `\n------------------\nMonster: ${mobs.mats.medic[i].monster}\nLevel: ${mobs.mats.medic[i].lv}\nElement: ${mobs.mats.medic[i].element}\nHP: ${mobs.mats.medic[i].hp}\nEXP: ${mobs.mats.medic[i].exp}\nLokasi: ${mobs.mats.medic[i].map}`
+         dbs += `\n------------------\nMonster: ${mobs.mats.medic[i].monster}\nLevel: ${mobs.mats.medic[i].lv}\nElement: ${mobs.mats.medic[i].element}\nHP: ${mobs.mats.medic[i].hp}\nEXP: ${mobs.mats.medic[i].exp}\nLokasi: ${mobs.mats.medic[i].map}`
       }
-      client.sendText(from, db, mek)
+      client.sendText(from, dbs, mek)
     } else if(text == 'kain' || text == "cloth") {
-      db = await lang.head(text)
+      dbs = await lang.head(text)
       for(let i = 0; i < mobs.mats.cloth.length; i++) {
-         db += `\n------------------\nMonster: ${mobs.mats.cloth[i].monster}\nLevel: ${mobs.mats.cloth[i].lv}\nElement: ${mobs.mats.cloth[i].element}\nHP: ${mobs.mats.cloth[i].hp}\nEXP: ${mobs.mats.cloth[i].exp}\nLokasi: ${mobs.mats.cloth[i].map}`
+         dbs += `\n------------------\nMonster: ${mobs.mats.cloth[i].monster}\nLevel: ${mobs.mats.cloth[i].lv}\nElement: ${mobs.mats.cloth[i].element}\nHP: ${mobs.mats.cloth[i].hp}\nEXP: ${mobs.mats.cloth[i].exp}\nLokasi: ${mobs.mats.cloth[i].map}`
       }
-      client.sendText(from, db, mek)
+      client.sendText(from, dbs, mek)
     }
     break;
 
   case 'logam':
   case 'metal':
-     db = await lang.head(command)
+     dbs = await lang.head(command)
       for(let i = 0; i < mobs.mats.metal.length; i++) {
-         db += `\n------------------\nMonster: ${mobs.mats.metal[i].monster}\nLevel: ${mobs.mats.metal[i].lv}\nElement: ${mobs.mats.metal[i].element}\nHP: ${mobs.mats.metal[i].hp}\nEXP: ${mobs.mats.metal[i].exp}\nLokasi: ${mobs.mats.metal[i].map}`
+         dbs += `\n------------------\nMonster: ${mobs.mats.metal[i].monster}\nLevel: ${mobs.mats.metal[i].lv}\nElement: ${mobs.mats.metal[i].element}\nHP: ${mobs.mats.metal[i].hp}\nEXP: ${mobs.mats.metal[i].exp}\nLokasi: ${mobs.mats.metal[i].map}`
       }
-      client.sendText(from, db, mek)
+      client.sendText(from, dbs, mek)
   break;
 
   case 'kayu':
   case 'wood':
-     db = await lang.head(command)
+     dbs = await lang.head(command)
       for(let i = 0; i < mobs.mats.wood.length; i++) {
-         db += `\n------------------\nMonster: ${mobs.mats.wood[i].monster}\nLevel: ${mobs.mats.wood[i].lv}\nElement: ${mobs.mats.wood[i].element}\nHP: ${mobs.mats.wood[i].hp}\nEXP: ${mobs.mats.wood[i].exp}\nLokasi: ${mobs.mats.wood[i].map}`
+         dbs += `\n------------------\nMonster: ${mobs.mats.wood[i].monster}\nLevel: ${mobs.mats.wood[i].lv}\nElement: ${mobs.mats.wood[i].element}\nHP: ${mobs.mats.wood[i].hp}\nEXP: ${mobs.mats.wood[i].exp}\nLokasi: ${mobs.mats.wood[i].map}`
       }
-      client.sendText(from, db, mek)
+      client.sendText(from, dbs, mek)
   break;
 
 case 'fauna':
   case 'beast':
-    db = await lang.head(command)
+    dbs = await lang.head(command)
       for(let i = 0; i < mobs.mats.beast.length; i++) {
-         db += `\n------------------\nMonster: ${mobs.mats.beast[i].monster}\nLevel: ${mobs.mats.beast[i].lv}\nElement: ${mobs.mats.beast[i].element}\nHP: ${mobs.mats.beast[i].hp}\nEXP: ${mobs.mats.beast[i].exp}\nLokasi: ${mobs.mats.beast[i].map}`
+         dbs += `\n------------------\nMonster: ${mobs.mats.beast[i].monster}\nLevel: ${mobs.mats.beast[i].lv}\nElement: ${mobs.mats.beast[i].element}\nHP: ${mobs.mats.beast[i].hp}\nEXP: ${mobs.mats.beast[i].exp}\nLokasi: ${mobs.mats.beast[i].map}`
       }
-      client.sendText(from, db, mek)
+      client.sendText(from, dbs, mek)
   break;
 
   case 'obat':
   case 'medic':
   case 'medicine':
-     db = await lang.head(command)
+     dbs = await lang.head(command)
       for(let i = 0; i < mobs.mats.medic.length; i++) {
-         db += `\n------------------\nMonster: ${mobs.mats.medic[i].monster}\nLevel: ${mobs.mats.medic[i].lv}\nElement: ${mobs.mats.medic[i].element}\nHP: ${mobs.mats.medic[i].hp}\nEXP: ${mobs.mats.medic[i].exp}\nLokasi: ${mobs.mats.medic[i].map}`
+         dbs += `\n------------------\nMonster: ${mobs.mats.medic[i].monster}\nLevel: ${mobs.mats.medic[i].lv}\nElement: ${mobs.mats.medic[i].element}\nHP: ${mobs.mats.medic[i].hp}\nEXP: ${mobs.mats.medic[i].exp}\nLokasi: ${mobs.mats.medic[i].map}`
       }
-      client.sendText(from, db, mek)
+      client.sendText(from, dbs, mek)
   break;
 
 case 'kain':
   case 'cloth':
-    db = await lang.head(command)
+    dbs = await lang.head(command)
       for(let i = 0; i < mobs.mats.cloth.length; i++) {
-         db += `\n------------------\nMonster: ${mobs.mats.cloth[i].monster}\nLevel: ${mobs.mats.cloth[i].lv}\nElement: ${mobs.mats.cloth[i].element}\nHP: ${mobs.mats.cloth[i].hp}\nEXP: ${mobs.mats.cloth[i].exp}\nLokasi: ${mobs.mats.cloth[i].map}`
+         dbs += `\n------------------\nMonster: ${mobs.mats.cloth[i].monster}\nLevel: ${mobs.mats.cloth[i].lv}\nElement: ${mobs.mats.cloth[i].element}\nHP: ${mobs.mats.cloth[i].hp}\nEXP: ${mobs.mats.cloth[i].exp}\nLokasi: ${mobs.mats.cloth[i].map}`
       }
-      client.sendText(from, db, mek)
+      client.sendText(from, dbs, mek)
   break;
 
   case 'event': 
     if(!text) return reply(lang.format(prefix,command))
       if(text == "valentine") {
         valen = event(text)
-        db = lang.quest(command, text)
+        dbs = lang.quest(command, text)
         for (let i = 0; i < valen.quest.length; i++) {
-          db += `\n------------------\n*${valen.quest[i].name}*\nSyarat: ${valen.quest[i].req}\nNPC: ${valen.quest[i].npc}\nQuest Level: ${valen.quest[i].lv}\nBahan Quest: \n${valen.quest[i].mats}\nBoss: ${valen.quest[i].boss}\nUnsur Boss: ${valen.quest[i].element}\nEXP: \n${valen.quest[i].exp}\nReward: ${valen.quest[i].reward}`
+          dbs += `\n------------------\n*${valen.quest[i].name}*\nSyarat: ${valen.quest[i].req}\nNPC: ${valen.quest[i].npc}\nQuest Level: ${valen.quest[i].lv}\nBahan Quest: \n${valen.quest[i].mats}\nBoss: ${valen.quest[i].boss}\nUnsur Boss: ${valen.quest[i].element}\nEXP: \n${valen.quest[i].exp}\nReward: ${valen.quest[i].reward}`
         }
-      client.sendText(from, db,mek)
+      client.sendText(from, dbs,mek)
       }
       if (text == "natal" || text == "christmas") {
         cris = event(text)
@@ -891,48 +927,48 @@ case 'kain':
       }
       if (text == "hanami") {
         hana = await event(text)
-        db = await lang.quest(command, text)
+        dbs = await lang.quest(command, text)
         for (let i = 0; i < hana.quest.length; i++) {
-          db += `\n------------------------------\n*${hana.quest[i].name}*\n*Syarat:* ${hana.quest[i].req}\n*Quest:* \n${hana.quest[i].quest}\n*Boss:* ${hana.quest[i].boss}\n*Unsur Boss:* ${hana.quest[i].element}\n*EXP:* \n${hana.quest[i].exp}\n*Reward:* ${hana.quest[i].reward}`
+          dbs += `\n------------------------------\n*${hana.quest[i].name}*\n*Syarat:* ${hana.quest[i].req}\n*Quest:* \n${hana.quest[i].quest}\n*Boss:* ${hana.quest[i].boss}\n*Unsur Boss:* ${hana.quest[i].element}\n*EXP:* \n${hana.quest[i].exp}\n*Reward:* ${hana.quest[i].reward}`
         }
-        client.sendText(from, db, mek)
+        client.sendText(from, dbs, mek)
       }
       if (text == "summer" || text == "sumer") {
         sumer = await event(text)
-        db = await lang.quest(command, text)
+        dbs = await lang.quest(command, text)
         for (let i = 0; i < sumer.quest.length; i++) {
-          db += `\n------------------------------\n*${sumer.quest[i].name}*\n*Syarat:* ${sumer.quest[i].req}\n*Quest:* \n${sumer.quest[i].quest}\n*Boss:* ${sumer.quest[i].boss}\n*Unsur Boss:* ${sumer.quest[i].element}\n*EXP:* \n${sumer.quest[i].exp}\n*Reward:* ${sumer.quest[i].reward}`
+          dbs += `\n------------------------------\n*${sumer.quest[i].name}*\n*Syarat:* ${sumer.quest[i].req}\n*Quest:* \n${sumer.quest[i].quest}\n*Boss:* ${sumer.quest[i].boss}\n*Unsur Boss:* ${sumer.quest[i].element}\n*EXP:* \n${sumer.quest[i].exp}\n*Reward:* ${sumer.quest[i].reward}`
         }
-        client.sendText(from, db, mek)
+        client.sendText(from, dbs, mek)
       }
       break;
 
     case 'valentine':
       valen = await event(command)
-        db = await lang.quest(command)
+        dbs = await lang.quest(command)
         for (let i = 0; i < valen.quest.length; i++) {
-          db += `\n------------------\n*${valen.quest[i].name}*\nSyarat: ${valen.quest[i].req}\nNPC: ${valen.quest[i].npc}\nQuest Level: ${valen.quest[i].lv}\nBahan Quest: \n${valen.quest[i].mats}\nBoss: ${valen.quest[i].boss}\nUnsur Boss: ${valen.quest[i].element}\nEXP: \n${valen.quest[i].exp}\nReward: ${valen.quest[i].reward}`
+          dbs += `\n------------------\n*${valen.quest[i].name}*\nSyarat: ${valen.quest[i].req}\nNPC: ${valen.quest[i].npc}\nQuest Level: ${valen.quest[i].lv}\nBahan Quest: \n${valen.quest[i].mats}\nBoss: ${valen.quest[i].boss}\nUnsur Boss: ${valen.quest[i].element}\nEXP: \n${valen.quest[i].exp}\nReward: ${valen.quest[i].reward}`
         }
-        client.sendText(from, db, mek)
+        client.sendText(from, dbs, mek)
         break
 
       case 'hanami':
       hana = await event(command)
-        db = await lang.quest(command)
+        dbs = await lang.quest(command)
         for (let i = 0; i < hana.quest.length; i++) {
-          db += `\n------------------\n*${hana.quest[i].name}*\nSyarat: ${hana.quest[i].req}\nQuest: \n${hana.quest[i].quest}\nBoss: ${hana.quest[i].boss}\nUnsur Boss: ${hana.quest[i].element}\nEXP: \n${hana.quest[i].exp}\nReward: ${hana.quest[i].reward}`
+          dbs += `\n------------------\n*${hana.quest[i].name}*\nSyarat: ${hana.quest[i].req}\nQuest: \n${hana.quest[i].quest}\nBoss: ${hana.quest[i].boss}\nUnsur Boss: ${hana.quest[i].element}\nEXP: \n${hana.quest[i].exp}\nReward: ${hana.quest[i].reward}`
         }
-        client.sendText(from, db, mek)
+        client.sendText(from, dbs, mek)
         break
 
       case 'summer':
       case 'sumer':
       sumer = await event(command)
-        db = await lang.quest(command)
+        dbs = await lang.quest(command)
         for (let i = 0; i < sumer.quest.length; i++) {
-          db += `\n------------------\n*${sumer.quest[i].name}*\nSyarat: ${sumer.quest[i].req}\nQuest: \n${sumer.quest[i].quest}\nBoss: ${sumer.quest[i].boss}\nUnsur Boss: ${sumer.quest[i].element}\nEXP: \n${sumer.quest[i].exp}\nReward: ${sumer.quest[i].reward}`
+          dbs += `\n------------------\n*${sumer.quest[i].name}*\nSyarat: ${sumer.quest[i].req}\nQuest: \n${sumer.quest[i].quest}\nBoss: ${sumer.quest[i].boss}\nUnsur Boss: ${sumer.quest[i].element}\nEXP: \n${sumer.quest[i].exp}\nReward: ${sumer.quest[i].reward}`
         }
-        client.sendText(from, db, mek)
+        client.sendText(from, dbs, mek)
         break
 
 
@@ -1283,6 +1319,7 @@ case 'info':
                neww = performance.now()
                oldd = performance.now()
               bio = await client.fetchStatus(botNumber)
+              ussage = await Usage.find();
               respon = `
 - *${global.botName}* -
 
@@ -1292,9 +1329,9 @@ _*INFO*_
 *last update Bio:* ${bio.setAt}.
 *Owner:* ${global.ownerName}.
 *Contact:* wa.me/${global.owner}
-*Private Usage:* ${usage.usage_private}.
-*Group Usage:* ${usage.usage_group}.
-*Total usage:* ${usage.usage_private + usage.usage_group}.
+*Private Usage:* ${ussage[0].usage_private}.
+*Group Usage:* ${ussage[0].usage_group}.
+*Total usage:* ${ussage[0].usage_private + ussage[0].usage_group}.
 
 Kecepatan Respon ${latensi.toFixed(4)} _Second_ \n ${oldd - neww} _miliseconds_\n\nRuntime : ${runtime(process.uptime())}
 
@@ -1394,9 +1431,9 @@ break
 
         case 'donate':
         case 'donasi':
-          db = await lang.donate()
-          client.sendText(from, db)
-            break
+          dbs = await lang.donate()
+          client.sendText(from, dbs)
+        break
 
     case 'hidetag':
     if(!isGroupAdmins) return reply(lang.onAdmin())
