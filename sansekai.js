@@ -501,7 +501,7 @@ module.exports = sansekai = async (client, m, chatUpdate, store) => {
       if (userDB === null) {
           reply(lang.update(pushname))
           addUser(groupMetadata.id)
-      } else if (!user[useIndex].latest) {
+      } else if (!user[userIndex].latest) {
         reply(lang.update(pushname))
         addUser(groupMetadata.id)
       }
