@@ -1575,10 +1575,11 @@ break
 case 'reset':
   if(!isOwner) return
   proses("⌛")
-  Object.keys(register).forEach((i) => {
-    register[i].latest = false
-  })
-  fs.writeFileSync('./db/register.json', JSON.stringify(register))
+  await User.updateMany({}, { latest: false })
+  // Object.keys(register).forEach((i) => {
+  //   register[i].latest = false
+  // })
+  // fs.writeFileSync('./db/register.json', JSON.stringify(register))
   proses("✔")
   reply("success!")
   break
