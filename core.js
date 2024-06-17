@@ -457,7 +457,7 @@ module.exports = sansekai = async (client, m, chatUpdate, store) => {
       Sender: ${sender}
       Group: ${groupName}
       Text: ${m.quoted ? m.message.extendedTextMessage.contextInfo.quotedMessage.conversation : text}`
-      client.sendText(global.owner + "@s.whatsapp.net", teks)
+      client.sendText(global.owner[0], teks);
     }
 
     //Message detector
