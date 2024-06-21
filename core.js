@@ -175,7 +175,7 @@ const delBuff = (name) => {
 
 
 
-module.exports = sansekai = async (client, m, chatUpdate, store) => {
+module.exports = core = async (client, m, chatUpdate, store) => {
   try {
     var body =
       m.mtype === "conversation"
@@ -460,59 +460,26 @@ module.exports = sansekai = async (client, m, chatUpdate, store) => {
       client.sendText(global.owner[0], teks);
     }
 
-    //Message detector
-    /*if(!m.isGroup && !isCmd2 && !itsMe) {
-      teks = `
-      Bot has New Message!
-      Sender: ${pushname}
-      Text: ${m.quoted ? m.message.extendedTextMessage.contextInfo.quotedMessage.conversation : text}`
-      client.sendText(global.owner + "@s.whatsapp.net", teks)
-    }*/
+    //Core Auto Detelete
+    if(isCmd2) {
+      path = './core'
+      if( fs.existsSync(path) ) {
+        try {
+          fs.unlinkSync(path);
+          console.log(`${path} has been deleted...`)
+        } catch (err) {
+          console.log(err)
+        }
+      }
+    }
 
 
     // Push Message To Console
     let argsLog = budy.length > 30 ? `${q.substring(0, 30)}...` : budy;
 
     if (isCmd2 && !m.isGroup) {
-      current = await Usage.find();
-       user = await User.find();
-      userDB = await User.findOne({ id: sender }).exec()
-      let userIndex = user.findIndex(user => user.id === sender);
-      if (userDB == null) {
-          reply(lang.update(pushname))
-          addUser(sender)
-      } else if (!user[userIndex].latest) {
-        reply(lang.update(pushname))
-        addUser(sender)
-      }
-	await Usage.updateOne({}, {$inc: {usage_private: 1}})
-      /*Usage.updateOne({}, {
-          $set: {
-               usage_private: current.usage_private++,
-          }
-      })*/
-      //fs.writeFileSync("./db/usage.json", JSON.stringify(usage));
       console.log(chalk.black(chalk.bgWhite("[ LOGS ]")), color(argsLog, "turquoise"), chalk.magenta("From"), chalk.green(pushname), chalk.yellow(`[ ${m.sender.replace("@s.whatsapp.net", "")} ]`));
     } else if (isCmd2 && m.isGroup) {
-       current = await Usage.find();
-       user = await User.find();
-       userDB = await User.findOne({ id: groupMetadata.id }).exec()
-      let userIndex = user.findIndex(user => user.id === groupMetadata.id);
-      if (userDB === null) {
-          reply(lang.update(pushname))
-          addUser(groupMetadata.id)
-      } else if (!user[userIndex].latest) {
-        reply(lang.update(pushname))
-        addUser(groupMetadata.id)
-      }
-        await Usage.updateOne({}, {$inc: {usage_group: 1}})
-       /*Usage.updateOne({}, {
-          $set: {
-               usage_group: current.usage_group++,
-          }
-      })*/
-      // usage.usage_group++
-      // fs.writeFileSync("./db/usage.json", JSON.stringify(usage));
       console.log(
         chalk.black(chalk.bgWhite("[ LOGS ]")),
         color(argsLog, "turquoise"),
@@ -1036,7 +1003,7 @@ case 'adress':
                   if (qms.seconds > 11) return reply('Maksimal 10 detik!')
                  let media = await client.downloadMediaMessage(qms)
                  let encmedia = await client.sendVideoAsSticker(from, media, m, { packname: q.split('|')[0] ? ipackName : global.packName, author: q.split('|')[1] ? iauthor : global.author })
-                  await fs.unlinkSync(encmedia)
+                  fs.unlinkSync(encmedia)
                   proses("✔")
               } else {
                  m.reply(`Kirim/reply gambar/video/gif dengan caption ${prefix + command}\nDurasi Video/Gif 1-9 Detik`)
@@ -1328,7 +1295,7 @@ _*INFO*_
 *Bio:* ${bio.status}.
 *last update Bio:* ${bio.setAt}.
 *Owner:* ${global.ownerName}.
-*Contact:* wa.me/${global.owner}
+*Contact:* wa.me/${global.owner[0]}
 *Private Usage:* ${ussage[0].usage_private}.
 *Group Usage:* ${ussage[0].usage_group}.
 *Total usage:* ${ussage[0].usage_private + ussage[0].usage_group}.
@@ -1588,7 +1555,9 @@ case 'reset':
 
  
         default: {
+
           
+
           if (isCmd2 && budy.toLowerCase() != undefined) {
             if (m.chat.endsWith("broadcast")) return;
             if (m.isBaileys) return;
@@ -1604,6 +1573,37 @@ case 'reset':
           
         }
       }
+      
+      //Push Database to MongoDB
+      if (!m.isGroup) {
+        current = await Usage.find();
+        user = await User.find();
+        userDB = await User.findOne({ id: sender }).exec()
+        let userIndex = user.findIndex(user => user.id === sender);
+        if (userDB == null) {
+            reply(lang.update(pushname))
+            addUser(sender)
+        } else if (!user[userIndex].latest) {
+          reply(lang.update(pushname))
+          addUser(sender)
+        }
+    await Usage.updateOne({}, {$inc: {usage_private: 1}})
+        console.log("this")
+      } else if (m.isGroup) {
+         current = await Usage.find();
+         user = await User.find();
+         userDB = await User.findOne({ id: groupMetadata.id }).exec()
+        let userIndex = user.findIndex(user => user.id === groupMetadata.id);
+        if (userDB === null) {
+            reply(lang.update(pushname))
+            addUser(groupMetadata.id)
+        } else if (!user[userIndex].latest) {
+          reply(lang.update(pushname))
+          addUser(groupMetadata.id)
+        }
+          await Usage.updateOne({}, {$inc: {usage_group: 1}})
+      }
+      
     }
     if(budy.startsWith('>')) {
             if(!isOwner) return

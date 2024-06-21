@@ -171,16 +171,17 @@ exports.changelog = () => {
 ===== *04 - 06 - 2024* =====
 - fix food exp(*!food*)
 - give options sticker resolution
+
+===== *21 - 06 - 2024* =====
+- Improve bot perfomance
 `
 }
 
 exports.update = (pushname) => {
 return `
-*New Update V. 2.4.35b*
+*New Update V. 2.4.36a*
 Hi ${pushname}. 
-kami telah menambahkan opsi resolusi stiker menjadi resolusi asli/_force stretch_(Kotak). pada saat menggunakan command !sticker jika tidak ditambahkan query "asli" maka otomatis gambar menjadi _stretch_/kotak.
-
-kami juga telah memperbaiki fitur food exp(*!food*) _khusus player Toram Online_.
+kami telah memberbaiki bug yang menyebabkan Bot delay saat digunakan. Hal ini disebabkan karena adanya file besar yang otomatis terdownload saat menjalankan koneksi bot ke server.
 `
 }
 

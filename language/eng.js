@@ -162,16 +162,17 @@ exports.changelog = () => {
 ===== *04 - 06 - 2024* =====
 - fix food exp(*!food*)
 - give options sticker resolution
+
+===== *21 - 06 - 2024* =====
+- Improve bot perfomance
 `
 }
 
 exports.update = (pushname) => {
 return `
-*New Update V. 2.4.35b*
+*New Update V. 2.4.36a*
 Hi ${pushname}. 
-we have added the sticker resolution option to native resolution/_force stretch_(Square). When using the !sticker command, if the "asli" query is not added, the image will automatically become _stretched_/boxed.
-
-We have also improved the food exp(*!food*) feature _specifically for Toram Online players_.
+we have fixed a bug that caused the Bot to delay when used. This is because there are large files that are automatically downloaded when the bot connects to the server.
 `
 }
 
