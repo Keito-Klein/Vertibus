@@ -1287,6 +1287,7 @@ case 'info':
                oldd = performance.now()
               bio = await client.fetchStatus(botNumber)
               ussage = await Usage.find();
+              userDB = await User.find()
               respon = `
 - *${global.botName}* -
 
@@ -1299,6 +1300,7 @@ _*INFO*_
 *Private Usage:* ${ussage[0].usage_private}.
 *Group Usage:* ${ussage[0].usage_group}.
 *Total usage:* ${ussage[0].usage_private + ussage[0].usage_group}.
+*Total user:* ${userDB.length}.
 
 Kecepatan Respon ${latensi.toFixed(4)} _Second_ \n ${oldd - neww} _miliseconds_\n\nRuntime : ${runtime(process.uptime())}
 

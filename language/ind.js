@@ -179,7 +179,7 @@ exports.changelog = () => {
 
 exports.update = (pushname) => {
 return `
-*New Update V. 2.4.36a*
+*New Update V. 2.4.37a*
 Hi ${pushname}. 
 kami telah memberbaiki bug yang menyebabkan Bot delay saat digunakan. Hal ini disebabkan karena adanya file besar yang otomatis terdownload saat menjalankan koneksi bot ke server.
 `
