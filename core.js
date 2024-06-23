@@ -38,6 +38,7 @@ const akronim = JSON.parse(fs.readFileSync("./db/guide-data/akronim.json"));
 require('./mongoDB/db.js');
 const User = require('./models/user.js');
 const Usage = require('./models/usage.js');
+const { buff } = require("./language/ind.js");
 
 
 
@@ -521,6 +522,21 @@ case 'wallpaper':
   url = neko.url
   client.sendImage(from, url, '', mek)
 break
+
+case 'getimage':
+  if(!isUrl) return reply('enter the url image!');
+  try {
+    proses('⏳');
+    res = await fetch(text)
+    data = await res.buffer();
+    client.sendImage(from, data, " ", mek)
+    proses('✔');
+  } catch(err) {
+    console.log(err)
+    proses('❌');
+    reply('someting\'s error');
+  }
+  break
 
           
 
