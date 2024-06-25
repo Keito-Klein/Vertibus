@@ -26,7 +26,7 @@ const { igDownloader, tiktok, fb, pinterest } = require("./lib/downloader")
 
 var ipackName = false//Don't fill. sett packName on setting.js
 var iauthor = false//Don't fill. sett author on setting.js
-var currentTime = moment().tz('Asia/Jakarta').format('HH:mm');
+var currentTime = moment().tz('Asia/Jakarta').format('HH:mm'); //set your Timezone in tz()
 
 /*DataBase*/
 const guild = JSON.parse(fs.readFileSync('./db/guild.json'));
@@ -40,9 +40,6 @@ const akronim = JSON.parse(fs.readFileSync("./db/guide-data/akronim.json"));
 require('./mongoDB/db.js');
 const User = require('./models/user.js');
 const Usage = require('./models/usage.js');
-const { buff } = require("./language/ind.js");
-
-
 
 
 /*Change Your Language Here!*/
