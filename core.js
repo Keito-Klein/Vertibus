@@ -26,6 +26,7 @@ const { igDownloader, tiktok, fb, pinterest } = require("./lib/downloader")
 
 var ipackName = false//Don't fill. sett packName on setting.js
 var iauthor = false//Don't fill. sett author on setting.js
+var currentTime = moment().tz('Asia/Jakarta').format('HH:mm');
 
 /*DataBase*/
 const guild = JSON.parse(fs.readFileSync('./db/guild.json'));
@@ -34,6 +35,7 @@ const welkom = JSON.parse(fs.readFileSync('./db/welcome.json'));
 const usage = JSON.parse(fs.readFileSync("./db/usage.json"));
 const register = JSON.parse(fs.readFileSync("./db/register.json"));
 const akronim = JSON.parse(fs.readFileSync("./db/guide-data/akronim.json"));
+
 //Getting Database from mongoDB
 require('./mongoDB/db.js');
 const User = require('./models/user.js');
@@ -479,7 +481,7 @@ module.exports = core = async (client, m, chatUpdate, store) => {
     let argsLog = budy.length > 30 ? `${q.substring(0, 30)}...` : budy;
 
     if (isCmd2 && !m.isGroup) {
-      console.log(chalk.black(chalk.bgWhite("[ LOGS ]")), color(argsLog, "turquoise"), chalk.magenta("From"), chalk.green(pushname), chalk.yellow(`[ ${m.sender.replace("@s.whatsapp.net", "")} ]`));
+      console.log(chalk.black(chalk.bgWhite("[ LOGS ]")), color(argsLog, "turquoise"), chalk.magenta("From"), chalk.green(pushname), chalk.yellow(`[ ${m.sender.replace("@s.whatsapp.net", "")} ]`), chalk.bgYellow(`[ ${currentTime} ]`));
     } else if (isCmd2 && m.isGroup) {
       console.log(
         chalk.black(chalk.bgWhite("[ LOGS ]")),
@@ -488,8 +490,8 @@ module.exports = core = async (client, m, chatUpdate, store) => {
         chalk.green(pushname),
         chalk.yellow(`[ ${m.sender.replace("@s.whatsapp.net", "")} ]`),
         chalk.blueBright("IN"),
-        chalk.green(groupName)
-
+        chalk.green(groupName),
+        chalk.bgYellow(`[ ${currentTime} ]`)
       );
     }
 
@@ -1494,7 +1496,7 @@ await client.sendMessage(from,{ video: {url:vid.videoUrl}, caption: ytc }, mek)
   break     
 
 case 'fbdl':
-          case 'fb':
+case 'fb':
   if (!q) return reply (lang.format(prefix, command))
   try {
     proses("⏳")
@@ -1525,6 +1527,7 @@ case 'fbdl':
     break
 
   case 'tiktok':
+  case 'tt':
     if(!text) return reply(lang.format(prefix, command))
     try {
     proses("⏳")
