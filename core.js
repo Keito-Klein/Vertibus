@@ -974,6 +974,7 @@ case 'code':
 case 'adres':
 case 'addres':
 case 'adress':
+case 'buff':
     reply(lang.buff(q))
   break
 
