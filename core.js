@@ -985,6 +985,7 @@ case 'adress':
 
     case 'remini': 
     case 'tohd':
+    case 'hd':
   if (!/image/.test(mime)) return reply('gunakan foto!')
   if (!/image\/(jpe?g|png)/.test(mime)) return reply('Format gambar tidak didukung!')
     if (/image/.test(mime)) {
@@ -1073,6 +1074,7 @@ m.reply('Gunakan foto/stiker!')
 break
 
 case 'toimg':
+case 'toimage':
   if (!isQuotedSticker) return reply('𝗥𝗲𝗽𝗹𝘆/𝘁𝗮𝗴 𝘀𝘁𝗶𝗰𝗸𝗲𝗿 !')
   try {
 
@@ -1088,7 +1090,9 @@ case 'toimg':
 }
 break
 
-case 'tomp4': case 'tovideo': 
+case 'tomp4':
+case 'tovideo': 
+case 'tovid':
 if (!isQuotedSticker) return reply('𝗥𝗲𝗽𝗹𝘆/𝘁𝗮𝗴 𝘀𝘁𝗶𝗰𝗸𝗲𝗿 !')
   if (m.msg.contextInfo.quotedMessage.stickerMessage.isAnimated === false) return reply(" Gunakan sticker animated !")
 try {
