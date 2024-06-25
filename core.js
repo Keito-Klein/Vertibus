@@ -478,7 +478,7 @@ module.exports = core = async (client, m, chatUpdate, store) => {
     let argsLog = budy.length > 30 ? `${q.substring(0, 30)}...` : budy;
 
     if (isCmd2 && !m.isGroup) {
-      console.log(chalk.black(chalk.bgWhite("[ LOGS ]")), color(argsLog, "turquoise"), chalk.magenta("From"), chalk.green(pushname), chalk.yellow(`[ ${m.sender.replace("@s.whatsapp.net", "")} ]`), chalk.bgYellow(`[ ${currentTime} ]`));
+      console.log(chalk.black(chalk.bgWhite("[ LOGS ]")), color(argsLog, "turquoise"), chalk.magenta("From"), chalk.green(pushname), chalk.yellow(`[ ${m.sender.replace("@s.whatsapp.net", "")} ]`), chalk.black.bgYellow(`[ ${currentTime} ]`));
     } else if (isCmd2 && m.isGroup) {
       console.log(
         chalk.black(chalk.bgWhite("[ LOGS ]")),
@@ -488,7 +488,7 @@ module.exports = core = async (client, m, chatUpdate, store) => {
         chalk.yellow(`[ ${m.sender.replace("@s.whatsapp.net", "")} ]`),
         chalk.blueBright("IN"),
         chalk.green(groupName),
-        chalk.bgYellow(`[ ${currentTime} ]`)
+        chalk.black.bgYellow(`[ ${currentTime} ]`)
       );
     }
 
