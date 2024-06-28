@@ -189,6 +189,10 @@ kami telah menambahkan fitur *!play* kedalam bot. Fitur tersebut berfungsi untuk
 
 *FAQ*❓
 Owner juga mau menyampaikan berapa jawaban pertanyaan yang pernah ditanyakan kepada bot:
+
+🗣: Kenapa botnya ga bisa dimasukin ke grup?
+> Botnya ku privasi hanya kontak yang disave yang bisa nambahin bot ke grup. karena banyak yang memasukaan bot ke grup porno. *Kalau mau memasukan bot kedalam grup harus ijin dulu ke owner*.
+
 🗣: Kenapa fiturnya dikit banget/kurang seru?
 > Gw dulu bikin nih bot cuman untuk penggunaan pribadi/untuk guildku dalam toram online, namun banyak pengguna yang memasukan bot kedalam grupnya, karena ada fitur convert gambar/video menjadi sticker. Maka dari itu gw memutuskan menambah beberapa fitur yang bisa digunakan oleh orang lain.
 

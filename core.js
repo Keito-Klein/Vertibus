@@ -1458,9 +1458,9 @@ case 'play':
     try{ 
       ytlink = await yts(text)
       urlVideo = ytlink.videos[0]
-      client.sendImage(from, urlVideo.image, `*${urlVideo.title}*\n- Duration:${urlVideo.timestamp}\n- Viewer: ${urlVideo.views}\n- Release: ${urlVideo.ago}`, mek)
+      client.sendImage(from, urlVideo.image, `*${urlVideo.title}*\n- Duration:${urlVideo.timestamp}\n- Viewer: ${urlVideo.views}\n- Release: ${urlVideo.ago}`)
       file = await yta.mp3(urlVideo.url)
-      client.sendMessage(from,{ audio: fs.readFileSync(file.path), mimetype: 'audio/mp4', ptt: true }, mek)
+      client.sendMessage(from, { audio: fs.readFileSync(file.path), mimetype: 'audio/mp4', ptt: true }, mek)
       fs.unlinkSync(file.path)
       proses('✔');
     } catch(err) {

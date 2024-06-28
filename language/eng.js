@@ -180,6 +180,10 @@ we have added the *!play* feature to the bot. This feature functions to play mus
 
 *FAQ*❓
 The owner also wants to convey how many answers to questions the bot has asked:
+
+🗣: Why can't the bot be added to the group?
+> My bot is private, only saved contacts can add the bot to the group. because many people add bots to porn groups. *If you want to add a bot to a group, you must first get permission from the owner*.
+
 🗣: Why are there so few/less exciting features?
 > I used to make this bot just for personal use/for my guild in Toram online, but many users include the bot in their groups, because there is a feature to convert images/videos into stickers. Therefore, I decided to add several features that can be used by other people.
 
