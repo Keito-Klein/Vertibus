@@ -1452,7 +1452,7 @@ break
 break
 
 case 'play':
-  if(!text) return reply(lang.format(prefix, comand))
+  if(!text) return reply(lang.format(prefix, command))
     if(!isUrl) return reply(lang.format(prefix, command))
       proses('⏳');
     try{ 
