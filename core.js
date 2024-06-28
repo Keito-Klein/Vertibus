@@ -10,6 +10,8 @@ const chalk = require("chalk");
 const cheerio = require("cheerio");
 const axios = require("axios");
 const ytdl = require('ytdl-core');
+const yta = require('./lib/ytdl');
+const yts = require('youtube-yts');
 const fetch = require('node-fetch');
 const neko_modules = require('nekos.life');
 const moment = require('moment-timezone');
@@ -1449,24 +1451,43 @@ break
   sen = await client.sendMessage(from, { audio: {url: `./${file}`}, mimetype: 'audio/mp4'})
 break
 
+case 'play':
+  if(!text) return reply(lang.format(prefix, comand))
+    if(!isUrl) return reply(lang.format(prefix, command))
+      proses('⏳');
+    try{ 
+      ytlink = await yts(text)
+      urlVideo = ytlink.videos[0]
+      client.sendImage(from, urlVideo.image, `*${urlVideo.title}*\n- Duration:${urlVideo.timestamp}\n- Viewer: ${urlVideo.views}\n- Release: ${urlVideo.ago}`, mek)
+      file = await yta.mp3(urlVideo.url)
+      client.sendMessage(from,{ audio: fs.readFileSync(file.path), mimetype: 'audio/mp4', ptt: true }, mek)
+      fs.unlinkSync(file.path)
+      proses('✔');
+    } catch(err) {
+      proses('❌');
+      reply('Sepertinya ada yang error')
+      console.log(err)
+    }
+  break
+
 case 'ytmp3':
-    try {
       if (!text) return m.reply(`Example : ${prefix + command} https://youtube.com/watch?v=PtFMh6Tccag%2`)
+      try {
         proses("⏳")
-       yta = require('./lib/ytdl')
       file = await yta.mp3(text)
       teks = `*Detail:*\n- *Title:* ${file.meta.title}\n- *Channel:* ${file.meta.channel}\n- *Duration:* ${file.meta.seconds}\n- *Size:* ${file.size / 1000000} MB`
       img = file.meta.image
       await client.sendImage(from, img, teks, mek)
       await client.sendMessage(from,{ audio: fs.readFileSync(file.path), mimetype: 'audio/mp4', ptt: true }, mek)
-await fs.unlinkSync(file.path)
+ fs.unlinkSync(file.path)
   proses("✔")
 } catch (err) {
   proses("❌")
 }
 break
+
 case 'ytmp4':
-       yta = require('./lib/ytdl')
+       
       if (!text) return m.reply(`Example : ${prefix + command} https://youtube.com/watch?v=PtFMh6Tccag%27`)
       const vid=await yta.mp4(text)
 const ytc=`

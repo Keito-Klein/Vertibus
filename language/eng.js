@@ -39,7 +39,8 @@ return `
  │•${prefix}ig
  │•${prefix}tiktok
  │•${prefix}ytmp3
- ╰•${prefix}ytmp4
+ │•${prefix}ytmp4
+ ╰•${prefix}play
  
 ❏ *Other Menu*
  │•${prefix}owner
@@ -165,14 +166,40 @@ exports.changelog = () => {
 
 ===== *21 - 06 - 2024* =====
 - Improve bot perfomance
+
+===== *28 - 06 - 2024* =====
+- Add !play at list
 `
 }
 
 exports.update = (pushname) => {
 return `
-*New Update V. 2.4.37a*
+*New Update V. 2.5.37a*
 Hi ${pushname}. 
-we have fixed a bug that caused the Bot to delay when used. This is because there are large files that are automatically downloaded when the bot connects to the server.
+we have added the *!play* feature to the bot. This feature functions to play music/songs from YouTube based on the keywords entered. The process may take a long time because the server we use is a free server.\nPlease understand🙏
+
+*FAQ*❓
+The owner also wants to convey how many answers to questions the bot has asked:
+🗣: Why are there so few/less exciting features?
+> I used to make this bot just for personal use/for my guild in Toram online, but many users include the bot in their groups, because there is a feature to convert images/videos into stickers. Therefore, I decided to add several features that can be used by other people.
+
+🗣: Why do bots sometimes take so long to respond?
+> Because the server I use is a free server whose specs are 100% CPU, 1GB RAM, 4GB storage.
+
+🗣: Why use a free server?
+> Because I want to make all the features in the bot free (no premium features). _Free server = free use_. If maybe someone donates, for example enough to buy a server, I'll use it to rent a better server.
+
+🗣: Why doesn't your bot have as many features as other bots?
+> I just make bots to fill my free time & I have a hobby of coding, so I fill my free time coding bots. I also only added the features I wanted.
+
+🗣: Why does your bot sometimes respond to the checklist but not respond?
+> so it's like this le. The data searched for from the URL entered is sometimes not found and has the value \`\`\`undefined\`\`\`. then the bot can't send messages with the value \`\`\`undefined\`\`\`, so the bot won't respond anything.
+
+🗣: what is the ocr feature for?
+> to convert the text in the image into text (in the form of a text message)
+
+🗣: How come that's all the images from the \`\`\`!milf\`\`\` feature?
+> I've been looking for web sources/packages that provide random milfs but couldn't find any.
 `
 }
 
@@ -1019,21 +1046,24 @@ exports.format = (prefix, command) => {
 		case 'bahasa':
 		case 'promote':
     case 'promote':
-    case 'ytdl':
     case 'watk':
     case 'cdmg':
-    case 'fbdl':
     case 'report':
-    case 'ytmp3':
-    case 'ytmp4':
     case 'hidetag':
-    case 'ig':
-    case 'tiktok':
-        case 'fb':
         case 'pixiv':
         case 'pinterest':
   			return `Please input query!!\nExample: ${prefix + command} your query here`
   		break;
+
+		  case 'ytdl':
+			case 'ytmp3':
+			case 'ytmp4':
+			case 'ig':
+			case 'tiktok':
+			case 'fb':
+				case 'fbdl':
+				return `Please input a link/url!`
+			break
 
   		case 'farm':
   		case 'farming':

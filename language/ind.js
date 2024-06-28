@@ -42,7 +42,8 @@ return `
  │•${prefix}ig
  │•${prefix}tiktok
  │•${prefix}ytmp3
- ╰•${prefix}ytmp4
+ │•${prefix}ytmp4
+ ╰•${prefix}play
  
 ❏ *Other Menu*
  │•${prefix}owner
@@ -174,14 +175,44 @@ exports.changelog = () => {
 
 ===== *21 - 06 - 2024* =====
 - Improve bot perfomance
+
+===== *28 - 06 - 2024* =====
+- Add !play at list
 `
 }
 
 exports.update = (pushname) => {
 return `
-*New Update V. 2.4.37a*
+*New Update V. 2.5.37a*
 Hi ${pushname}. 
-kami telah memberbaiki bug yang menyebabkan Bot delay saat digunakan. Hal ini disebabkan karena adanya file besar yang otomatis terdownload saat menjalankan koneksi bot ke server.
+kami telah menambahkan fitur *!play* kedalam bot. Fitur tersebut berfungsi untuk memutar musik/lagu dari youtube berdasarkan keyword yang dimasukan. Proses mungkin akan memakan waktu lama karena server yang kami gunakan merupakan server gratis.\nMohon dimaklumi🙏
+
+*FAQ*❓
+Owner juga mau menyampaikan berapa jawaban pertanyaan yang pernah ditanyakan kepada bot:
+🗣: Kenapa fiturnya dikit banget/kurang seru?
+> Gw dulu bikin nih bot cuman untuk penggunaan pribadi/untuk guildku dalam toram online, namun banyak pengguna yang memasukan bot kedalam grupnya, karena ada fitur convert gambar/video menjadi sticker. Maka dari itu gw memutuskan menambah beberapa fitur yang bisa digunakan oleh orang lain.
+
+🗣: Respon bot kok kadang lama banget?
+> Karena server yang gw pake adalah server gratisan yg speknya CPU 100%, RAM 1GB, Storage 4GB.
+
+🗣: Kenapa pake server gratisan?
+> Karena gw mau menggratiskan semua fitur yang ada dalam bot(gaada fitur premium). _Server gratis = penggunaan gratis_. kalau mungkin ada yg donasi, misal cukup untuk membeli server, ghw pake buat nyewa server yang lebih baik.
+
+🗣: Kenapa botmu fiturnya gk banyak kyk bot lain?
+> Gw bikin bot cuma untuk mengisi waktu luang & gw memiliki hobi ngoding, jadi gw isi waktu luang gw ngoding bot. Gw juga cuman nambah fitur yg gw inginkan saja.
+
+🗣: Kenapa botmu kadang udh respon checklist tapi ngga respon?
+> jadi gini le. Data yang dicari dari url yang dimasukin kadang ga ketemu dan bernilai \`\`\`undefined\`\`\`. lalu bot gak bisa ngirim pesan yang bernilai \`\`\`undefined\`\`\`, jadi bot ga akan merespon apa apa.
+
+🗣: fitur ocr buat apa?
+> buat mengkonvert teks yang ada dalam gambar menjadi teks(dalam bentuk text message)
+
+🗣: Gambar dari fitur \`\`\`!milf\`\`\` kok itu itu aja?
+> gw udah nyari nyari source web/package yang nyediain random milf tapi ga nemu nemu.
+
+*mau nanya nanya lagi?*
+ketik !owner trus chat yg ada disitu
+_Note_: gw jarang on ig
 `
 }
 
@@ -1031,7 +1062,7 @@ exports.format = (prefix, command) => {
           case 'lvling' : 
           case 'leveling':
           	return `Cara penggunaan\n${prefix + command} level|bonus exp`
-          break;
+          break
 
 
   		case 'ai':
@@ -1047,21 +1078,24 @@ exports.format = (prefix, command) => {
 		case 'bahasa':
 		case 'promote':
     case 'spam':
-    case 'ytdl':
     case 'watk':
     case 'cdmg':
-    case 'fbdl':
     case 'report':
-    case 'ytmp3':
-    case 'ytmp4':
     case 'hidetag':
-    case 'ig':
-    case 'tiktok':
-        case 'fb': 
         case 'pixiv':
         case 'pinterest':
   			return `mohon masukan query!!\nContoh: ${prefix + command} masukan query disini`
   		break;
+
+		  case 'ytdl':
+			case 'ytmp3':
+			case 'ytmp4':
+			case 'ig':
+			case 'tiktok':
+			case 'fb':
+				case 'fbdl':
+				return `Mohon masukan link/url!`
+			break
 
   		case 'farm':
   		case 'farming':
