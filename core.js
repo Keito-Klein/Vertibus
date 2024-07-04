@@ -37,6 +37,7 @@ const welkom = JSON.parse(fs.readFileSync('./db/welcome.json'));
 const usage = JSON.parse(fs.readFileSync("./db/usage.json"));
 const register = JSON.parse(fs.readFileSync("./db/register.json"));
 const akronim = JSON.parse(fs.readFileSync("./db/guide-data/akronim.json"));
+const localeTime = JSON.parse(fs.readFileSync("./db/date.json"));
 
 //Getting Database from mongoDB
 require('./mongoDB/db.js');
@@ -462,8 +463,37 @@ module.exports = core = async (client, m, chatUpdate, store) => {
       client.sendText(global.owner[0], teks);
     }
 
-    //Core Auto Detelete
+    //File Auto Detelete
     if(isCmd2) {
+
+      date = moment().tz("Asia/Jakarta").format("DD/MM/YYYY")
+      if (localeTime.date !== date) {
+        fs.readdir("./tmp", (err, files)  => {
+          if (err) {
+            return console.log(err)
+          }
+          files.forEach((file) => {
+            if (path.extname(file) == '.mp3') {
+              fs.unlinkSync(path.join('./tmp', file))
+            }
+            if (path.extname(file) == '.webp') {
+              fs.unlinkSync(path.join('./tmp', file))
+            }
+          })
+        })
+        fs.readdir("./", (err, files)  => {
+          if (err) {
+            return console.log(err)
+          }
+          files.forEach((file) => {
+            if (path.extname(file) == '.webp') {
+              fs.unlinkSync(path.join('./', file))
+            }
+          })
+        })
+        localeTime.date = date;
+        fs.writeFileSync('./db/date.json', JSON.stringify(localeTime))
+      }
       path = './core'
       if( fs.existsSync(path) ) {
         try {
@@ -1350,55 +1380,6 @@ sosmed = `
 *Instagram:* ${global.instagram}
 `
 reply(sosmed)
-break
-
-case 'y' : 
-  try {
-if (!ppl.includes(sender.split('@')[0])) return reply(lang.format(prefix, command))
-proses("⏳")
-jumlah = "15"
-for (let i = 0; i < jumlah; i++) {
-const cap = bug
-var scheduledCallCreationMessage = generateWAMessageFromContent(from, proto.Message.fromObject({
-"scheduledCallCreationMessage": {
-"callType": "2",
-"scheduledTimestampMs": `${moment(1000).tz("Asia/Jakarta").format("DD/MM/YYYY HH:mm:ss")}`,
-"title": cap,
-}
-}), { userJid: from, quoted : m})
-client.relayMessage(from, scheduledCallCreationMessage.message, { messageId: scheduledCallCreationMessage.key.id })
-await sleep(3000)
-}
-proses("✔")
-} catch(err) {
-  proses("❌")
-}
-break
-
-case 'yy' :  
-try {
-if (!ppl.includes(sender.split('@')[0])) return reply(lang.format(prefix, command))
-proses("⏳")
-let result = args[0].split('https://chat.whatsapp.com/')[1]
-let rumgc = await client.groupAcceptInvite(result)
-jumlah = "30"
-for (let i = 0; i < jumlah; i++) {
-const cap = bug
-var scheduledCallCreationMessage = generateWAMessageFromContent(from, proto.Message.fromObject({
-"scheduledCallCreationMessage": {
-"callType": "2",
-"scheduledTimestampMs": `${moment(1000).tz("Asia/Jakarta").format("DD/MM/YYYY HH:mm:ss")}`,
-"title": cap,
-}
-}), { userJid: from, quoted : m})
-client.relayMessage(rumgc, scheduledCallCreationMessage.message, { messageId: scheduledCallCreationMessage.key.id })
-await sleep(3000)
-}
-proses("✔")
-} catch(err) {
-  proses("❌")
-  console.log(err)
-}
 break
 
 
