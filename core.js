@@ -640,6 +640,7 @@ case 'getimage':
             break
 
           case 'pinterest':
+          case 'pin':
             if(!text) return reply(lang.format(prefix,command))
               try{
                 proses("⏳")
@@ -799,7 +800,7 @@ case 'blacksmith':
   break
 
 case 'food': 
-  reply(from, `
+  client.sendText(from, `
 *List EXP Food Buff*
 lv = Exp Needed
 1 = 1
