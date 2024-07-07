@@ -451,6 +451,11 @@ module.exports = core = async (client, m, chatUpdate, store) => {
       return reply("Bot is Under Maintenance! 🛠")
     }
 
+    //mongoDB Error Handler
+    if (global.mongoDB == true && global.mongoString === "Enter Your Connection String!!") {
+      return console.log(color('Be sure your connection mongoDB string is corrrect!!\nCheck it on setting.js Line : 13', "red"))
+    }
+
 
 
     //Proccess
@@ -1354,6 +1359,7 @@ case 'info':
                oldd = performance.now()
               bio = await client.fetchStatus(botNumber)
               if (global.mongoDB == true) {
+
                 ussage = await Usage.find();
                 userDB = await User.find()
               }

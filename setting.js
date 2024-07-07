@@ -9,7 +9,8 @@ global.author = 'Vertibus';
 global.guild = ['6289675651966-1611471388@g.us', '120363023056066862@g.us']
 global.reminder = true
 global.raid = false
-global.mongoDB = true
+global.mongoDB = false //set true to use mongodb
+global.mongoString = 'Enter Your Connection String!!'
 
 /*SosMed*/
 global.facebook = 'https://facebook.com/taufik.qillah.73'
