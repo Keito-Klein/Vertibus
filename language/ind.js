@@ -188,7 +188,7 @@ exports.update = (pushname) => {
 return `
 *New Update V. 3.5.37a*
 Hi ${pushname}. 
-Kami telah meperbarui versi bot. Untuk deeveloper fitur berikut telah hadir: 
+Kami telah memperbarui versi bot. Untuk developer fitur berikut telah hadir: 
 - *Switch Database*
 > developer bisa mengganti mode database menggunakan database mongoDB atau local database(storage/memory). namun, database lokal dengan mongoDB tidak akan sinkron. fitur ini akan berguna bagi developer yang tidak bisa menggunakan mongoDB atau tidak mempunyai akun mongoDB atlas.\n\nNote: mode database bisa diganti didalam setting/file configurasi.
 `
