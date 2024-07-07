@@ -43,18 +43,20 @@ This project require :
 ## Setting Up
 - Make your OcrSpace ApiKey [Here](https://ocr.space/ocrapi)
 - Make your Imgbb ApiKey [Here](https://api.imgbb.com)
-- Change your ApiKey at setting.js line 14 & 15.
+- Change your ApiKey at setting.js line 20 & 21.
 - Change name file session at setting.js line 6. this is optional
 - Change owner number at setting.js line 2
-- Change your language at sansekai.js line 39, there's only 2 language at now. just Indonesia (ind) & English (eng)
+- Change your language at core.js line 53, there's only 2 language at now. just Indonesia (ind) & English (eng)
+- Change your database mode ***local/mongoDB*** at setting.js line 12 
+- Change your mongoDB connection string at setting.js line 13
 
 ## Install
 **Install on RDP/Windows ✅**
 
 Install:
-[NodeJS](https://nodejs.org/en/download/)
-[Git Bash](https://git-scm.com/downloads)
-[FFMPEG](https://www.gyan.dev/ffmpeg/builds/)
+- [NodeJS](https://nodejs.org/en/download/)
+- [Git Bash](https://git-scm.com/downloads)
+- [FFMPEG](https://www.gyan.dev/ffmpeg/builds/)
 
 Then:
 ```bash
@@ -66,7 +68,7 @@ $ node index.js
 **Install on Termux ✅**
 
 ```bash
-$ pkg install git nodejs ffmpeg-y
+$ pkg install git nodejs ffmpeg -y
 $ git clone https://github.com/Keito-Klein/Vetibus
 $ cd Vertibus
 $ npm install
