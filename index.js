@@ -180,7 +180,7 @@ async function startHisoka() {
   );
   const msgRetryCounterCache = new NodeCache() // for retry message, "waiting message"
   const client = sansekaiConnect({
-    version: [2, 2413, 1],
+    version,
     logger: pino({ level: "silent" }),
     printQRInTerminal: !pairingCode,
     mobile: useMobile, // mobile api (prone to bans)
@@ -280,10 +280,15 @@ async function startHisoka() {
   };
 
   client.ev.on("contacts.update", (update) => {
+    let obj = {};
     for (let contact of update) {
+        obj[contact.id] = obj[contact.id] || {};
+        Object.assign(obj[contact.id], contact)
+    }
+    /*for (let contact of update) {
       let id = client.decodeJid(contact.id);
       if (store && store.contacts) store.contacts[id] = { id, name: contact.notify };
-    }
+    }*/
   });
 
   client.getName = (jid, withoutContact = false) => {

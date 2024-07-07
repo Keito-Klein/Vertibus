@@ -9,6 +9,7 @@ global.author = 'Vertibus';
 global.guild = ['6289675651966-1611471388@g.us', '120363023056066862@g.us']
 global.reminder = true
 global.raid = false
+global.mongoDB = true
 
 /*SosMed*/
 global.facebook = 'https://facebook.com/taufik.qillah.73'

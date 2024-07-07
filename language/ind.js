@@ -178,45 +178,19 @@ exports.changelog = () => {
 
 ===== *28 - 06 - 2024* =====
 - Add !play at list
+
+===== *07 - 07 - 2024* =====
+- Add Switch database mode
 `
 }
 
 exports.update = (pushname) => {
 return `
-*New Update V. 2.5.37a*
+*New Update V. 3.5.37a*
 Hi ${pushname}. 
-kami telah menambahkan fitur *!play* kedalam bot. Fitur tersebut berfungsi untuk memutar musik/lagu dari youtube berdasarkan keyword yang dimasukan. Proses mungkin akan memakan waktu lama karena server yang kami gunakan merupakan server gratis.\nMohon dimaklumi🙏
-
-*FAQ*❓
-Owner juga mau menyampaikan berapa jawaban pertanyaan yang pernah ditanyakan kepada bot:
-
-🗣: Kenapa botnya ga bisa dimasukin ke grup?
-> Botnya ku privasi hanya kontak yang disave yang bisa nambahin bot ke grup. karena banyak yang memasukaan bot ke grup porno. *Kalau mau memasukan bot kedalam grup harus ijin dulu ke owner*.
-
-🗣: Kenapa fiturnya dikit banget/kurang seru?
-> Gw dulu bikin nih bot cuman untuk penggunaan pribadi/untuk guildku dalam toram online, namun banyak pengguna yang memasukan bot kedalam grupnya, karena ada fitur convert gambar/video menjadi sticker. Maka dari itu gw memutuskan menambah beberapa fitur yang bisa digunakan oleh orang lain.
-
-🗣: Respon bot kok kadang lama banget?
-> Karena server yang gw pake adalah server gratisan yg speknya CPU 100%, RAM 1GB, Storage 4GB.
-
-🗣: Kenapa pake server gratisan?
-> Karena gw mau menggratiskan semua fitur yang ada dalam bot(gaada fitur premium). _Server gratis = penggunaan gratis_. kalau mungkin ada yg donasi, misal cukup untuk membeli server, ghw pake buat nyewa server yang lebih baik.
-
-🗣: Kenapa botmu fiturnya gk banyak kyk bot lain?
-> Gw bikin bot cuma untuk mengisi waktu luang & gw memiliki hobi ngoding, jadi gw isi waktu luang gw ngoding bot. Gw juga cuman nambah fitur yg gw inginkan saja.
-
-🗣: Kenapa botmu kadang udh respon checklist tapi ngga respon?
-> jadi gini le. Data yang dicari dari url yang dimasukin kadang ga ketemu dan bernilai \`\`\`undefined\`\`\`. lalu bot gak bisa ngirim pesan yang bernilai \`\`\`undefined\`\`\`, jadi bot ga akan merespon apa apa.
-
-🗣: fitur ocr buat apa?
-> buat mengkonvert teks yang ada dalam gambar menjadi teks(dalam bentuk text message)
-
-🗣: Gambar dari fitur \`\`\`!milf\`\`\` kok itu itu aja?
-> gw udah nyari nyari source web/package yang nyediain random milf tapi ga nemu nemu.
-
-*mau nanya nanya lagi?*
-ketik !owner trus chat yg ada disitu
-_Note_: gw jarang on ig
+Kami telah meperbarui versi bot. Untuk deeveloper fitur berikut telah hadir: 
+- *Switch Database*
+> developer bisa mengganti mode database menggunakan database mongoDB atau local database(storage/memory). namun, database lokal dengan mongoDB tidak akan sinkron. fitur ini akan berguna bagi developer yang tidak bisa menggunakan mongoDB atau tidak mempunyai akun mongoDB atlas.\n\nNote: mode database bisa diganti didalam setting/file configurasi.
 `
 }
 

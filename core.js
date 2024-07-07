@@ -22,8 +22,7 @@ const { processing } = require("./lib/remini")
 const { mt } = require("./lib/mt.js")
 const { ind } =require("./language")
 const { eng } = require("./language")
-const { bug } = require('./lib/bug')
-const { igDownloader, tiktok, fb, pinterest } = require("./lib/downloader")
+const { igDownloader, tiktok, fb, pinterest } = require("./lib/downloader");
 
 
 var ipackName = false//Don't fill. sett packName on setting.js
@@ -34,21 +33,26 @@ var currentTime = moment().tz('Asia/Jakarta').format('HH:mm'); //set your Timezo
 const guild = JSON.parse(fs.readFileSync('./db/guild.json'));
 const inRaid = JSON.parse(fs.readFileSync("./lib/guild.json"));
 const welkom = JSON.parse(fs.readFileSync('./db/welcome.json'));
-const usage = JSON.parse(fs.readFileSync("./db/usage.json"));
-const register = JSON.parse(fs.readFileSync("./db/register.json"));
 const akronim = JSON.parse(fs.readFileSync("./db/guide-data/akronim.json"));
 const localeTime = JSON.parse(fs.readFileSync("./db/date.json"));
+let Usage 
+let User
 
 //Getting Database from mongoDB
-require('./mongoDB/db.js');
-const User = require('./models/user.js');
-const Usage = require('./models/usage.js');
+if (global.mongoDB == true) {
+  require('./mongoDB/db.js');
+   User = require('./models/user.js');
+   Usage = require('./models/usage.js');
+} else {
+  User = JSON.parse(fs.readFileSync("./db/register.json"));
+  Usage = JSON.parse(fs.readFileSync("./db/usage.json"));
+}
 
 
 /*Change Your Language Here!*/
 lang = ind
 
-//Regist Function
+//Regist Function via mongoDB
 const addUser = async(id) => {
   const userdb = await User.findOne({ id }).exec(); 
    user = await User.find()
@@ -58,25 +62,33 @@ const addUser = async(id) => {
       id,
       latest: true
     }
-    // register.push(ovj)
     data = new User(ovj)
     data.save().then(() => {
       console.log(`add new data to mongoDB: ${id}`)
     })
   } else {
-    //latest = await User.findOne({ id }).exec()
-      //console.log(latest.latest)
+   
     if (!user[userIndex].latest) {
         await User.updateOne({ id: id } , { latest: true })
-        
-      /*User.updateOne({ id }, {
-        $set: {
-          latest: true
-        }
-      })*/
     }
   }
-  // fs.writeFileSync('./db/register.json' , JSON.stringify(register));
+}
+
+//Regist Function
+const adduser = (id) => {
+  let userIndex = User.findIndex(user => user.id === id);
+  if (userIndex === -1) {
+    const ovj = {
+      id,
+      latest: true
+    }
+    User.push(ovj)
+  } else {
+    if (!User[userIndex].latest) {
+      User[userIndex].latest = true
+    }
+  }
+  fs.writeFileSync('./db/register.json' , JSON.stringify(User));
 }
 
 
@@ -468,6 +480,7 @@ module.exports = core = async (client, m, chatUpdate, store) => {
 
       date = moment().tz("Asia/Jakarta").format("DD/MM/YYYY")
       if (localeTime.date !== date) {
+          //tmp folder
         fs.readdir("./tmp", (err, files)  => {
           if (err) {
             return console.log(err)
@@ -481,6 +494,7 @@ module.exports = core = async (client, m, chatUpdate, store) => {
             }
           })
         })
+          //root folder
         fs.readdir("./", (err, files)  => {
           if (err) {
             return console.log(err)
@@ -1339,8 +1353,10 @@ case 'info':
                neww = performance.now()
                oldd = performance.now()
               bio = await client.fetchStatus(botNumber)
-              ussage = await Usage.find();
-              userDB = await User.find()
+              if (global.mongoDB == true) {
+                ussage = await Usage.find();
+                userDB = await User.find()
+              }
               respon = `
 - *${global.botName}* -
 
@@ -1350,10 +1366,10 @@ _*INFO*_
 *last update Bio:* ${bio.setAt}.
 *Owner:* ${global.ownerName}.
 *Contact:* wa.me/${global.owner[0]}
-*Private Usage:* ${ussage[0].usage_private}.
-*Group Usage:* ${ussage[0].usage_group}.
-*Total usage:* ${ussage[0].usage_private + ussage[0].usage_group}.
-*Total user:* ${userDB.length}.
+*Private Usage:* ${global.mongoDB ? ussage[0].usage_private : Usage.usage_private}.
+*Group Usage:* ${global.mongoDB ? ussage[0].usage_group : Usage.usage_group}.
+*Total usage:* ${global.mongoDB ? ussage[0].usage_private + ussage[0].usage_group : Usage.usage_private + Usage.usage_group}.
+*Total user:* ${global.mongoDB ? userDB.length : User.length}.
 
 Kecepatan Respon ${latensi.toFixed(4)} _Second_ \n ${oldd - neww} _miliseconds_\n\nRuntime : ${runtime(process.uptime())}
 
@@ -1568,11 +1584,14 @@ break
 case 'reset':
   if(!isOwner) return
   proses("⌛")
-  await User.updateMany({}, { latest: false })
-  // Object.keys(register).forEach((i) => {
-  //   register[i].latest = false
-  // })
-  // fs.writeFileSync('./db/register.json', JSON.stringify(register))
+  if (global.mongoDB == true) {
+    await User.updateMany({}, { latest: false })
+  } else {
+    Object.keys(User).forEach((i) => {
+      User[i].latest = false
+    })
+    fs.writeFileSync('./db/register.json', JSON.stringify(User))
+  }
   proses("✔")
   reply("success!")
   break
@@ -1602,32 +1621,60 @@ case 'reset':
       
       //Push Database to MongoDB
       if (!m.isGroup) {
-        current = await Usage.find();
-        user = await User.find();
-        userDB = await User.findOne({ id: sender }).exec()
-        let userIndex = user.findIndex(user => user.id === sender);
-        if (userDB == null) {
+        if (global.mongoDB == true) {
+
+          current = await Usage.find();
+          user = await User.find();
+          userDB = await User.findOne({ id: sender }).exec()
+          let userIndex = user.findIndex(user => user.id === sender);
+          if (userDB == null) {
+              reply(lang.update(pushname))
+              addUser(sender)
+          } else if (!user[userIndex].latest) {
             reply(lang.update(pushname))
             addUser(sender)
-        } else if (!user[userIndex].latest) {
-          reply(lang.update(pushname))
-          addUser(sender)
-        }
-    await Usage.updateOne({}, {$inc: {usage_private: 1}})
-        console.log("this")
-      } else if (m.isGroup) {
-         current = await Usage.find();
-         user = await User.find();
-         userDB = await User.findOne({ id: groupMetadata.id }).exec()
-        let userIndex = user.findIndex(user => user.id === groupMetadata.id);
-        if (userDB === null) {
+          }
+      await Usage.updateOne({}, {$inc: {usage_private: 1}})
+        } else {
+          let userIndex = User.findIndex(user => user.id === sender);
+          if (userIndex == -1) {
+              reply(lang.update(pushname))
+              adduser(sender)
+          } else if (!User[userIndex].latest) {
             reply(lang.update(pushname))
-            addUser(groupMetadata.id)
-        } else if (!user[userIndex].latest) {
-          reply(lang.update(pushname))
-          addUser(groupMetadata.id)
+            adduser(sender)
+          }
+          Usage.usage_private++
+          fs.writeFileSync("./db/usage.json", JSON.stringify(Usage));
         }
-          await Usage.updateOne({}, {$inc: {usage_group: 1}})
+      } else if (m.isGroup) {
+        if (global.mongoDB == true) {
+
+          current = await Usage.find();
+          user = await User.find();
+          userDB = await User.findOne({ id: groupMetadata.id }).exec()
+         let userIndex = user.findIndex(user => user.id === groupMetadata.id);
+         if (userDB === null) {
+             reply(lang.update(pushname))
+             addUser(groupMetadata.id)
+         } else if (!user[userIndex].latest) {
+           reply(lang.update(pushname))
+           addUser(groupMetadata.id)
+         }
+           await Usage.updateOne({}, {$inc: {usage_group: 1}})
+        } else {
+
+          let userIndex = User.findIndex(user => user.id === groupMetadata.id);
+          if (userIndex == -1) {
+              reply(lang.update(pushname))
+              adduser(groupMetadata.id)
+          } else if (!User[userIndex].latest) {
+            reply(lang.update(pushname))
+            adduser(groupMetadata.id)
+          }
+          Usage.usage_group++
+          fs.writeFileSync("./db/usage.json", JSON.stringify(Usage));
+        }
       }
       
     }
