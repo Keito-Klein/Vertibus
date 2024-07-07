@@ -1,6 +1,6 @@
 {
   "name": "vertibus",
-  "version": "1.4.5",
+  "version": "3.5.37b",
   "description": "WhatsApp Bot with Toram Online DB",
   "main": "index.js",
   "type": "commonjs",
