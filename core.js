@@ -1066,7 +1066,7 @@ case 'buff':
 
                   let media = await client.downloadMediaMessage(qms)
                   let encmedia = await client.sendImageAsSticker(from, media, m, text.toLowerCase() == "asli" ? true : false, { packname: q.split('|')[0] ? ipackName : global.packName, author: q.split('|')[1] ? iauthor : global.author })
-                 await fs.unlinkSync(encmedia)
+                  fs.unlinkSync(encmedia)
                  proses("✔")
              } else if (/video/.test(mime)) {
                   if (qms.seconds > 11) return reply('Maksimal 10 detik!')
