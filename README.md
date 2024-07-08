@@ -66,8 +66,14 @@ $ npm install
 $ node index.js
 ```
 **Install on Termux ✅**
+> [!WARNING]
+> sharp package may causing crash when running npm install.
+
+to prevent this from happening. delete the sharp package on the `package.json` file
 
 ```bash
+$ pkg update 
+$ pkg upgrade 
 $ pkg install git nodejs ffmpeg -y
 $ git clone https://github.com/Keito-Klein/Vetibus
 $ cd Vertibus
