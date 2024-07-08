@@ -181,16 +181,22 @@ exports.changelog = () => {
 
 ===== *07 - 07 - 2024* =====
 - Add Switch database mode
+
+===== *08 - 07 - 2024* =====
+- Add Switch Sticker converter function
 `
 }
 
 exports.update = (pushname) => {
 return `
-*New Update V. 3.5.37a*
-Hi ${pushname}. 
+*New Update V. 3.5.38a*
+Hi ${pushname}.
 Kami telah memperbarui versi bot. Untuk developer fitur berikut telah hadir: 
-- *Switch Database*
-> developer bisa mengganti mode database menggunakan database mongoDB atau local database(storage/memory). namun, database lokal dengan mongoDB tidak akan sinkron. fitur ini akan berguna bagi developer yang tidak bisa menggunakan mongoDB atau tidak mempunyai akun mongoDB atlas.\n\nNote: mode database bisa diganti didalam setting/file configurasi.
+- *Switch Sticker converter function*
+> bot akan otomatis menggunakan \`FFMPEG\` apabila package sharp tidak ada. hal ini biasanya terjadi saat digunakan di termux.
+
+tanya tanya silahkan pm owner dengan mengetik:
+*!owner*
 `
 }
 

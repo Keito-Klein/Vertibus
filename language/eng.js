@@ -172,16 +172,19 @@ exports.changelog = () => {
 
 ===== *07 - 07 - 2024* =====
 - Add Switch database mode
+
+===== *08 - 07 - 2024* =====
+- Add Switch Sticker converter function
 `
 }
 
 exports.update = (pushname) => {
 return `
-*New Update V. 3.5.37a*
+*New Update V. 3.5.38a*
 Hi ${pushname}. 
 We have updated the bot version. For developers the following features are available: 
-- *Database Switch*
-> developers can change the database mode using a mongoDB database or local database (storage/memory). however, the local database with mongoDB will not be in sync. This feature will be useful for developers who cannot use MongoDB or do not have a MongoDB Atlas account.\n\nNote: The database mode can be changed in the settings/configuration file.
+- *Switch Sticker converter function*
+> The bot will automatically use \`FFMPEG\` if the sharp package is not present. this usually happens when used in termux.
 `
 }
 
