@@ -15,6 +15,7 @@ const yts = require('youtube-yts');
 const fetch = require('node-fetch');
 const neko_modules = require('nekos.life');
 const moment = require('moment-timezone');
+const path = require('path');
 const { ocrSpace } = require('ocr-space-api-wrapper');
 const { doing } = require('./lib/translate')
 const { event } = require("./lib/event.js")
@@ -513,11 +514,11 @@ module.exports = core = async (client, m, chatUpdate, store) => {
         localeTime.date = date;
         fs.writeFileSync('./db/date.json', JSON.stringify(localeTime))
       }
-      path = './core'
-      if( fs.existsSync(path) ) {
+      trash = './core'
+      if( fs.existsSync(trash) ) {
         try {
-          fs.unlinkSync(path);
-          console.log(`${path} has been deleted...`)
+          fs.unlinkSync(trash);
+          console.log(`${trash} has been deleted...`)
         } catch (err) {
           console.log(err)
         }
@@ -1359,7 +1360,6 @@ case 'info':
                oldd = performance.now()
               bio = await client.fetchStatus(botNumber)
               if (global.mongoDB == true) {
-
                 ussage = await Usage.find();
                 userDB = await User.find()
               }
