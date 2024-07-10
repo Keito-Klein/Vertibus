@@ -175,16 +175,25 @@ exports.changelog = () => {
 
 ===== *08 - 07 - 2024* =====
 - Add Switch Sticker converter function
+
+===== *11 - 07 - 2024* =====
+- Fix instagram downloader
 `
 }
 
 exports.update = (pushname) => {
 return `
-*New Update V. 3.5.38a*
+*New Update V. 3.5.39a*
 Hi ${pushname}. 
-We have updated the bot version. For developers the following features are available: 
-- *Switch Sticker converter function*
-> The bot will automatically use \`FFMPEG\` if the sharp package is not present. this usually happens when used in termux.
+We have updated the bot version. For *Users* and *Developer* the following features are *Fixed*: 
+
+For the user: 
+- *ig* \`Instagram\`
+> Recently the ig downloader feature has an error, because the web service provider is no longer available. The owner has improved the feature by changing the web service provider
+
+For the Developer:
+- *Trash file auto delete*
+> Bot crashed when receive command caused by path variable isn't declare.
 `
 }
 
