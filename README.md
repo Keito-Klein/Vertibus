@@ -67,7 +67,7 @@ $ node index.js
 ```
 **Install on Termux ✅**
 > [!WARNING]
-> sharp package may causing crash when running npm install.
+> sharp package may causing crash when running `npm install`.
 
 to prevent this from happening. delete the sharp package on the `package.json` file
 
