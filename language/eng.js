@@ -178,22 +178,28 @@ exports.changelog = () => {
 
 ===== *11 - 07 - 2024* =====
 - Fix instagram downloader
+
+===== *16 - 07 - 2024* =====
+- Fix play
+- Fix ytmp3
+- Fix ytmp4
 `
 }
 
 exports.update = (pushname) => {
 return `
 *New Update V. 3.5.39a*
-Hi ${pushname}. 
-We have updated the bot version. For *Users* and *Developer* the following features are *Fixed*: 
+Hi ${pushname}.
+We have updated the bot version. For *Users* the following improvements have arrived: 
 
-For the user: 
-- *ig* \`Instagram\`
-> Recently the ig downloader feature has an error, because the web service provider is no longer available. The owner has improved the feature by changing the web service provider
 
-For the Developer:
-- *Trash file auto delete*
-> Bot crashed when receive command caused by path variable isn't declare.
+- \`play\`
+- \`ytmp3\`
+- \`ytmp4\`
+> This long-broken feature has been repaired by the owner. The feature is broken because the bot experienced a \`status code: 403{forbidden}\` error when downloading the file.
+
+for questions please pm the owner by typing:
+*!owner*
 `
 }
 

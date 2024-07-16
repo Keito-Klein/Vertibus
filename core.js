@@ -9,10 +9,11 @@ const util = require("util");
 const chalk = require("chalk");
 const cheerio = require("cheerio");
 const axios = require("axios");
-const ytdl = require('ytdl-core');
+const ytdl = require('@distube/ytdl-core');
 const yta = require('./lib/ytdl');
 const yts = require('youtube-yts');
 const fetch = require('node-fetch');
+const ffmpeg = require("fluent-ffmpeg");
 const neko_modules = require('nekos.life');
 const moment = require('moment-timezone');
 const path = require('path');
@@ -575,7 +576,7 @@ case 'wallpaper':
 break
 
 case 'getimage':
-  if(!isUrl) return reply('enter the url image!');
+  if(!isUrl(text)) return reply('enter the url image!');
   try {
     proses('⏳');
     res = await fetch(text)
@@ -1457,16 +1458,42 @@ break
 
 case 'play':
   if(!text) return reply(lang.format(prefix, command))
-    if(!isUrl) return reply(lang.format(prefix, command))
-      proses('⏳');
+     
     try{ 
+        proses('⏳');
       ytlink = await yts(text)
+        proses("🔍")
       urlVideo = ytlink.videos[0]
       client.sendImage(from, urlVideo.image, `*${urlVideo.title}*\n- Duration:${urlVideo.timestamp}\n- Viewer: ${urlVideo.views}\n- Release: ${urlVideo.ago}`)
-      file = await yta.mp3(urlVideo.url)
-      client.sendMessage(from, { audio: fs.readFileSync(file.path), mimetype: 'audio/mp4', ptt: true }, mek)
-      fs.unlinkSync(file.path)
-      proses('✔');
+      let mp3File = getRandom('.mp3')
+          console.log(color('Download Audio With ytdl-core'))
+          proses("⬇")
+          let stream = await ytdl(urlVideo.url, {
+              quality: 'highestaudio',
+              format: 'mp3',
+              highWaterMark: 1 << 30,
+              liveBuffer: 1 << 30
+          })
+          .on('error', err => {
+              downlaodSucess = undefined;
+              console.log(err)
+          })
+          await ffmpeg(stream)
+            .audioBitrate(96)
+            .audioChannels(1)
+            .format('mp3')
+            .save(`./tmp/${mp3File}`)
+            .on('error', err => {
+              downloadSucess = undefined;
+              console.log(err)
+          })
+            .on('end', async() => {
+              downloadSucess = true;
+              proses("⬆")
+              await client.sendMessage(from, { audio: fs.readFileSync(`./tmp/${mp3File}`), mimetype: 'audio/mp4', ptt: true }, mek)
+              proses("✔")
+          })
+            
     } catch(err) {
       proses('❌');
       reply('Sepertinya ada yang error')
@@ -1474,32 +1501,83 @@ case 'play':
     }
   break
 
-case 'ytmp3':
-      if (!text) return m.reply(`Example : ${prefix + command} https://youtube.com/watch?v=PtFMh6Tccag%2`)
+  case 'ytmp3':
+    if (!text) return m.reply(`Example : ${prefix + command} https://youtube.com/watch?v=PtFMh6Tccag%2`)
+      if (!isUrl(text)) return m.reply(`Example : ${prefix + command} https://youtube.com/watch?v=PtFMh6Tccag%2`)
       try {
-        proses("⏳")
-      file = await yta.mp3(text)
-      teks = `*Detail:*\n- *Title:* ${file.meta.title}\n- *Channel:* ${file.meta.channel}\n- *Duration:* ${file.meta.seconds}\n- *Size:* ${file.size / 1000000} MB`
-      img = file.meta.image
-      await client.sendImage(from, img, teks, mek)
-      await client.sendMessage(from,{ audio: fs.readFileSync(file.path), mimetype: 'audio/mp4', ptt: true }, mek)
- fs.unlinkSync(file.path)
-  proses("✔")
+    proses("⌛")
+        let mp3File = getRandom('.mp3')
+        console.log(color('Download Audio With ytdl-core'))
+        proses("⬇")
+        let stream = await ytdl(text, {
+            quality: 'highestaudio',
+            format: 'mp3',
+            highWaterMark: 1 << 30,
+            liveBuffer: 1 << 30
+        })
+        .on('error', err => {
+            downlaodSucess = undefined;
+            console.log(err)
+        })
+        await ffmpeg(stream)
+          .audioBitrate(96)
+          .audioChannels(1)
+          .format('mp3')
+          .save(`./tmp/${mp3File}`)
+          .on('error', err => {
+            downloadSucess = undefined;
+            console.log(err)
+        })
+          .on('end', async() => {
+            downloadSucess = true;
+            proses("⬆")
+            await client.sendMessage(from, { audio: fs.readFileSync(`./tmp/${mp3File}`), mimetype: 'audio/mp4', ptt: true }, mek)
+            proses("✔")
+        })
+          
+        } catch (err) {
+        proses("❌")
+        console.log(err)
+        }
+    /*try {
+      proses("⏳")
+      
+    file = await yta.mp3(text)
+    teks = `*Detail:*\n- *Title:* ${file.meta.title}\n- *Channel:* ${file.meta.channel}\n- *Duration:* ${file.meta.seconds}\n- *Size:* ${file.size / 1000000} MB`
+    img = file.meta.image
+    await client.sendImage(from, img, teks, mek)
+    await client.sendMessage(from,{ audio: fs.readFileSync(file.path), mimetype: 'audio/mp4', ptt: true }, mek)
+fs.unlinkSync(file.path)
+proses("✔")
 } catch (err) {
-  proses("❌")
-}
+proses("❌")
+}*/
 break
 
 case 'ytmp4':
        
       if (!text) return m.reply(`Example : ${prefix + command} https://youtube.com/watch?v=PtFMh6Tccag%27`)
-      const vid=await yta.mp4(text)
+      if (!isUrl(text)) return m.reply(`Example : ${prefix + command} https://youtube.com/watch?v=PtFMh6Tccag%2`)
+            try{
+                proses("⌛")
+                let info = await ytdl.getInfo(text)
+                proses("🔍")
+    			let format = ytdl.chooseFormat(info.formats, { quality: '18' });
+                proses("⬆")
+                client.sendMessage(from, {video: {url: format.url}, caption: `*Video Info*\n\n*Title*: \`${info.videoDetails.title}\`\n*Channel*: \`${info.videoDetails.ownerChannelName}\`\n*Category*: \`${info.videoDetails.category}\`\n*Published*: \`${info.videoDetails.publishDate}\`\n*Viewed*: \`${info.videoDetails.viewCount}\``}, mek)
+                proses("✔")
+            } catch(err) {
+                proses("❌")
+                console.log(err)
+            }
+    
+      /*const vid=await yta.mp4(text)
 const ytc=`
 *Tittle:* ${vid.title}
 *Date:* ${vid.date}
 *Duration:* ${vid.duration}
 *Quality:* ${vid.quality}`
-await client.sendMessage(from,{ video: {url:vid.videoUrl}, caption: ytc }, mek)
+await client.sendMessage(from,{ video: {url:vid.videoUrl}, caption: ytc }, mek)*/
               break
 
         case 'addmem':

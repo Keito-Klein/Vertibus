@@ -187,22 +187,25 @@ exports.changelog = () => {
 
 ===== *11 - 07 - 2024* =====
 - Fix instagram downloader
+
+===== *16 - 07 - 2024* =====
+- Fix play
+- Fix ytmp3
+- Fix ytmp4
 `
 }
 
 exports.update = (pushname) => {
 return `
-*New Update V. 3.5.39a*
+*New Update V. 3.5.42b*
 Hi ${pushname}.
-Kami telah memperbarui versi bot. Untuk *User* dan *Developer* perbaikan berikut telah hadir: 
+Kami telah memperbarui versi bot. Untuk *User* perbaikan berikut telah hadir: 
 
-Untuk user: 
-- *ig* \`Instagram\`
-> Baru-baru ini fitur ig downloader error, karena web penyedia layanan tidak lagi beroperasi lagi. Owner telah memperbaiki fitur dengan mengganti web penyedia layanan.
 
-Untuk developer: 
-- *Auto delete file sampah*
-> Bot mengalami crash saat menerima command, dikarenakan path variable tidak di deklarasikan.
+- \`play\`
+- \`ytmp3\`
+- \`ytmp4\`
+> fitur yang telah lama rusak ini telah diperbaiki oleh owner. Fitur rusak dikarenakan bot mengalami error \`status code: 403{forbidden}\` saat mendownloaad file.
 
 tanya tanya silahkan pm owner dengan mengetik:
 *!owner*
