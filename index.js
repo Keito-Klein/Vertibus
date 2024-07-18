@@ -184,7 +184,7 @@ async function startHisoka() {
     logger: pino({ level: "silent" }),
     printQRInTerminal: !pairingCode,
     mobile: useMobile, // mobile api (prone to bans)
-    browser: [ "Ubuntu", "Chrome", "20.0.04" ],
+    browser: [ "Ubuntu", "Firefox", "20.0.04" ],
     auth: {
          creds: state.creds,
          keys: makeCacheableSignalKeyStore(state.keys, pino({ level: "fatal" }).child({ level: "fatal" })),
