@@ -1411,6 +1411,19 @@ case 'bot':
 await reply(`bot active!\nsince ${runtime(process.uptime())} ago`)
 break
 
+case "join":
+  if(!isOwner) return reply("Hanya bisa dilakukan oleh Owner")
+  if(isUrl(text)) return reply("input the URL")
+    try{
+      proses("⌛")
+      await client.groupAcceptInvite(text)
+      proses("✔")
+  } catch(e) {
+    proses("❌")
+    console.log(e)
+  }
+  break
+
 
         case 'spam':
           if(!q) return reply(lang.format(prefix, command))
@@ -1593,9 +1606,29 @@ await client.sendMessage(from,{ video: {url:vid.videoUrl}, caption: ytc }, mek)*
         media = await client.downloadAndSaveMediaMessage(qms, ranp)
         await client.sendMessage(from, { audio: { url: media }, mimetype: 'audio/mp4', ptt: true })
           fs.unlinkSync(media)
-  break     
+  break   
+  
+        case 'fb':
+        case 'fbdl':
+            if (!q) return reply("input link")
+            try{
+            proses("⌛")
+                const fbdl = require("fb-downloader-scrapper")
+            fbdl(text)
+			.then((result)=>{
+    		client.sendMessage(from, {video: {url: result.hd}, caption: result.title !== undefined ? result.title : " "}, mek)
+                proses("✔")
+			}).catch((err)=>{
+    			console.log(err)
+			})
+            
+            } catch(err) {
+                proses("❌")
+                console.log(err)
+            }
+            break
 
-case 'fbdl':
+/*case 'fbdl':
 case 'fb':
   if (!q) return reply (lang.format(prefix, command))
   try {
@@ -1611,7 +1644,7 @@ case 'fb':
         proses("❌")
         console.log(err)
       }
-    break
+    break*/
 
   case 'ig':
     try {
