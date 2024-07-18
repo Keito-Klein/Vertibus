@@ -188,7 +188,7 @@ exports.changelog = () => {
 
 exports.update = (pushname) => {
 return `
-*New Update V. 3.5.39a*
+*New Update V. 3.5.42a*
 Hi ${pushname}.
 We have updated the bot version. For *Users* the following improvements have arrived: 
 
