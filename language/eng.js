@@ -61,12 +61,9 @@ return `
  │•${prefix}promote
  │•${prefix}report
  ╰•${prefix}donasi
-
- 🌐 *Join Group Bot* 🌐
- https://chat.whatsapp/GhGhNeX8p3MKwc8KsmaWph
  
 💰 *Bantu donasi di :*
-💲 Saweria : https://saweria.co/mikako
+
 💳 dana : 083831853737
 💳 GoPay : 083831853737
 💳 ShopeePay : 083831853737
