@@ -713,6 +713,7 @@ case 'getimage':
           case 'lvl':
           case 'lvling' : 
           case 'leveling':
+            return reply("Fitur sedang dalam perbaikan!")
             try {
          lvl = q.split('|')[0]
          bexp = q.split('|')[1]
@@ -725,17 +726,20 @@ case 'getimage':
             if( isNaN(bexp)) return m.reply(lang.format(prefix, command))
               proses("⏳")
         
-    axios.get(`https://toram-id.com/leveling?level=${lvl}&bonusexp=${bexp}&range=5`)
+    axios.get(`https://coryn.club/leveling.php?lv=${lvl}&gap=9&bonusEXP=${bexp}`)
   .then((response) => {
     if (response.status === 200) {
       const html = response.data;
       const $ = cheerio.load(html);
       const array = []
-      $('tr.text-danger').each(function(i, elem) {
+      $('.level-row').each(function(i, elem) {
         array[i] = {
-          boss: $(this).find('.px-2 > div').text().trim(),
-          location: $(this).find('.text-muted > a').text().trim(),
-          exp: $(this).find('.text-primary').text().trim()
+          level: $(this).find('.level-col-1 > b').text().trim(),
+          boss: $(this).find('.level-col-2 > p:nth-child(1) > b > a').text().trim(),
+          location: $(this).find('.level-col-2 > p:nth-child(2)').text().trim(),
+          exp: [
+            $(this).find('.level-col-3 > p:nth-child(1) > b').text().trim(),
+          ]
         }
       });
       let gb = `*Leveling lvl ${lvl} & bonus exp ${bexp}*\n`
