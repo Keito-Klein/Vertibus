@@ -1,1 +1,1 @@
-const file = 'empty'
+const empty = "empty File"
