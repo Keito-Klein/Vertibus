@@ -13,6 +13,7 @@ const {
   makeInMemoryStore,
   PHONENUMBER_MCC,
   jidDecode,
+  areJidsSameUser,
   proto,
   getContentType,
   useMultiFileAuthState,
@@ -48,7 +49,6 @@ const color = (text, color) => {
   return !color ? chalk.green(text) : chalk.keyword(color)(text);
 };
 
-
 function smsg(conn, m, store) {
   if (!m) return m;
   let M = proto.WebMessageInfo;
@@ -65,20 +65,11 @@ function smsg(conn, m, store) {
     m.mtype = getContentType(m.message);
     m.msg = m.mtype == "viewOnceMessage" ? m.message[m.mtype].message[getContentType(m.message[m.mtype].message)] : m.message[m.mtype];
     m.body =
-    m.mtype === 'conversation' ? m.message.conversation :
-    m.mtype === 'imageMessage' ? m.message.imageMessage.caption :
-    m.mtype === 'videoMessage' ? m.message.videoMessage.caption :
-    m.mtype === 'extendedTextMessage' ? m.message.extendedTextMessage.text :
-    m.mtype === 'buttonsResponseMessage' ? m.message.buttonsResponseMessage.selectedButtonId :
-    m.mtype === 'listResponseMessage' ? m.message.listResponseMessage.singleSelectReply.selectedRowId :
-    m.mtype === 'InteractiveResponseMessage' ? JSON.parse(m.message.interactiveResponseMessage.nativeFlowResponseMessage.paramsJson)?.id :
-    m.mtype === 'templateButtonReplyMessage' ? m.message.templateButtonReplyMessage.selectedId :
-    m.mtype === 'messageContextInfo' ?
-      m.message.buttonsResponseMessage?.selectedButtonId || 
-      m.message.listResponseMessage?.singleSelectReply.selectedRowId ||
-      m.message.InteractiveResponseMessage.NativeFlowResponseMessage ||
-      m.text :
-    ''
+      m.message.conversation ||
+      m.msg.caption ||
+      m.msg.text ||
+      (m.mtype == "viewOnceMessage" && m.msg.caption) ||
+      m.text;
     let quoted = (m.quoted = m.msg.contextInfo ? m.msg.contextInfo.quotedMessage : null);
     m.mentionedJid = m.msg.contextInfo ? m.msg.contextInfo.mentionedJid : [];
     if (m.quoted) {
@@ -114,7 +105,7 @@ function smsg(conn, m, store) {
         message: quoted,
         ...(m.isGroup ? { participant: m.quoted.sender } : {}),
       }));
-      
+
       /**
        *
        * @returns
@@ -151,17 +142,9 @@ function smsg(conn, m, store) {
    */
   m.copy = () => exports.smsg(conn, M.fromObject(M.toObject(m)));
 
-  /**
-   *
-   * @param {*} jid
-   * @param {*} forceForward
-   * @param {*} options
-   * @returns
-   */
-  m.copyNForward = (jid = m.chat, forceForward = false, options = {}) => conn.copyNForward(jid, m, forceForward, options);
-
   return m;
 }
+
 
 async function startHisoka() {
   const { state, saveCreds } = await useMultiFileAuthState(`./${global.sessionName ? global.sessionName : "session"}`);
@@ -369,10 +352,11 @@ async function startHisoka() {
     } else if (connection === "open") {
       console.log(color("Bot success conneted to server", "green"));
       console.log(color("Type /menu to see menu"));
-      client.sendMessage(global.owner + "@s.whatsapp.net", { text: `Bot started!\n\njangan lupa support ya bang :)\n${global.donet}` });
+      client.sendMessage(global.owner[0] + "@s.whatsapp.net", { text: `Bot started!\n\njangan lupa support ya bang :)\n${global.donet}` });
     }
     // console.log('Connected...', update)
   });
+  
 
   client.ev.on("creds.update", saveCreds);
   

