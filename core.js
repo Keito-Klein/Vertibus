@@ -832,9 +832,9 @@ case 'getimage':
               if(!text && isNaN(text)) return reply(lang.format(prefix, command));
               try{
                 proses("⌛")
-                pdfFile = await nhentai(text);
-                pdfPath = fs.readFileSync(pdfFile);
-                client.sendMessage(from, pdfPath, {mimetype: 'application/pdf', filename: 'exam.pdf'})//WIP
+                nuclearCode = await nhentai(text, text);
+                file = fs.readFileSync(nuclearCode);
+                await client.sendMessage(from, {document: file, mimetype: 'application/pdf', fileName: `${text}.pdf`} )
                 proses("✔");
               } catch(err) {
                 proses("❌");
