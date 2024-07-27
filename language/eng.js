@@ -34,6 +34,7 @@ return `
  │•${prefix}smeme
  │•${prefix}toimg
  │•${prefix}remini
+ │•${prefix}nhentai
  │•${prefix}tovideo
  │•${prefix}fb
  │•${prefix}ig
@@ -180,20 +181,30 @@ exports.changelog = () => {
 - Fix play
 - Fix ytmp3
 - Fix ytmp4
+
+===== *16 - 07 - 2024* =====
+- Add nhentai downloader at list
+- Add bug
+- Fix leveling
 `
 }
 
 exports.update = (pushname) => {
 return `
-*New Update V. 3.5.42a*
-Hi ${pushname}.
-We have updated the bot version. For *Users* the following improvements have arrived: 
+*New Update V. 3.7.44a*
+HHi ${pushname}.
+We have updated the bot version. For *Users*/*Owner* the following improvements/additions are available: 
 
 
-- \`play\`
-- \`ytmp3\`
-- \`ytmp4\`
-> This long-broken feature has been repaired by the owner. The feature is broken because the bot experienced a \`status code: 403{forbidden}\` error when downloading the file.
+- \`Leveling\`
+> Previously the leveling feature could not be used because the bot got an \`\`\`error code 403\`\`\` caused by website/data source security starting to become tighter.
+
+- \`nhentai\`
+> This feature was added because the owner was confused.
+
+- \`bug\`
+> This feature can only be used by the owner because it is very dangerous if misused
+
 
 for questions please pm the owner by typing:
 *!owner*
