@@ -880,7 +880,7 @@ case 'getimage':
           case 'lvl':
           case 'lvling' : 
           case 'leveling':
-            return reply("Fitur sedang dalam perbaikan!")
+            //return reply("Fitur sedang dalam perbaikan!")
             try {
          lvl = q.split('|')[0]
          bexp = q.split('|')[1]
@@ -893,30 +893,56 @@ case 'getimage':
             if( isNaN(bexp)) return m.reply(lang.format(prefix, command))
               proses("⏳")
         
-    axios.get(`https://coryn.club/leveling.php?lv=${lvl}&gap=9&bonusEXP=${bexp}`)
-  .then((response) => {
-    if (response.status === 200) {
-      const html = response.data;
-      const $ = cheerio.load(html);
-      const array = []
-      $('.level-row').each(function(i, elem) {
-        array[i] = {
-          level: $(this).find('.level-col-1 > b').text().trim(),
-          boss: $(this).find('.level-col-2 > p:nth-child(1) > b > a').text().trim(),
-          location: $(this).find('.level-col-2 > p:nth-child(2)').text().trim(),
-          exp: $('.level-col-3 > p').forEach((elem, index) => {
-            $(this).find(`.level-col-3 > p:nth.child(${index + 1}) > b`).text.trim()
+          axios.get(`https://coryn.club/leveling.php?lv=${lvl}&gap=7&bonusEXP=${bexp}`)
+          .then((response) => {
+            if (response.status === 200) {
+              const html = response.data;
+              const $ = cheerio.load(html);
+              const array = []
+              $('.level-row').each(function(i, elem) {
+                /*array[i] = {
+                  level: $(this).find('.level-col-1 > b').text().trim(),
+                  boss: $(this).find('.level-col-2 > p:nth-child(1) > b > a').text().trim(),
+                  location: $(this).find('.level-col-2 > p:nth-child(2)').text().trim(),
+                }*/
+               level = $(this).find('.level-col-1 > b').text().trim();
+               boss = $(this).find('.level-col-2 > p:nth-child(1) > b > a').text().trim();
+               location = $(this).find('.level-col-2 > p:nth-child(2)').text().trim();
+               fullBreak = $(this).find('.level-col-3 > p:nth-child(1) > b').text().trim();
+               allBreak = $(this).find('.level-col-3 > p:nth-child(1)> small').text().trim();
+               secondBreak = $(this).find('.level-col-3 > p:nth-child(2)').text().trim();
+               twoBreak = $(this).find('.level-col-3 > p:nth-child(2) > small').text().trim();
+               firstBreak = $(this).find('.level-col-3 > p:nth-child(3)').text().trim();
+               oneBreak = $(this).find('.level-col-3 > p:nth-child(3) > small').text().trim();
+               noBreak = $(this).find('.level-col-3 > p:nth-child(4)').text().trim();
+               zeroBreak = $(this).find('.level-col-3 > p:nth-child(4)> small').text().trim();
+        
+               array.push({
+                level,
+                boss,
+                location,
+                exp: {
+                  fullBreak,
+                  secondBreak : secondBreak ? secondBreak : " - ",
+                  firstBreak : firstBreak ? firstBreak : " - ",
+                  noBreak : noBreak ? noBreak : " - "
+                },
+                star: {
+                  allBreak,
+                  twoBreak: twoBreak ? twoBreak : " - ",
+                  oneBreak: oneBreak ? oneBreak : " - ",
+                  zeroBreak: zeroBreak ? zeroBreak : " - "
+                }
+               })
+              });
+              let gb = `*Leveling lvl ${lvl} & bonus exp ${bexp}%*\n`
+              for(let i = 0; i < array.length; i++) {
+                  gb += `-------------------------------\nBoss: ${array[i].boss}\nBoss Level: ${array[i].level}\nLocation: ${array[i].location}\nEXP:\n- Full Break: ${array[i].exp.fullBreak} ${array[i].star.allBreak}\n- Two Break: ${array[i].exp.secondBreak}\n- One Break: ${array[i].exp.firstBreak}\n- No Break: ${array[i].exp.noBreak} \n`
+              }
+              client.sendMessage(from, gb, mek)
+              proses("✔")
+            }
           })
-        }
-      });
-      let gb = `*Leveling lvl ${lvl} & bonus exp ${bexp}*\n`
-      for(let i = 0; i < array.length; i++) {
-          gb += `-------------------------------\nBoss: ${array[i].boss}\nLocation: ${array[i].location}\nEXP: ${array[i].exp}\n`
-      }
-      client.sendText(from, gb, mek)
-      proses("✔")
-    }
-  })
     } catch (err) {
       proses("❌")
       m.reply(lang.eror(err))
