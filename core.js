@@ -94,6 +94,18 @@ const adduser = (id) => {
   fs.writeFileSync('./db/register.json' , JSON.stringify(User));
 }
 
+//Consigment Function
+const dotting = (int) => {
+
+  price = int.toString();
+
+  reversed = price.split('').reverse().join('');
+  dotReserve = reversed.match(/.{1,3}/g).join('.');
+  reverses = dotReserve.split('').reverse().join('');
+
+  return reverses;
+}
+
 
 //Akronim Function
 const acronime = (query) => {
@@ -949,6 +961,118 @@ case 'getimage':
     }
   break;
 
+  case 'cb-novip':
+    proses("⌛")
+    dotPrice = text.replace(/\./g, '')
+    price = parseInt(dotPrice)
+    fee = Math.floor(price * 0.1)
+    profit = price - fee
+    
+    //Indonesia Server
+    taxIn = price * 0.2
+    indo = price + taxIn
+
+    //Chinesse Server 0 tax
+    taxCh = price * 0
+    china = price + taxCh
+
+    //Japan Server
+    taxJp = price * 0.03
+    japan = price + taxJp
+
+    result = `
+*Result*: 
+Harga: \`\`\`${dotting(price)}\`\`\`
+Fee: \`\`\`${dotting(fee)}\`\`\`
+Profit: \`\`\`${dotting(profit)}\`\`\`
+Global Price: 
+- Indonesia: \`\`\`${dotting(indo)}\`\`\`
+- China: \`\`\`${dotting(china)}\`\`\`
+- Japan: \`\`\`${dotting(japan)}\`\`\`
+      `
+    client.sendText(from, result, mek)
+    proses("✔");
+  break
+
+  case 'cb-vip': 
+  proses("⌛")
+    dotPrice = text.replace(/\./g, '')
+    price = parseInt(dotPrice)
+    fee = Math.floor(price * 0.1 * 0.6)
+    
+    profit = price - fee
+    
+    //Indonesia Server
+    taxIn = price * 0.2
+    indo = price + taxIn
+
+    //Chinesse Server 0 tax
+    taxCh = price * 0
+    china = price + taxCh
+
+    //Japan Server
+    taxJp = price * 0.03
+    japan = price + taxJp
+
+    result = `
+*Result*: 
+Harga: \`\`\`${dotting(price)}\`\`\`
+Fee: \`\`\`${dotting(fee)}\`\`\`
+Profit: \`\`\`${dotting(profit)}\`\`\`
+Global Price: 
+- Indonesia: \`\`\`${dotting(indo)}\`\`\`
+- China: \`\`\`${dotting(china)}\`\`\`
+- Japan: \`\`\`${dotting(japan)}\`\`\`
+      `
+    client.sendText(from, result, mek)
+    proses("✔");
+  break
+
+
+  case 'cb' :
+    if (!text && isNaN(text)) return reply("please input the price!")
+    teks = "Do you have 30-Day Tickets/VIP?\nOpen button bellow ⬇"
+    msg = generateWAMessageFromContent(from, {
+      viewOnceMessage: {
+        message: {
+            "messageContextInfo": {
+              "deviceListMetadata": {},
+              "deviceListMetadataVersion": 2
+            },
+            interactiveMessage: proto.Message.InteractiveMessage.create({
+              body: proto.Message.InteractiveMessage.Body.create({
+                text: teks
+              }),
+              footer: proto.Message.InteractiveMessage.Footer.create({
+                text: global.botName
+              }),
+              nativeFlowMessage: proto.Message.InteractiveMessage.NativeFlowMessage.create({
+                buttons: [
+    {
+      "name": "quick_reply",
+      "buttonParamsJson": `{"display_text":"Yes ✔","id":"${prefix}cb-vip ${text}"}`
+    },
+    {
+      "name": "quick_reply",
+      "buttonParamsJson": `{"display_text":"No ❌","id":"${prefix}cb-novip ${text}"}`
+    }
+               ],
+              }),
+              contextInfo: {
+                      mentionedJid: [m.sender], 
+                      forwardingScore: 999,
+                      isForwarded: true
+                    }
+            })
+        }
+      }
+    }, {})
+
+    await client.relayMessage(msg.key.remoteJid, msg.message, {
+      messageId: msg.key.id
+    })
+    break 
+
   case "istilah":
   case "singkatan":
   case "akronim":
@@ -1613,7 +1737,8 @@ case "join":
   if(isUrl(text)) return reply("input the URL")
     try{
       proses("⌛")
-      await client.groupAcceptInvite(text)
+      groupLink = text.split(" ")[0].split("https://chat.whatsapp.com/")[1];
+      await client.groupAcceptInvite(groupLink)
       proses("✔")
   } catch(e) {
     proses("❌")

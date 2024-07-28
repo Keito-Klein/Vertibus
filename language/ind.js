@@ -30,6 +30,7 @@ return `
  │•${prefix}food
  │•${prefix}mobs
  │•${prefix}tas
+ │•${prefix}cb
  ╰•${prefix}mq
 
  ❏ *Media Menu*
@@ -191,19 +192,24 @@ exports.changelog = () => {
 - Fix ytmp3
 - Fix ytmp4
 
-===== *16 - 07 - 2024* =====
+===== *27 - 07 - 2024* =====
 - Add nhentai downloader at list
 - Add bug
 - Fix leveling
+
+===== *28 - 07 - 2024* =====
+- Add Consigmentboard Calculator
 `
 }
 
 exports.update = (pushname) => {
 return `
-*New Update V. 3.7.44a*
+*New Update V. 3.8.44a*
 Hi ${pushname}.
-Kami telah memperbarui versi bot. Untuk *User*/*Owner* perbaikan/penambahan berikut telah hadir: 
+Kami telah memperbarui versi bot. Untuk *User* penambahan berikut telah hadir: 
 
+- \`cb\`
+> Jika kamu player Toram Online. Kami telah menambahkan fitur kalkulator harga papan untuk menghitung laba, fee, harga global.
 
 - \`Leveling\`
 > Sebelumnya fitur leveling tidak dapat digunakan karena bot mendapat \`\`\`error code 403\`\`\` disebabkan oleh keamanan website/sumber data yang mulai ketat.

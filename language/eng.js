@@ -27,6 +27,7 @@ return `
  │•${prefix}food
  │•${prefix}mobs
  │•${prefix}bag
+ │•${prefix}cb
  ╰•${prefix}mq
 
  ❏ *Media Menu*
@@ -182,19 +183,24 @@ exports.changelog = () => {
 - Fix ytmp3
 - Fix ytmp4
 
-===== *16 - 07 - 2024* =====
+===== *27 - 07 - 2024* =====
 - Add nhentai downloader at list
 - Add bug
 - Fix leveling
+
+===== *28 - 07 - 2024* =====
+- Add Consigmentboard Calculator
 `
 }
 
 exports.update = (pushname) => {
 return `
-*New Update V. 3.7.44a*
+*New Update V. 3.8.44a*
 HHi ${pushname}.
 We have updated the bot version. For *Users*/*Owner* the following improvements/additions are available: 
 
+- \`Leveling\`
+> If you are a Toram Online player. We have added a board price calculator feature to calculate profit, fees, global prices.
 
 - \`Leveling\`
 > Previously the leveling feature could not be used because the bot got an \`\`\`error code 403\`\`\` caused by website/data source security starting to become tighter.
