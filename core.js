@@ -939,7 +939,7 @@ case 'getimage':
               for(let i = 0; i < array.length; i++) {
                   gb += `-------------------------------\nBoss: ${array[i].boss}\nBoss Level: ${array[i].level}\nLocation: ${array[i].location}\nEXP:\n- Full Break: ${array[i].exp.fullBreak} ${array[i].star.allBreak}\n- Two Break: ${array[i].exp.secondBreak}\n- One Break: ${array[i].exp.firstBreak}\n- No Break: ${array[i].exp.noBreak} \n`
               }
-              client.sendMessage(from, gb, mek)
+              client.sendText(from, gb, mek)
               proses("✔")
             }
           })
