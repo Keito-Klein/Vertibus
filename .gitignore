@@ -2,3 +2,6 @@ node_modules/
 client/
 package-lock.json
 lib/youtube-dl.js
+db/date.json
+db/register.json
+db/usage.json
