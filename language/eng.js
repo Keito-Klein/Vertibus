@@ -190,27 +190,32 @@ exports.changelog = () => {
 
 ===== *28 - 07 - 2024* =====
 - Add Consigmentboard Calculator
+
+===== *29 - 07 - 2024* =====
+- Fix play
+- Fix ytmp3
+- Fix ytmp4
+- Fix levling
+- Fix cb calculator
 `
 }
 
 exports.update = (pushname) => {
 return `
-*New Update V. 3.8.44a*
-HHi ${pushname}.
-We have updated the bot version. For *Users*/*Owner* the following improvements/additions are available: 
+*New Update V. 3.8.49b*
+Hi ${pushname}.
+We have updated the bot version. For *Users* the following improvements are available: 
+
+- \`cb\`
+> cb can still be used even if the query does not exist.(Fixed)
 
 - \`Leveling\`
-> If you are a Toram Online player. We have added a board price calculator feature to calculate profit, fees, global prices.
+> Previously the leveling feature could not be used because the bot got an \`\`\`error code 403\`\`\` caused by website/data source security starting to become tighter. we have also reduced some unnecessary data.
 
-- \`Leveling\`
-> Previously the leveling feature could not be used because the bot got an \`\`\`error code 403\`\`\` caused by website/data source security starting to become tighter.
-
-- \`nhentai\`
-> This feature was added because the owner was confused.
-
-- \`bug\`
-> This feature can only be used by the owner because it is very dangerous if misused
-
+- \`play\`
+- \`ytmp3\`
+- \`ytmp4\`
+Previously the leveling feature could not be used because the bot got an error code 403 due to the security of the website/data source which was getting tighter. we have fixed it by changing the data source. However, some videos/music may experience errors.
 
 for questions please pm the owner by typing:
 *!owner*

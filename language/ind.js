@@ -199,26 +199,32 @@ exports.changelog = () => {
 
 ===== *28 - 07 - 2024* =====
 - Add Consigmentboard Calculator
+
+===== *29 - 07 - 2024* =====
+- Fix play
+- Fix ytmp3
+- Fix ytmp4
+- Fix levling
+- Fix cb calculator
 `
 }
 
 exports.update = (pushname) => {
 return `
-*New Update V. 3.8.44a*
+*New Update V. 3.8.49b*
 Hi ${pushname}.
-Kami telah memperbarui versi bot. Untuk *User* penambahan berikut telah hadir: 
+Kami telah memperbarui versi bot. Untuk *User* perbaikan berikut telah hadir: 
 
 - \`cb\`
-> Jika kamu player Toram Online. Kami telah menambahkan fitur kalkulator harga papan untuk menghitung laba, fee, harga global.
+> cb tetap bisa digunakan meskipun query tidak ada.(Fixed)
 
 - \`Leveling\`
-> Sebelumnya fitur leveling tidak dapat digunakan karena bot mendapat \`\`\`error code 403\`\`\` disebabkan oleh keamanan website/sumber data yang mulai ketat.
+> Sebelumnya fitur leveling tidak dapat digunakan karena bot mendapat \`\`\`error code 403\`\`\` disebabkan oleh keamanan website/sumber data yang mulai ketat. kami juga telah mengurangi beberapa data yang tidak diperlukan.
 
-- \`nhentai\`
-> fitur ini ditambahkan karena owner gabut.
-
-- \`bug\`
-> fitur ini hanya bisa digunakan oleh owner karena bersifat berbahaya sekali jika disalahgunakan
+- \`play\`
+- \`ytmp3\`
+- \`ytmp4\`
+Sebelumnya fitur leveling tidak dapat digunakan karena bot mendapat \`\`\`error code 403\`\`\` disebabkan oleh keamanan website/sumber data yang mulai ketat. kai telah memperbaiki dengan mengganti sumber data. namun, beberapa video/music mungkin mengalami error.
 
 
 tanya tanya silahkan pm owner dengan mengetik:

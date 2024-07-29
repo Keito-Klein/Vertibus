@@ -10,7 +10,7 @@ const chalk = require("chalk");
 const cheerio = require("cheerio");
 const axios = require("axios");
 const ytdl = require('@distube/ytdl-core');
-const yts = require('youtube-yts');
+const yts = require('yt-search');
 const fetch = require('node-fetch');
 const ffmpeg = require("fluent-ffmpeg");
 const neko_modules = require('nekos.life');
@@ -455,6 +455,17 @@ module.exports = core = async (client, m, chatUpdate, store) => {
     },
   }
 
+      //Proccess
+      const proses = (reaction) => {
+        const reactions = {
+         react: {
+           text: reaction,
+           key: m.key
+         }
+        } 
+        client.sendMessage(from, reactions)
+     }
+
   /*Random No.*/
   const getRandom = (ext) => {
   return `${Math.floor(Math.random() * 10000)}${ext}`
@@ -470,6 +481,86 @@ module.exports = core = async (client, m, chatUpdate, store) => {
     /*if (global.mongoDB == true && global.mongoString === "Enter Your Connection String!!") {
       return console.log(color('Be sure your connection mongoDB string is corrrect!!\nCheck it on setting.js Line : 13', "red"))
     }*/
+
+//Yotube Downloaader Function
+async function ytdls(videoUrl) {
+  return new Promise(async (resolve, reject) => {
+      try {
+          const searchParams = new URLSearchParams();
+          searchParams.append('query', videoUrl);
+          searchParams.append('vt', 'mp3');
+          proses("🔍")
+          const searchResponse = await axios.post(
+              'https://tomp3.cc/api/ajax/search',
+              searchParams.toString(),
+              {
+                  headers: {
+                      'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+                      'Accept': '*/*',
+                      'X-Requested-With': 'XMLHttpRequest'
+                  }
+              }
+          );
+          if (searchResponse.data.status !== 'ok') {
+              proses("❌")
+              throw new Error('Failed to search for the video.');
+
+          }            
+          const videoId = searchResponse.data.vid;
+          const videoTitle = searchResponse.data.title;
+          const mp4Options = searchResponse.data.links.mp4;
+          const mp3Options = searchResponse.data.links.mp3;
+          const mediumQualityMp4Option = mp4Options[136]; 
+          const mp3Option = mp3Options['mp3128']; 
+          const mp4ConvertParams = new URLSearchParams();
+          mp4ConvertParams.append('vid', videoId);
+          mp4ConvertParams.append('k', mediumQualityMp4Option.k);
+          proses("🔄")
+          const mp4ConvertResponse = await axios.post(
+              'https://tomp3.cc/api/ajax/convert',
+              mp4ConvertParams.toString(),
+              {
+                  headers: {
+                      'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+                      'Accept': '*/*',
+                      'X-Requested-With': 'XMLHttpRequest'
+                  }
+              }
+          );
+          if (mp4ConvertResponse.data.status !== 'ok') {
+              proses("❌")
+              throw new Error('Failed to convert the video to MP4.');
+          }
+          const mp4DownloadLink = mp4ConvertResponse.data.dlink;
+          const mp3ConvertParams = new URLSearchParams();
+          mp3ConvertParams.append('vid', videoId);
+          mp3ConvertParams.append('k', mp3Option.k);
+          const mp3ConvertResponse = await axios.post(
+              'https://tomp3.cc/api/ajax/convert',
+              mp3ConvertParams.toString(),
+              {
+                  headers: {
+                      'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+                      'Accept': '*/*',
+                      'X-Requested-With': 'XMLHttpRequest'
+                  }
+              }
+          );
+          if (mp3ConvertResponse.data.status !== 'ok') {
+              proses("❌")
+              throw new Error('Failed to convert the video to MP3.');
+          }
+          const mp3DownloadLink = mp3ConvertResponse.data.dlink;
+          resolve({
+              title: videoTitle,
+              mp4DownloadLink,
+              mp3DownloadLink
+          });
+      } catch (error) {
+          reject('Error: ' + error.message);
+      }
+  });
+}
 
 //Bug Function
 
@@ -610,17 +701,6 @@ function sendMessageWithMentions(text, mentions = [], quoted = false) {
   }
 }
 
-
-    //Proccess
-    const proses = (reaction) => {
-       const reactions = {
-        react: {
-          text: reaction,
-          key: m.key
-        }
-       } 
-       client.sendMessage(from, reactions)
-    }
 
 
     //Tag Detector
@@ -928,24 +1008,26 @@ case 'getimage':
                oneBreak = $(this).find('.level-col-3 > p:nth-child(3) > small').text().trim();
                noBreak = $(this).find('.level-col-3 > p:nth-child(4)').text().trim();
                zeroBreak = $(this).find('.level-col-3 > p:nth-child(4)> small').text().trim();
-        
-               array.push({
-                level,
-                boss,
-                location,
-                exp: {
-                  fullBreak,
-                  secondBreak : secondBreak ? secondBreak : " - ",
-                  firstBreak : firstBreak ? firstBreak : " - ",
-                  noBreak : noBreak ? noBreak : " - "
-                },
-                star: {
-                  allBreak,
-                  twoBreak: twoBreak ? twoBreak : " - ",
-                  oneBreak: oneBreak ? oneBreak : " - ",
-                  zeroBreak: zeroBreak ? zeroBreak : " - "
-                }
-               })
+                
+               if(fullBreak && oneBreak) {
+                 array.push({
+                  level,
+                  boss,
+                  location,
+                  exp: {
+                    fullBreak,
+                    secondBreak : secondBreak ? secondBreak : " - ",
+                    firstBreak : firstBreak ? firstBreak : " - ",
+                    noBreak : noBreak ? noBreak : " - "
+                  },
+                  star: {
+                    allBreak,
+                    twoBreak: twoBreak ? twoBreak : " - ",
+                    oneBreak: oneBreak ? oneBreak : " - ",
+                    zeroBreak: zeroBreak ? zeroBreak : " - "
+                  }
+                 })
+               }
               });
               let gb = `*Leveling lvl ${lvl} & bonus exp ${bexp}%*\n`
               for(let i = 0; i < array.length; i++) {
@@ -962,7 +1044,7 @@ case 'getimage':
   break;
 
   case 'cb-novip':
-    proses("⌛")
+    if (!text) return
     dotPrice = text.replace(/\./g, '')
     price = parseInt(dotPrice)
     fee = Math.floor(price * 0.1)
@@ -991,11 +1073,10 @@ Global Price:
 - Japan: \`\`\`${dotting(japan)}\`\`\`
       `
     client.sendText(from, result, mek)
-    proses("✔");
   break
 
   case 'cb-vip': 
-  proses("⌛")
+  if (!text) return
     dotPrice = text.replace(/\./g, '')
     price = parseInt(dotPrice)
     fee = Math.floor(price * 0.1 * 0.6)
@@ -1025,12 +1106,12 @@ Global Price:
 - Japan: \`\`\`${dotting(japan)}\`\`\`
       `
     client.sendText(from, result, mek)
-    proses("✔");
   break
 
 
   case 'cb' :
-    if (!text && isNaN(text)) return reply("please input the price!")
+    if (!text) return reply("please input the price!")
+    if (isNaN(text)) return reply("Price should be number!")
     teks = "Do you have 30-Day Tickets/VIP?\nOpen button bellow ⬇"
     msg = generateWAMessageFromContent(from, {
       viewOnceMessage: {
@@ -1791,7 +1872,123 @@ case "join":
   sen = await client.sendMessage(from, { audio: {url: `./${file}`}, mimetype: 'audio/mp4'})
 break
 
-case 'play':
+case 'play': 
+  if (!text) return reply(`*Example :* ${prefix + command} title`);
+  try {
+    proses("⌛")
+    let search = await yts(text);
+    let videos = search.all;
+
+    if (!videos || videos.length === 0) {
+      return reply('No music found');
+    }
+
+    // Pilih antara 1 dan 5 video secara acak
+    const numVideos = Math.min(videos.length, Math.floor(Math.random() * 10) + 1);
+    const selectedVideos = [];
+
+    while (selectedVideos.length < numVideos) {
+      const randomIndex = Math.floor(Math.random() * videos.length);
+      const randomVideo = videos.splice(randomIndex, 1)[0]; // Menghindari pemilihan video yang sama
+      if(randomVideo.type === 'video' && !randomVideo.ago.includes('Streamed')) selectedVideos.push(randomVideo);
+    }
+
+    let push = [];
+
+    for (let i = 0; i < selectedVideos.length; i++) {
+      console.log(selectedVideos)
+      let video = selectedVideos[i];
+      let cap = `Title : ${video.title}`;
+      let mediaMessage
+      try{
+        mediaMessage = await prepareWAMessageMedia({ image: { url: video.thumbnail } }, { upload: client.waUploadToServer });
+      } catch {
+        mediaMessage = await prepareWAMessageMedia({ image: { url: "./assets/icon.jpg" } }, { upload: client.waUploadToServer });
+      }
+
+      push.push({
+        body: proto.Message.InteractiveMessage.Body.fromObject({
+          text: cap
+        }),
+        footer: proto.Message.InteractiveMessage.Footer.fromObject({
+          text: botName
+        }),
+        header: proto.Message.InteractiveMessage.Header.create({
+          title: `Video ke - ${i + 1}`,
+          subtitle: '',
+          hasMediaAttachment: true,
+          ...mediaMessage
+        }),
+        nativeFlowMessage: proto.Message.InteractiveMessage.NativeFlowMessage.fromObject({
+          buttons: [
+            {
+              "name": "quick_reply",
+              "buttonParamsJson": `{"display_text":"Video 🎦","id":"${prefix}ytmp4 ${video.url}"}`
+            },
+            {
+              "name": "quick_reply",
+              "buttonParamsJson": `{"display_text":"Audio 🎵","id":"${prefix}ytmp3 ${video.url}"}`
+            }
+          ]
+        })
+      });
+    }
+
+    const msg = generateWAMessageFromContent(m.chat, {
+      viewOnceMessage: {
+        message: {
+          messageContextInfo: {
+            deviceListMetadata: {},
+            deviceListMetadataVersion: 2
+          },
+          interactiveMessage: proto.Message.InteractiveMessage.fromObject({
+            body: proto.Message.InteractiveMessage.Body.create({
+              text: lang.success()
+            }),
+            footer: proto.Message.InteractiveMessage.Footer.create({
+              text: botName
+            }),
+            header: proto.Message.InteractiveMessage.Header.create({
+              hasMediaAttachment: false
+            }),
+            carouselMessage: proto.Message.InteractiveMessage.CarouselMessage.fromObject({
+              cards: push
+            })
+          })
+        }
+      }
+    }, {});
+
+    await client.relayMessage(from, msg.message, {
+      messageId: msg.key.id
+    });
+  } catch (e) {
+    console.error(e);
+    await reply(lang.eror());
+  }
+
+break
+
+case 'ytmp3': 
+  if (!text) return reply(lang.format(prefix, command))
+  proses("⌛")
+  searchResponse = await ytdls(text)
+  await client.sendMessage(from, { audio: {url: searchResponse.mp3DownloadLink}, mimetype: "audio/mp4", ptt: false}, { quoted: m })
+  proses("✔")
+break
+
+case 'ytmp4':
+  if (!text) return replynano(lang.format(prefix, command))
+  proses("⌛")
+  searchResponse = await ytdls(text)
+  const ytc = `*[ YOUTUBE DOWNLOADER ]*
+  
+  ©${botName}`;
+  client.sendMessage(from, { video: { url: searchResponse.mp4DownloadLink }, caption: ytc }, { quoted: m })
+  proses("✔")
+break
+
+/*case 'play':
   if(!text) return reply(lang.format(prefix, command))
      
     try{ 
@@ -1836,9 +2033,9 @@ case 'play':
       reply('Sepertinya ada yang error')
       console.log(err)
     }
-  break
+  break*/
 
-  case 'ytmp3':
+  /*case 'ytmp3':
     if (!text) return m.reply(`Example : ${prefix + command} https://youtube.com/watch?v=PtFMh6Tccag%2`)
       if (!isUrl(text)) return m.reply(`Example : ${prefix + command} https://youtube.com/watch?v=PtFMh6Tccag%2`)
       try {
@@ -1878,22 +2075,10 @@ case 'play':
         proses("❌")
         console.log(err)
         }
-    /*try {
-      proses("⏳")
-      
-    file = await yta.mp3(text)
-    teks = `*Detail:*\n- *Title:* ${file.meta.title}\n- *Channel:* ${file.meta.channel}\n- *Duration:* ${file.meta.seconds}\n- *Size:* ${file.size / 1000000} MB`
-    img = file.meta.image
-    await client.sendImage(from, img, teks, mek)
-    await client.sendMessage(from,{ audio: fs.readFileSync(file.path), mimetype: 'audio/mp4', ptt: true }, mek)
-fs.unlinkSync(file.path)
-proses("✔")
-} catch (err) {
-proses("❌")
-}*/
-break
 
-case 'ytmp4':
+break*/
+
+/*case 'ytmp4':
        
       if (!text) return m.reply(`Example : ${prefix + command} https://youtube.com/watch?v=PtFMh6Tccag%27`)
       if (!isUrl(text)) return m.reply(`Example : ${prefix + command} https://youtube.com/watch?v=PtFMh6Tccag%2`)
@@ -1910,14 +2095,7 @@ case 'ytmp4':
                 console.log(err)
             }
     
-      /*const vid=await yta.mp4(text)
-const ytc=`
-*Tittle:* ${vid.title}
-*Date:* ${vid.date}
-*Duration:* ${vid.duration}
-*Quality:* ${vid.quality}`
-await client.sendMessage(from,{ video: {url:vid.videoUrl}, caption: ytc }, mek)*/
-              break
+              break*/
 
         case 'addmem':
           if(!q) return reply(lang.format(prefix, command))
