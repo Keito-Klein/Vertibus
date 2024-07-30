@@ -29,12 +29,14 @@ const readline = require("readline");
 const NodeCache = require("node-cache");
 const moment = require("moment-timezone")
 const _ = require("lodash");
+const cpath = require("path");
 const fileType = require("file-type");
 const PhoneNumber = require("awesome-phonenumber");
 const { imageToWebp, videoToWebp, writeExifImg, writeExifVid, toImage, stickerToGif } = require('./lib/exif');
 const { ind } = require("./language")
 const inRaid = JSON.parse(fs.readFileSync('./lib/guild.json'));
 const welkom = JSON.parse(fs.readFileSync('./db/welcome.json'));
+const { getSizeMedia } = require("./lib/utils")
 let phoneNumber = "6289329820760"
 const pairingCode = !!phoneNumber || process.argv.includes("--pairing-code")
 const useMobile = process.argv.includes("--mobile")
@@ -63,20 +65,22 @@ function smsg(conn, m, store) {
   }
   if (m.message) {
     m.mtype = getContentType(m.message);
-    m.msg = m.mtype == "viewOnceMessage" ? m.message[m.mtype].message[getContentType(m.message[m.mtype].message)] : m.message[m.mtype];
+    m.msg = (m.mtype == "viewOnceMessage" ? m.message[m.mtype].message[getContentType(m.message[m.mtype].message)] : m.message[m.mtype]);
     m.body =
       m.message.conversation ||
-      m.msg.caption ||
-      m.msg.text ||
-      (m.mtype == "viewOnceMessage" && m.msg.caption) ||
-      m.text;
-    let quoted = (m.quoted = m.msg.contextInfo ? m.msg.contextInfo.quotedMessage : null);
+      m.msg.caption || 
+      m.msg.text || 
+      (m.mtype == 'listResponseMessage') && m.msg.singleSelectReply.selectedRowId || 
+      (m.mtype == 'buttonsResponseMessage') && m.msg.selectedButtonId || 
+      (m.mtype == 'viewOnceMessage') && m.msg.caption ||
+      m.text
+    let quoted = m.quoted = m.msg.contextInfo ? m.msg.contextInfo.quotedMessage : null;
     m.mentionedJid = m.msg.contextInfo ? m.msg.contextInfo.mentionedJid : [];
     if (m.quoted) {
-      let type = getContentType(quoted);
+      let type = Object.keys(m.quoted)[0];
       m.quoted = m.quoted[type];
       if (["productMessage"].includes(type)) {
-        type = getContentType(m.quoted);
+        type = Object.keys(m.quoted)[0];
         m.quoted = m.quoted[type];
       }
       if (typeof m.quoted === "string")
@@ -519,6 +523,21 @@ console.log(err)
       : Buffer.alloc(0);
     return await client.sendMessage(jid, { image: buffer, caption: caption, ...options }, { quoted });
   };
+
+  client.getFile = async (PATH, save) => {
+    let res
+    let data = Buffer.isBuffer(PATH) ? PATH : /^data:.*?\/.*?;base64,/i.test(PATH) ? Buffer.from(PATH.split`,`[1], 'base64') : /^https?:\/\//.test(PATH) ? await (res = await getBuffer(PATH)) : fs.existsSync(PATH) ? (filename = PATH, fs.readFileSync(PATH)) : typeof PATH === 'string' ? PATH : Buffer.alloc(0)
+    let type = await fileType.fromBuffer(data) || {
+    mime: 'application/octet-stream',
+    ext: '.bin'}
+    filename = cpath.join(__filename, './lib' + new Date * 1 + '.' + type.ext)
+    if (data && save) fs.promises.writeFile(filename, data)
+    return {
+    res,
+    filename,
+    size: await getSizeMedia(data),
+    ...type,
+    data}}
 
   client.sendVideo = async (jid, path, caption = '', quoted = '', gif = false, options) => {
         let buffer = Buffer.isBuffer(path) ? path : /^data:.*?\/.*?;base64,/i.test(path) ? Buffer.from(path.split`,`[1], 'base64') : /^https?:\/\//.test(path) ? await (await getBuffer(path)) : fs.existsSync(path) ? fs.readFileSync(path) : Buffer.alloc(0)

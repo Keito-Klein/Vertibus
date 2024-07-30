@@ -478,9 +478,9 @@ module.exports = core = async (client, m, chatUpdate, store) => {
     }
 
     //mongoDB Error Handler
-    /*if (global.mongoDB == true && global.mongoString === "Enter Your Connection String!!") {
+    if (global.mongoDB == true && global.mongoString === "Enter Your Connection String!!") {
       return console.log(color('Be sure your connection mongoDB string is corrrect!!\nCheck it on setting.js Line : 13', "red"))
-    }*/
+    }
 
 //Yotube Downloaader Function
 async function ytdls(videoUrl) {
@@ -930,6 +930,7 @@ case 'getimage':
                 proses("✔");
               } catch(err) {
                 proses("❌");
+                reply(lang.eror(err))
                 console.log(err)
               }
             break
@@ -1815,7 +1816,7 @@ break
 
 case "join":
   if(!isOwner) return reply("Hanya bisa dilakukan oleh Owner")
-  if(isUrl(text)) return reply("input the URL")
+  if(!isUrl(text)) return reply("input the URL")
     try{
       proses("⌛")
       groupLink = text.split(" ")[0].split("https://chat.whatsapp.com/")[1];
@@ -1872,7 +1873,7 @@ case "join":
   sen = await client.sendMessage(from, { audio: {url: `./${file}`}, mimetype: 'audio/mp4'})
 break
 
-case 'play': 
+/*case 'play': 
   if (!text) return reply(`*Example :* ${prefix + command} title`);
   try {
     proses("⌛")
@@ -1890,13 +1891,13 @@ case 'play':
     while (selectedVideos.length < numVideos) {
       const randomIndex = Math.floor(Math.random() * videos.length);
       const randomVideo = videos.splice(randomIndex, 1)[0]; // Menghindari pemilihan video yang sama
-      if(randomVideo.type === 'video' && !randomVideo.ago.includes('Streamed')) selectedVideos.push(randomVideo);
+      reserved = randomVideo.ago !== undefined ? randomVideo.ago : "1 Years ago"
+      if(randomVideo.type === 'video' && reserved.includes('Streamed')) selectedVideos.push(randomVideo);
     }
 
     let push = [];
 
     for (let i = 0; i < selectedVideos.length; i++) {
-      console.log(selectedVideos)
       let video = selectedVideos[i];
       let cap = `Title : ${video.title}`;
       let mediaMessage
@@ -1967,7 +1968,7 @@ case 'play':
     await reply(lang.eror());
   }
 
-break
+break*/
 
 case 'ytmp3': 
   if (!text) return reply(lang.format(prefix, command))
@@ -1988,10 +1989,40 @@ case 'ytmp4':
   proses("✔")
 break
 
-/*case 'play':
+case 'play':
   if(!text) return reply(lang.format(prefix, command))
+    try{
+      proses("⌛");
+      search = await yts(text);
+      video = search.videos[0];
+      let { title, thumbnail, timestamp, views, ago, url } = video;
+      mp3Url = await ytdls(url)
+      mp3File = {
+        audio: {
+          url: mp3Url.mp3DownloadLink
+        },
+        mimetype: 'audio/mp4',
+        fileName: `${title}`,
+        contextInfo: {
+          externalAdReply: {
+            showAdAttribution: true,
+            mediaType: 2,
+            mediaUrl: url,
+            title: title,
+            sourceUrl: url,
+            thumbnail: await (await client.getFile(thumbnail)).data
+          }
+        }
+      };
+      await client.sendMessage(from, mp3File, mek);
+      proses("✔");
+  } catch (err) {
+    proses('❌')
+    console.log(err)
+  }
+
      
-    try{ 
+    /*try{ 
         proses('⏳');
       ytlink = await yts(text)
         proses("🔍")
@@ -2032,8 +2063,8 @@ break
       proses('❌');
       reply('Sepertinya ada yang error')
       console.log(err)
-    }
-  break*/
+    }*/
+  break
 
   /*case 'ytmp3':
     if (!text) return m.reply(`Example : ${prefix + command} https://youtube.com/watch?v=PtFMh6Tccag%2`)
