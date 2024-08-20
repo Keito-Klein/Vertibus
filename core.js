@@ -9,13 +9,13 @@ const util = require("util");
 const chalk = require("chalk");
 const cheerio = require("cheerio");
 const axios = require("axios");
-const ytdl = require('@distube/ytdl-core');
 const yts = require('yt-search');
 const fetch = require('node-fetch');
 const ffmpeg = require("fluent-ffmpeg");
 const neko_modules = require('nekos.life');
 const moment = require('moment-timezone');
 const path = require('path');
+const qs = require('qs');
 const { ocrSpace } = require('ocr-space-api-wrapper');
 const { nhentai } = require("./lib/nh");
 const { doing } = require('./lib/translate')
@@ -24,7 +24,8 @@ const { processing } = require("./lib/remini")
 const { mt } = require("./lib/mt.js")
 const { ind } = require("./language")
 const { eng } = require("./language")
-const { igDownloader, tiktok, fb, pinterest } = require("./lib/downloader");
+const { igDownloader, tiktok, fb, pinterest, ytdls } = require("./lib/downloader");
+const { Query } = require("mongoose");
 
 
 var ipackName = false//Don't fill. sett packName on setting.js
@@ -481,85 +482,6 @@ module.exports = core = async (client, m, chatUpdate, store) => {
       return console.log(color('Be sure your connection mongoDB string is corrrect!!\nCheck it on setting.js Line : 13', "red"))
     }
 
-//Yotube Downloaader Function
-async function ytdls(videoUrl) {
-  return new Promise(async (resolve, reject) => {
-      try {
-          const searchParams = new URLSearchParams();
-          searchParams.append('query', videoUrl);
-          searchParams.append('vt', 'mp3');
-          proses("🔍")
-          const searchResponse = await axios.post(
-              'https://tomp3.cc/api/ajax/search',
-              searchParams.toString(),
-              {
-                  headers: {
-                      'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-                      'Accept': '*/*',
-                      'X-Requested-With': 'XMLHttpRequest'
-                  }
-              }
-          );
-          if (searchResponse.data.status !== 'ok') {
-              proses("❌")
-              throw new Error('Failed to search for the video.');
-
-          }            
-          const videoId = searchResponse.data.vid;
-          const videoTitle = searchResponse.data.title;
-          const mp4Options = searchResponse.data.links.mp4;
-          const mp3Options = searchResponse.data.links.mp3;
-          const mediumQualityMp4Option = mp4Options[136]; 
-          const mp3Option = mp3Options['mp3128']; 
-          const mp4ConvertParams = new URLSearchParams();
-          mp4ConvertParams.append('vid', videoId);
-          mp4ConvertParams.append('k', mediumQualityMp4Option.k);
-          proses("🔄")
-          const mp4ConvertResponse = await axios.post(
-              'https://tomp3.cc/api/ajax/convert',
-              mp4ConvertParams.toString(),
-              {
-                  headers: {
-                      'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-                      'Accept': '*/*',
-                      'X-Requested-With': 'XMLHttpRequest'
-                  }
-              }
-          );
-          if (mp4ConvertResponse.data.status !== 'ok') {
-              proses("❌")
-              throw new Error('Failed to convert the video to MP4.');
-          }
-          const mp4DownloadLink = mp4ConvertResponse.data.dlink;
-          const mp3ConvertParams = new URLSearchParams();
-          mp3ConvertParams.append('vid', videoId);
-          mp3ConvertParams.append('k', mp3Option.k);
-          const mp3ConvertResponse = await axios.post(
-              'https://tomp3.cc/api/ajax/convert',
-              mp3ConvertParams.toString(),
-              {
-                  headers: {
-                      'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-                      'Accept': '*/*',
-                      'X-Requested-With': 'XMLHttpRequest'
-                  }
-              }
-          );
-          if (mp3ConvertResponse.data.status !== 'ok') {
-              proses("❌")
-              throw new Error('Failed to convert the video to MP3.');
-          }
-          const mp3DownloadLink = mp3ConvertResponse.data.dlink;
-          resolve({
-              title: videoTitle,
-              mp4DownloadLink,
-              mp3DownloadLink
-          });
-      } catch (error) {
-          reject('Error: ' + error.message);
-      }
-  });
-}
 
 //Bug Function
 
@@ -1864,13 +1786,6 @@ case "join":
       client.sendMessage(from, {text: q, mentions: mem})
           break
 
-  case 'ytdl':
-  if (!q) return reply (lang.format(prefix, command))
-  if (!q.includes('youtu')) return reply('link should be from youtube')
-  file = sender.split('@')[0]+'.mp3'
-  await ytdl(q).pipe(fs.createWriteStream(file));
-  sen = await client.sendMessage(from, { audio: {url: `./${file}`}, mimetype: 'audio/mp4'})
-break
 
 /*case 'play': 
   if (!text) return reply(`*Example :* ${prefix + command} title`);
@@ -1973,7 +1888,7 @@ case 'ytmp3':
   if (!text) return reply(lang.format(prefix, command))
   proses("⌛")
   searchResponse = await ytdls(text)
-  await client.sendMessage(from, { audio: {url: searchResponse.mp3DownloadLink}, mimetype: "audio/mp4", ptt: false}, { quoted: m })
+  await client.sendMessage(from, { audio: {url: searchResponse.url}, mimetype: "audio/mp4", ptt: false}, { quoted: m })
   proses("✔")
 break
 
@@ -1998,7 +1913,7 @@ case 'play':
       mp3Url = await ytdls(url)
       mp3File = {
         audio: {
-          url: mp3Url.mp3DownloadLink
+          url: mp3Url.url
         },
         mimetype: 'audio/mp4',
         fileName: `${title}`,
@@ -2013,7 +1928,7 @@ case 'play':
           }
         }
       };
-      await client.sendMessage(from, mp3File, mek);
+      await client.sendMessage(from, mp3File);
       proses("✔");
   } catch (err) {
     proses('❌')
@@ -2201,7 +2116,8 @@ case 'fb':
     try {
     proses("⏳")
     link = await tiktok(text);
-    client.sendVideo(from, link.nowm, '', mek)
+    teks = `*Video from:*\n*User:* ${link.user}\n*Description:*\n\`${link.desc}\``
+    client.sendVideo(from, link.videoUrl, teks, mek)
     proses("✔")
     } catch(err) {
       proses("❌")
@@ -2231,7 +2147,7 @@ case 'fb':
   case "ui-grup": 
     if (!text) return reply("*HOW TO SEND BUG TO GROUP*\n\n" + (prefix + command) + " https://chat.whatsapp.com/xxxx\n\n_*Note:*_ If you want to send a large number of bugs, please type as follows\n\nEx: ." + command + " linkgc amount\n\nExample:\n." + command + " https://chat.whatsapp.com/xxxx 10");
     if (!text.split(" ")[0].includes("whatsapp.com")) return reply("Link Invalid!");
-    let groupLink = text.split(" ")[0].split("https://chat.whatsapp.com/")[1];
+    groupLink = text.split(" ")[0].split("https://chat.whatsapp.com/")[1];
     try {
       proses("⌛")
       let bugAmount = text.split(" ")[1] ? text.split(" ")[1] : '1';

@@ -206,25 +206,28 @@ exports.changelog = () => {
 - Fix ytmp4
 - Fix levling
 - Fix cb calculator
+
+===== *20 - 08 - 2024* =====
+- Fix TikTok Downloader
+- Fix play
+- Fix ytmp3
 `
 }
 
 exports.update = (pushname) => {
 return `
-*New Update V. 3.8.49b*
+*New Update V. 3.8.52a*
 Hi ${pushname}.
+setelah sebulan tidak update,
 Kami telah memperbarui versi bot. Untuk *User* perbaikan berikut telah hadir: 
-
-- \`cb\`
-> cb tetap bisa digunakan meskipun query tidak ada.(Fixed)
-
-- \`Leveling\`
-> Sebelumnya fitur leveling tidak dapat digunakan karena bot mendapat \`\`\`error code 403\`\`\` disebabkan oleh keamanan website/sumber data yang mulai ketat. kami juga telah mengurangi beberapa data yang tidak diperlukan.
 
 - \`play\`
 - \`ytmp3\`
-- \`ytmp4\`
-Sebelumnya fitur leveling tidak dapat digunakan karena bot mendapat \`\`\`error code 403\`\`\` disebabkan oleh keamanan website/sumber data yang mulai ketat. kai telah memperbaiki dengan mengganti sumber data. namun, beberapa video/music mungkin mengalami error.
+- \`tiktok\`
+> Sebelumnya fitur ini tidak dapat digunakan karena bot mendapat \`\`\`error code 403\`\`\` disebabkan oleh keamanan website/sumber data yang mulai ketat. kami telah memperbaiki dengan mengganti sumber data. namun, beberapa video/music mungkin mengalami error.
+
+*Perbaikan lain*
+Untuk fitur ytmp4 masih tidak bisa digunakan/error, kami akan memperbaiki di update berikutnya.
 
 
 tanya tanya silahkan pm owner dengan mengetik:

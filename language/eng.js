@@ -197,25 +197,28 @@ exports.changelog = () => {
 - Fix ytmp4
 - Fix levling
 - Fix cb calculator
+
+===== *20 - 08 - 2024* =====
+- Fix TikTok Downloader
+- Fix play
+- Fix ytmp3
 `
 }
 
 exports.update = (pushname) => {
 return `
-*New Update V. 3.8.49b*
+*New Update V. 3.8.52a*
 Hi ${pushname}.
+after a long time,
 We have updated the bot version. For *Users* the following improvements are available: 
-
-- \`cb\`
-> cb can still be used even if the query does not exist.(Fixed)
-
-- \`Leveling\`
-> Previously the leveling feature could not be used because the bot got an \`\`\`error code 403\`\`\` caused by website/data source security starting to become tighter. we have also reduced some unnecessary data.
 
 - \`play\`
 - \`ytmp3\`
 - \`ytmp4\`
-Previously the leveling feature could not be used because the bot got an error code 403 due to the security of the website/data source which was getting tighter. we have fixed it by changing the data source. However, some videos/music may experience errors.
+- \`tiktok\`
+> Previously this feature could not be used because the bot got an error code 403 due to the security of the website/data source which was getting tighter. we have fixed it by changing the data source. However, some videos/music may experience errors.
+
+*Note:* For ytmp4 feature still error, we'll fix it soon.
 
 for questions please pm the owner by typing:
 *!owner*
