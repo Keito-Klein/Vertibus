@@ -27,7 +27,7 @@
     "@distube/ytdl-core": "^4.13.5",
     "@hapi/boom": "^10.0.0",
     "@vitalets/google-translate-api": "^7.0.0",
-    "@whiskeysockets/baileys": "^6.7.5",
+    "@whiskeysockets/baileys": "^6.7.7",
     "awesome-phonenumber": "^2.64.0",
     "chalk": "^4.1.2",
     "cheerio": "^1.0.0-rc.12",
