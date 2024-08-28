@@ -34,6 +34,7 @@ return `
  │•${prefix}sticker
  │•${prefix}smeme
  │•${prefix}toimg
+ │•${prefix}text2img
  │•${prefix}remini
  │•${prefix}nhentai
  │•${prefix}tovideo
@@ -202,12 +203,20 @@ exports.changelog = () => {
 - Fix TikTok Downloader
 - Fix play
 - Fix ytmp3
+
+===== *22 - 08 - 2024* =====
+- Add text2img at list
+- Fix ytmp3
+- Fix play
+
+===== *29 - 08 - 2024* =====
+- Fix instagram downloader
 `
 }
 
 exports.update = (pushname) => {
 return `
-*New Update V. 3.8.52a*
+*New Update V. 3.9.56a*
 Hi ${pushname}.
 after a long time,
 We have updated the bot version. For *Users* the following improvements are available: 
@@ -215,10 +224,12 @@ We have updated the bot version. For *Users* the following improvements are avai
 - \`play\`
 - \`ytmp3\`
 - \`ytmp4\`
-- \`tiktok\`
+- \`instagram\`
 > Previously this feature could not be used because the bot got an error code 403 due to the security of the website/data source which was getting tighter. we have fixed it by changing the data source. However, some videos/music may experience errors.
 
-*Note:* For ytmp4 feature still error, we'll fix it soon.
+Additional features:
+- \`text2img\`
+> text2img is a feature for generate image from text/prompt.
 
 for questions please pm the owner by typing:
 *!owner*
@@ -1058,7 +1069,7 @@ exports.format = (prefix, command) => {
   		case 'ai':
   		case 'openai': 
   		case "img": 
-  		case "ai-img": 
+  		case "text2img": 
   		case "image": 
   		case "images":
   		case 'mobs':
@@ -1072,8 +1083,10 @@ exports.format = (prefix, command) => {
     case 'cdmg':
     case 'report':
     case 'hidetag':
-        case 'pixiv':
-        case 'pinterest':
+	case 'pixiv':
+    case 'pinterest':
+	case 'quote':
+	case 'qc':
   			return `Please input query!!\nExample: ${prefix + command} your query here`
   		break;
 

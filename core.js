@@ -4,18 +4,18 @@ const fs = require("fs");
 const os = require('os');
 const speed = require('performance-now')
 const { performance } = require('perf_hooks');
-const { runtime, formatp, getBuffer, sleep } = require("./lib/utils.js") 
+const { runtime, formatp, getBuffer, sleep, telegraPH } = require("./lib/utils.js") 
 const util = require("util");
 const chalk = require("chalk");
 const cheerio = require("cheerio");
 const axios = require("axios");
 const yts = require('yt-search');
 const fetch = require('node-fetch');
-const ffmpeg = require("fluent-ffmpeg");
+const imgbb = require('imgbb-uploader');
 const neko_modules = require('nekos.life');
 const moment = require('moment-timezone');
+const fileType = require("file-type");
 const path = require('path');
-const qs = require('qs');
 const { ocrSpace } = require('ocr-space-api-wrapper');
 const { nhentai } = require("./lib/nh");
 const { doing } = require('./lib/translate')
@@ -24,8 +24,7 @@ const { processing } = require("./lib/remini")
 const { mt } = require("./lib/mt.js")
 const { ind } = require("./language")
 const { eng } = require("./language")
-const { igDownloader, tiktok, fb, pinterest, ytdls } = require("./lib/downloader");
-const { Query } = require("mongoose");
+const { igDownloader, tiktok, fb, pinterest } = require("./lib/downloader");
 
 
 var ipackName = false//Don't fill. sett packName on setting.js
@@ -482,6 +481,86 @@ module.exports = core = async (client, m, chatUpdate, store) => {
       return console.log(color('Be sure your connection mongoDB string is corrrect!!\nCheck it on setting.js Line : 13', "red"))
     }
 
+    async function ytdlnew(videoUrl) {
+      return new Promise(async (resolve, reject) => {
+          try {
+              cookie = '_ga_JRWV2N11YN=GS1.1.1724395040.3.0.1724395040.0.0.0; _ga=GA1.2.1519648462.1723894496; _gid=GA1.2.23324566.1724395040'
+              const searchParams = new URLSearchParams();
+              searchParams.append('query', videoUrl);
+              searchParams.append('vt', 'mp3');
+              proses("🔍")
+              const searchResponse = await axios.post(
+                  'https://tomp3.cc/api/ajax/search?hl=en',
+                  searchParams.toString(),
+                  {
+                      headers: {
+                          'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+                          'Accept': '*/*',
+                          'Cookie': cookie,
+                          'X-Requested-With': 'XMLHttpRequest'
+                      }
+                  }
+              );
+              if (searchResponse.data.status !== 'ok') {
+                proses("❌")
+                  throw new Error('Failed to search for the video.');
+              }            
+              const videoId = searchResponse.data.vid;
+              const videoTitle = searchResponse.data.title;
+              const mp4Options = searchResponse.data.links.mp4;
+              const mp3Options = searchResponse.data.links.mp3;
+              const mediumQualityMp4Option = mp4Options[136]; 
+              const mp3Option = mp3Options['mp3128']; 
+              const mp4ConvertParams = new URLSearchParams();
+              mp4ConvertParams.append('vid', videoId);
+              mp4ConvertParams.append('k', mediumQualityMp4Option.k);
+              proses("🔄")
+              const mp4ConvertResponse = await axios.post(
+                  'https://tomp3.cc/api/ajax/convert?hl=en',
+                  mp4ConvertParams.toString(),
+                  {
+                      headers: {
+                          'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+                          'Accept': '*/*',
+                          'Cookie': cookie,
+                          'X-Requested-With': 'XMLHttpRequest'
+                      }
+                  }
+              );
+              if (mp4ConvertResponse.data.status !== 'ok') {
+                  throw new Error('Failed to convert the video to MP4.');
+              }
+              const mp4DownloadLink = mp4ConvertResponse.data.dlink;
+              const mp3ConvertParams = new URLSearchParams();
+              mp3ConvertParams.append('vid', videoId);
+              mp3ConvertParams.append('k', mp3Option.k);
+              const mp3ConvertResponse = await axios.post(
+                  'https://tomp3.cc/api/ajax/convert',
+                  mp3ConvertParams.toString(),
+                  {
+                      headers: {
+                          'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+                          'Cookie': cookie,
+                          'Accept': '*/*',
+                          'X-Requested-With': 'XMLHttpRequest'
+                      }
+                  }
+              );
+              if (mp3ConvertResponse.data.status !== 'ok') {
+                  throw new Error('Failed to convert the video to MP3.');
+              }
+              const mp3DownloadLink = mp3ConvertResponse.data.dlink;
+              proses("⬆")
+              resolve({
+                  title: videoTitle,
+                  mp4DownloadLink,
+                  mp3DownloadLink
+              });
+          } catch (error) {
+              reject('Error: ' + error.message);
+          }
+      });
+   }
 
 //Bug Function
 
@@ -704,7 +783,89 @@ case "menu":
   m.reply(lang.menu(prefix))
 break;
 
-        
+case 'text2img':
+case 'dalle':
+if (!text) return reply(lang.format(prefix, command));
+try {
+proses("⏳")
+client.sendImage(from, `https://meitang.xyz/ai/text2img?text=${encodeURIComponent(text)}`, text, mek);
+proses("✔")
+} catch(err) {
+  proses("❌")
+  console.log(err)
+}
+break
+
+case 'ai':
+case 'openai':
+  if (!text) return reply(lang.format(prefix, command));
+  try {
+    proses("⏳")
+    asked = await axios({
+      url: `https://widipe.com/openai?text=${encodeURIComponent(text)}`,
+      method: 'GET',
+      responseType: 'json'
+    })
+
+    client.sendText(from, asked.result, mek)
+  } catch(err) {
+    console.log(err)
+    proses("❌")
+  }
+  break
+
+  case 'qc': 
+  if ((m.quoted && m.quoted.mtype === 'conversation') ||  text) {
+  proses('⏳')
+  userPP = await client.profilePictureUrl(m.quoted ? m.quoted.sender : m.sender).catch(_ => 'https://telegra.ph/file/6880771a42bad09dd6087.jpg');
+  buffer = Buffer.isBuffer(userPP) ? userPP : /^data:.*?\/.*?;base64,/i.test(userPP) ? Buffer.from(userPP.split`,`[1], 'base64') : /^https?:\/\//.test(userPP) ? await (await getBuffer(userPP)) : fs.existsSync(userPP) ? (filename = userPP, fs.readFileSync(userPP)) : typeof userPP === 'string' ? userPP : Buffer.alloc(0)
+  typeFile = await fileType.fromBuffer(buffer);
+  ranp = getRandom('.' + typeFile.ext);
+  fs.writeFileSync(`./tmp/${ranp}`, buffer);
+  imgUrl = await telegraPH(`./tmp/${ranp}`)
+
+  imgnya = await getBuffer(`https://widipe.com/quotely?avatar=${imgUrl}&name=${await client.getName(m.quoted ? m.quoted.sender : m.sender)}&text=${text? text : m.quoted ? m.quoted.text : ''}`)
+  client.sendImageAsSticker(from, imgnya, m, true, { packname: global.packName, author: global.author })
+  /*const json = {
+      "type": "quote",
+      "format": typeFile.ext,
+      "backgroundColor": "#FFFFFF",
+      "width": 512,
+      "height": 768,
+      "scale": 2,
+      "messages": [
+          {
+              "entities": [],
+              "avatar": true,
+              "from": {
+                  "id": 1,
+                  "name": await client.getName(m.quoted ? m.quoted.sender : pushname),
+                  "photo": {
+                      "url": imgUrl.
+                  }
+              },
+              "text": text? text : m.quoted ? m.quoted.text : '',
+              "replyMessage": {}
+          }
+      ]
+  };
+
+  res = await axios.post('https://bot.lyo.su/quote/generate', json, {
+      headers: {'Content-Type': 'application/json'}
+  });
+  buffer = Buffer.from(res.data.result.image, 'base64');
+  rest = { 
+      status: "200", 
+      creator: "AdrianTzy",
+      result: buffer
+  };
+
+  client.sendImageAsSticker(from, rest.result, m, true, {
+      packname: `${global.packname}`,
+      author: `${global.author}`
+  });*/
+  }
+break;
 
 case 'neko' :
   try {
@@ -1417,7 +1578,7 @@ case 'smeme': case 'stickmeme':
     proses("⏳")
 top = encodeURIComponent(q.split('|')[0])
 bottom = encodeURIComponent(q.split('|')[1])
-var imgbb = require('imgbb-uploader')
+
 if ((isMedia && !m.message.videoMessage || isQuotedImage || isQuotedSticker) && args.length > 0) {
 ger = isQuotedImage || isQuotedSticker ? JSON.parse(JSON.stringify(m).replace('quotedM','m')).message.extendedTextMessage.contextInfo : m
 ranp = getRandom('54')
@@ -1491,27 +1652,6 @@ proses("✔")
 break
 
 
-/*case 'tovid':
-if (!isQuotedSticker) return reply('𝗥𝗲𝗽𝗹𝘆/𝘁𝗮𝗴 𝘀𝘁𝗶𝗰𝗸𝗲𝗿 !')
-  if (m.msg.contextInfo.quotedMessage.stickerMessage.isAnimated === false) return reply(" Gunakan sticker animated !")
-    try {
-proses("⏳")
-if (m.msg.contextInfo.quotedMessage.stickerMessage.isAnimated === true) {
-const { tovid } = require("./lib/exif")
-ran = getRandom("99")
-media = await client.downloadAndSaveMediaMessage(qms, ran)
-let webpToMp4 = await toVideo(media, )
-await client.sendMessage(from, { video: { url: webpToMp4.result, caption: 'Convert Webp To Video' } }, {quoted:m})
-await fs.unlinkSync(media)
-proses("✔")
-}
-} catch(err) {
-  proses("❌")
-  console.log(err);
-}
-  break*/
-
-
   case 'togif':
   if (!isQuotedSticker) return reply('𝗥𝗲𝗽𝗹𝘆/𝘁𝗮𝗴 𝘀𝘁𝗶𝗰𝗸𝗲𝗿 !')
   ran = getRandom("99")
@@ -1520,10 +1660,11 @@ proses("✔")
   fs.unlinkSync(media)
 break
 
+
                                                     
 
         case 'forward':
-client.sendMessage(from, text, {contextInfo : {forwardingScore: 99, isForwarded: true}})
+          client.sendMessage(from, {text, contextInfo : {forwardingScore: 896, isForwarded: true}})
           break
           
 
@@ -1787,115 +1928,19 @@ case "join":
           break
 
 
-/*case 'play': 
-  if (!text) return reply(`*Example :* ${prefix + command} title`);
-  try {
-    proses("⌛")
-    let search = await yts(text);
-    let videos = search.all;
-
-    if (!videos || videos.length === 0) {
-      return reply('No music found');
-    }
-
-    // Pilih antara 1 dan 5 video secara acak
-    const numVideos = Math.min(videos.length, Math.floor(Math.random() * 10) + 1);
-    const selectedVideos = [];
-
-    while (selectedVideos.length < numVideos) {
-      const randomIndex = Math.floor(Math.random() * videos.length);
-      const randomVideo = videos.splice(randomIndex, 1)[0]; // Menghindari pemilihan video yang sama
-      reserved = randomVideo.ago !== undefined ? randomVideo.ago : "1 Years ago"
-      if(randomVideo.type === 'video' && reserved.includes('Streamed')) selectedVideos.push(randomVideo);
-    }
-
-    let push = [];
-
-    for (let i = 0; i < selectedVideos.length; i++) {
-      let video = selectedVideos[i];
-      let cap = `Title : ${video.title}`;
-      let mediaMessage
-      try{
-        mediaMessage = await prepareWAMessageMedia({ image: { url: video.thumbnail } }, { upload: client.waUploadToServer });
-      } catch {
-        mediaMessage = await prepareWAMessageMedia({ image: { url: "./assets/icon.jpg" } }, { upload: client.waUploadToServer });
-      }
-
-      push.push({
-        body: proto.Message.InteractiveMessage.Body.fromObject({
-          text: cap
-        }),
-        footer: proto.Message.InteractiveMessage.Footer.fromObject({
-          text: botName
-        }),
-        header: proto.Message.InteractiveMessage.Header.create({
-          title: `Video ke - ${i + 1}`,
-          subtitle: '',
-          hasMediaAttachment: true,
-          ...mediaMessage
-        }),
-        nativeFlowMessage: proto.Message.InteractiveMessage.NativeFlowMessage.fromObject({
-          buttons: [
-            {
-              "name": "quick_reply",
-              "buttonParamsJson": `{"display_text":"Video 🎦","id":"${prefix}ytmp4 ${video.url}"}`
-            },
-            {
-              "name": "quick_reply",
-              "buttonParamsJson": `{"display_text":"Audio 🎵","id":"${prefix}ytmp3 ${video.url}"}`
-            }
-          ]
-        })
-      });
-    }
-
-    const msg = generateWAMessageFromContent(m.chat, {
-      viewOnceMessage: {
-        message: {
-          messageContextInfo: {
-            deviceListMetadata: {},
-            deviceListMetadataVersion: 2
-          },
-          interactiveMessage: proto.Message.InteractiveMessage.fromObject({
-            body: proto.Message.InteractiveMessage.Body.create({
-              text: lang.success()
-            }),
-            footer: proto.Message.InteractiveMessage.Footer.create({
-              text: botName
-            }),
-            header: proto.Message.InteractiveMessage.Header.create({
-              hasMediaAttachment: false
-            }),
-            carouselMessage: proto.Message.InteractiveMessage.CarouselMessage.fromObject({
-              cards: push
-            })
-          })
-        }
-      }
-    }, {});
-
-    await client.relayMessage(from, msg.message, {
-      messageId: msg.key.id
-    });
-  } catch (e) {
-    console.error(e);
-    await reply(lang.eror());
-  }
-
-break*/
-
 case 'ytmp3': 
   if (!text) return reply(lang.format(prefix, command))
   proses("⌛")
-  searchResponse = await ytdls(text)
+  searchResponse = await ytdlnew(text)
   await client.sendMessage(from, { audio: {url: searchResponse.url}, mimetype: "audio/mp4", ptt: false}, { quoted: m })
   proses("✔")
 break
 
 case 'ytmp4':
+  return reply('sedang dalam perbaikan')
   if (!text) return replynano(lang.format(prefix, command))
   proses("⌛")
-  searchResponse = await ytdls(text)
+  searchResponse = await ytdlnew(text)
   const ytc = `*[ YOUTUBE DOWNLOADER ]*
   
   ©${botName}`;
@@ -1910,7 +1955,7 @@ case 'play':
       search = await yts(text);
       video = search.videos[0];
       let { title, thumbnail, timestamp, views, ago, url } = video;
-      mp3Url = await ytdls(url)
+      mp3Url = await ytdlnew(url)
       mp3File = {
         audio: {
           url: mp3Url.url
@@ -1934,113 +1979,8 @@ case 'play':
     proses('❌')
     console.log(err)
   }
-
-     
-    /*try{ 
-        proses('⏳');
-      ytlink = await yts(text)
-        proses("🔍")
-      urlVideo = ytlink.videos[0]
-      client.sendImage(from, urlVideo.image, `*${urlVideo.title}*\n- Duration:${urlVideo.timestamp}\n- Viewer: ${urlVideo.views}\n- Release: ${urlVideo.ago}`)
-      let mp3File = getRandom('.mp3')
-          console.log(color('Download Audio With ytdl-core'))
-          proses("⬇")
-          let stream = await ytdl(urlVideo.url, {
-              agent,
-              quality: 'highestaudio',
-              format: 'mp3',
-              highWaterMark: 1 << 30,
-              liveBuffer: 1 << 30
-          })
-          .on('error', err => {
-              downlaodSucess = undefined;
-              console.log(err)
-          })
-          await ffmpeg(stream)
-            .audioBitrate(96)
-            .audioChannels(1)
-            .format('mp3')
-            .save(`./tmp/${mp3File}`)
-            .on('error', err => {
-              downloadSucess = undefined;
-              console.log(err)
-          })
-            .on('end', async() => {
-              downloadSucess = true;
-              proses("⬆")
-              await client.sendMessage(from, { audio: fs.readFileSync(`./tmp/${mp3File}`), mimetype: 'audio/mp4', ptt: true }, mek)
-              proses("✔")
-              fs.unlinkSync(`./tmp/${mp3File}`)
-          })
-            
-    } catch(err) {
-      proses('❌');
-      reply('Sepertinya ada yang error')
-      console.log(err)
-    }*/
   break
 
-  /*case 'ytmp3':
-    if (!text) return m.reply(`Example : ${prefix + command} https://youtube.com/watch?v=PtFMh6Tccag%2`)
-      if (!isUrl(text)) return m.reply(`Example : ${prefix + command} https://youtube.com/watch?v=PtFMh6Tccag%2`)
-      try {
-    proses("⌛")
-        let mp3File = getRandom('.mp3')
-        console.log(color('Download Audio With ytdl-core'))
-        proses("⬇")
-        let stream = await ytdl(text, {
-            agent,
-            quality: 'highestaudio',
-            format: 'mp3',
-            highWaterMark: 1 << 30,
-            liveBuffer: 1 << 30
-        })
-        .on('error', err => {
-            downlaodSucess = undefined;
-            console.log(err)
-        })
-        await ffmpeg(stream)
-          .audioBitrate(96)
-          .audioChannels(1)
-          .format('mp3')
-          .save(`./tmp/${mp3File}`)
-          .on('error', err => {
-            downloadSucess = undefined;
-            console.log(err)
-        })
-          .on('end', async() => {
-            downloadSucess = true;
-            proses("⬆")
-            await client.sendMessage(from, { audio: fs.readFileSync(`./tmp/${mp3File}`), mimetype: 'audio/mp4', ptt: true }, mek)
-            proses("✔")
-            fs.unlinkSync(`./tmp/${mp3File}`)
-        })
-          
-        } catch (err) {
-        proses("❌")
-        console.log(err)
-        }
-
-break*/
-
-/*case 'ytmp4':
-       
-      if (!text) return m.reply(`Example : ${prefix + command} https://youtube.com/watch?v=PtFMh6Tccag%27`)
-      if (!isUrl(text)) return m.reply(`Example : ${prefix + command} https://youtube.com/watch?v=PtFMh6Tccag%2`)
-            try{
-                proses("⌛")
-                let info = await ytdl.getInfo(text, { agent })
-                proses("🔍")
-    			let format = ytdl.chooseFormat(info.formats, { quality: '18' });
-                proses("⬆")
-                client.sendMessage(from, {video: {url: format.url}, caption: `*Video Info*\n\n*Title*: \`${info.videoDetails.title}\`\n*Channel*: \`${info.videoDetails.ownerChannelName}\`\n*Category*: \`${info.videoDetails.category}\`\n*Published*: \`${info.videoDetails.publishDate}\`\n*Viewed*: \`${info.videoDetails.viewCount}\``}, mek)
-                proses("✔")
-            } catch(err) {
-                proses("❌")
-                console.log(err)
-            }
-    
-              break*/
 
         case 'addmem':
           if(!q) return reply(lang.format(prefix, command))
@@ -2079,30 +2019,17 @@ break*/
             }
             break
 
-/*case 'fbdl':
-case 'fb':
-  if (!q) return reply (lang.format(prefix, command))
-  try {
-    proses("⏳")
-  link = await fb(text)
-   if (link == undefined) {
-          proses("❌")
-          return reply("Can't download video from profile, use link from public pages or group instead.")
-      }
-  client.sendVideo(from, link, ' ', mek)
-  proses("✔")
-      } catch(err) {
-        proses("❌")
-        console.log(err)
-      }
-    break*/
 
   case 'ig':
     try {
     if(!text) return reply(lang.format(prefix,command))
     proses("⏳")
-    link = await igDownloader(text)
-    client.sendVideo(from, link, ' ', mek)
+    fetcher = await axios({
+      url: `https://widipe.com/download/igdl?url=${encodeURIComponent(text)}`,
+      method: 'GET',
+      responseType: 'json'
+    })
+    client.sendMessage(from, { video: {url: fetcher.data.result[0].url}, caption: `*Video from Instagram*:\n*User:* ${fetcher.data.result[0].wm}`}, mek)
     proses("✔")
     } catch(err) {
       proses("❌");
@@ -2126,19 +2053,25 @@ case 'fb':
     break
 
 
-  case 'ocr': 
-    if (isMedia && !m.message.videoMessage || isQuotedImage || isQuotedSticker) {
-      ger = isQuotedImage || isQuotedSticker ? JSON.parse(JSON.stringify(m).replace('quotedM','m')).message.extendedTextMessage.contextInfo : m
-      ranp = getRandom('99')
-    owgi = await  client.downloadAndSaveMediaMessage(qms,ranp)
-    ocr = await ocrSpace(owgi, {apiKey: global.ocr})
-    // console.log(ocr);
-    pass = ocr.ParsedResults[0].ParsedText
-    if (pass === '') return reply("can't parsing data, this is not image/bot error.")
-    client.sendText(from, pass)
-    fs.unlinkSync(owgi);
+    case 'ocr': 
+    try{
+      if (isMedia && !m.message.videoMessage || isQuotedImage || isQuotedSticker) {
+ger = isQuotedImage || isQuotedSticker ? JSON.parse(JSON.stringify(m).replace('quotedM','m')).message.extendedTextMessage.contextInfo : m
+ranp = getRandom('99')
+owgi = await  client.downloadAndSaveMediaMessage(qms,ranp)
+ocr = await ocrSpace(owgi, {apiKey: global.ocr})
+console.log(ocr);
+pass = ocr.ParsedResults[0].ParsedText
+if (pass === '') return reply("can't parsing data, this is not image/bot error.")
+client.sendText(from, pass)
+fs.unlinkSync(owgi);
+}
+    } catch(err){
+        proses("❌")
+        console.log(err)
     }
-    break
+
+break
 
   case 'changelog':
     reply(lang.changelog())
