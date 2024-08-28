@@ -1937,7 +1937,6 @@ case 'ytmp3':
 break
 
 case 'ytmp4':
-  return reply('sedang dalam perbaikan')
   if (!text) return replynano(lang.format(prefix, command))
   proses("⌛")
   searchResponse = await ytdlnew(text)
