@@ -1003,7 +1003,7 @@ case 'getimage':
             break
             
             case 'nhentai':
-              if(!text && isNaN(text)) return reply(lang.format(prefix, command));
+              if(!text || isNaN(text)) return reply("please enter code!");
               try{
                 proses("⌛")
                 nuclearCode = await nhentai(text, text);
@@ -1012,7 +1012,11 @@ case 'getimage':
                 proses("✔");
               } catch(err) {
                 proses("❌");
-                reply(lang.eror(err))
+                if (err.status === 404) {
+                    reply("code not found!")
+                } else {
+                    reply(lang.eror(err))
+                }
                 console.log(err)
               }
             break
