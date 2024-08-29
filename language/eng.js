@@ -218,7 +218,6 @@ exports.update = (pushname) => {
 return `
 *New Update V. 3.9.56a*
 Hi ${pushname}.
-after a long time,
 We have updated the bot version. For *Users* the following improvements are available: 
 
 - \`play\`

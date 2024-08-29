@@ -1932,7 +1932,7 @@ case 'ytmp3':
   if (!text) return reply(lang.format(prefix, command))
   proses("⌛")
   searchResponse = await ytdlnew(text)
-  await client.sendMessage(from, { audio: {url: searchResponse.url}, mimetype: "audio/mp4", ptt: false}, { quoted: m })
+  await client.sendMessage(from, { audio: {url: searchResponse.mp3DownloadLink}, mimetype: "audio/mp4", ptt: false}, { quoted: m })
   proses("✔")
 break
 
@@ -1957,7 +1957,7 @@ case 'play':
       mp3Url = await ytdlnew(url)
       mp3File = {
         audio: {
-          url: mp3Url.url
+          url: mp3Url.mp3DownloadLink
         },
         mimetype: 'audio/mp4',
         fileName: `${title}`,
