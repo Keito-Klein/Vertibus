@@ -38,6 +38,7 @@ return `
  │•${prefix}remini
  │•${prefix}nhentai
  │•${prefix}tovideo
+ │•${prefix}tomp3
  │•${prefix}fb
  │•${prefix}ig
  │•${prefix}tiktok
@@ -211,6 +212,9 @@ exports.changelog = () => {
 
 ===== *29 - 08 - 2024* =====
 - Fix instagram downloader
+
+===== *30 - 08 - 2024* =====
+- Add mp4 to mp3 converter
 `
 }
 
