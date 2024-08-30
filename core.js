@@ -15,6 +15,7 @@ const imgbb = require('imgbb-uploader');
 const neko_modules = require('nekos.life');
 const moment = require('moment-timezone');
 const fileType = require("file-type");
+const ffmpeg = require('fluent-ffmpeg');
 const path = require('path');
 const { ocrSpace } = require('ocr-space-api-wrapper');
 const { nhentai } = require("./lib/nh");
@@ -37,6 +38,7 @@ const inRaid = JSON.parse(fs.readFileSync("./lib/guild.json"));
 const welkom = JSON.parse(fs.readFileSync('./db/welcome.json'));
 const akronim = JSON.parse(fs.readFileSync("./db/guide-data/akronim.json"));
 const localeTime = JSON.parse(fs.readFileSync("./db/date.json"));
+const mobs = JSON.parse(fs.readFileSync("./db/farm.json"));
 let Usage 
 let User
 
@@ -297,162 +299,9 @@ module.exports = core = async (client, m, chatUpdate, store) => {
     const isQuotedImage = m.mtype === 'extendedTextMessage' && content.includes('imageMessage')
     const isQuotedAudio = m.mtype === 'extendedTextMessage' && content.includes('audioMessage')
     const isQuotedSticker = m.mtype === 'extendedTextMessage' && content.includes('stickerMessage')
+    const isQuotedVideo = m.mtype === 'extendedTextMessage' && content.includes('videoMessage')
 
-    /*Farming Object*/
-    let mobs = {
-    mats: {
-      metal: [{
-          monster: 'Goblin{Pedang)',
-          lv: '24',
-          element: 'Api',
-          hp: 'idk',
-          exp: 'idk',
-          map: 'Gua Ribisco: A3'
-      }, 
-      {
-          monster: 'Stone Soldier',
-          lv: '37',
-          element: 'Bumi',
-          hp: 'idk',
-          exp: 'idk',
-          map: 'Gua Lutaros: Mulut Gua'
-        }, {
-          monster: 'Ksatria Terkontrol',
-          lv: '93',
-          element: 'Gelap',
-          hp: 'idk',
-          exp: 'idk',
-          map: 'Istana Gelap: A2'
-        }, {
-          monster:'*Malaikat Gelembung(Biru)*',
-          lv: '*143*',
-          element: '*Air*',
-          hp: '*idk*',
-          exp: '*idk*',
-          map: '*Kuil Dewa Berkah: A2*'
-        }, {
-          monster: 'Bitum',
-          lv: '210',
-          element: 'Api',
-          hp: '36.600',
-          exp: '581',
-          map: 'Gunung Vulkani: A3'
-        }],
-
-      wood: [{
-          monster: 'Shell Mask',
-          lv: '27',
-          element: 'Bumi',
-          hp: 'idk',
-          exp: 'idk',
-          map: 'Gunung Nisel: Lereng'
-        },
-        {
-          monster: 'Machina Tumbuhan',
-          lv: '95',
-          element: 'Bumi',
-          hp: 'idk',
-            exp: 'idk',
-            map: 'Pembuangan Peligro'
-        }, {
-          monster: 'Pohon Parasit',
-          lv: '152',
-          element: 'Bumi',
-          hp: 'idk',
-          exp: '94',
-          map: 'Distrik Altolae'
-        }, {
-          monster: '*Ivy*',
-          lv: '*150*',
-          element: '*Bumi*',
-          hp: '*idk*',
-          exp: '*195*',
-          map: '*Kuil Naga Kegelapan: A2*'
-        }],
-
-        beast: [{
-          monster: 'Beak',
-          lv: '18',
-          element: 'Angin',
-          hp: 'idk',
-          exp: 'idk',
-          map: 'Kuil Runtuh: A1'
-        }, {
-          monster: 'Parasitized Dog',
-          lv: '57',
-          element: 'Gelap',
-          hp: 'idk',
-          exp: 'idk',
-          map: 'Kota Hilang: Alun-Alun'
-        }, {
-          monster: '*Venomsch*',
-          lv: '*112*',
-          element: '*Air*',
-          hp: '*7000*',
-          exp: '*dk*',
-          map: '*Saluran Bawah Tanah Ultimea: Selatan*'
-        }, {
-          monster: '*Underground Nemico*',
-          lv: '*109*',
-          element: '*Angin*',
-          hp: '*idk*',
-          exp: '*idk*',
-          map: '*Saluran Bawah Tanah Ultimea: Tenggara*'
-        }],
-
-        medic: [{
-          monster: '*Jelly Ungu*',
-          lv: '*110*',
-          element: '*Gelap*',
-          hp: '*7000*',
-          exp: '*128*',
-          map: '*Saluran Bawah Tanah Ultimea: Tenggara*'
-        }, {
-          monster: 'Lyark Spesialis',
-          lv: '119',
-          element: 'Gelap',
-          hp: '15000',
-          exp: '286',
-          map: 'Laboratorium Brahe: Gedung 2'
-        }, {
-          monster: 'Acernix',
-          lv: '138',
-          element: 'Air',
-          hp: '4000',
-          exp: '197',
-          map: 'Taman Es & Salju'
-        }],
-        cloth: [{
-          monster: 'Rutiro',
-          lv: '36',
-          element: 'Gelap',
-          hp: '1300',
-          exp: '48',
-          map: 'Menara Kuno Aulada'
-        }, {
-          monster: 'Cassy',
-          lv: '48',
-          element: 'Gelap',
-          hp: 'idk',
-          exp: '72',
-          map: 'Makam Ratu Kuno: Area 2'
-        }, {
-          monster: 'Underground Nemico',
-          lv: '109',
-          element: 'Angin',
-          hp: '6500',
-          exp: '103',
-          map: 'Saluran Bawah Tanah Ultimea: Tenggara'
-        }, {
-          monster: 'Potum Semadi',
-          lv: '132',
-          element: 'cahaya',
-          hp: '8465',
-          exp: '153',
-          map: 'Koridor Haresi'
-        }]
-    },
-  }
+    
 
       //Proccess
       const proses = (reaction) => {
@@ -1930,6 +1779,38 @@ case "join":
           }*/
       client.sendMessage(from, {text: q, mentions: mem})
           break
+
+          case 'tomp3':
+            if(!isQuotedVideo) return reply("send/reply videoMessage!")
+              try{
+            proses("⏳")
+            inputMedia = await client.downloadAndSaveMediaMessage(qms);
+            outputMedia = getRandom(".mp3")
+            ffmpeg(inputMedia)
+              .audioBitrate(128)
+              .audioChannels(2)
+              .format('mp3')
+              .save(`./tmp/${outputMedia}`)
+              .on('error', err => {
+                downloadSucess = undefined;
+                console.log(err)
+            })
+            .on('start', () => {
+              proses("🔄")
+            })
+              .on('end', async() => {
+                downloadSucess = true;
+                proses("⬆")
+                await client.sendMessage(from, { audio: fs.readFileSync(`./tmp/${outputMedia}`), mimetype: 'audio/mp4', ptt: false })
+                proses("✔")
+                fs.unlinkSync(`./tmp/${outputMedia}`)
+            })
+
+            } catch(err) {
+              proses("❌")
+                console.log(err)
+            }
+            break
 
 
 case 'ytmp3': 
