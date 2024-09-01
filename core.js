@@ -38,7 +38,7 @@ const inRaid = JSON.parse(fs.readFileSync("./lib/guild.json"));
 const welkom = JSON.parse(fs.readFileSync('./db/welcome.json'));
 const akronim = JSON.parse(fs.readFileSync("./db/guide-data/akronim.json"));
 const localeTime = JSON.parse(fs.readFileSync("./db/date.json"));
-const mobs = JSON.parse(fs.readFileSync("./db/farm.json"));
+const mobs = JSON.parse(fs.readFileSync("./db/guide-data/farm.json"));
 let Usage 
 let User
 
