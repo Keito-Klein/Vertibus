@@ -21,7 +21,7 @@ const { ocrSpace } = require('ocr-space-api-wrapper');
 const { nhentai } = require("./lib/nh");
 const { doing } = require('./lib/translate')
 const { event } = require("./lib/event.js")
-const { processing } = require("./lib/remini")
+const { remini } = require("./lib/remini")
 const { mt } = require("./lib/mt.js")
 const { ind } = require("./language")
 const { eng } = require("./language")
@@ -1380,13 +1380,32 @@ case 'buff':
     case 'hd':
   if (!/image/.test(mime)) return reply('gunakan foto!')
   if (!/image\/(jpe?g|png)/.test(mime)) return reply('Format gambar tidak didukung!')
-    if (/image/.test(mime)) {
-      proses("⏳")
-      let media = await client.downloadMediaMessage(qms)
-      let encmedia = await processing(media, 'enhance')
-      client.sendImage(from, encmedia, 'Done!', mek)
-      proses("✔")
+    try {
+  if (/image/.test(mime)) {
+    proses("⏳")
+    ranp = getRandom(' - remini')
+    owgi = await  client.downloadAndSaveMediaMessage(qms, ranp)
+    options = {
+      apiKey: global.imgbb, // MANDATORY
+      imagePath: owgi, // OPTIONAL: pass a local file (max 32Mb)
+      name: ranp, // OPTIONAL: pass a custom filename to imgBB API
+      expiration: 3600 /* OPTIONAL: pass a numeric value in seconds.
+      It must be in the 60-15552000 range.
+      Enable this to force your image to be deleted after that time. */,
+    };
+  anu = await imgbb(options)
+    if (text && text === "2") {
+      encmedia = await remini(anu.display_url, text)
+    } else {
+      encmedia = await remini(anu.display_url, "4")
     }
+    client.sendImage(from, encmedia, 'Done!', mek)
+    proses("✔")
+  }
+  } catch(e) {
+    console.error(e)
+    proses("❌")
+  }
     break
 
   case 'sticker':
