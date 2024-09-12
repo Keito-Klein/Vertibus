@@ -215,24 +215,20 @@ exports.changelog = () => {
 
 ===== *30 - 08 - 2024* =====
 - Add mp4 to mp3 converter
+
+===== *12 - 09 - 2024* =====
+- Fix Remini
 `
 }
 
 exports.update = (pushname) => {
 return `
-*New Update V. 3.9.56a*
+*New Update V. 3.9.57a*
 Hi ${pushname}.
 We have updated the bot version. For *Users* the following improvements are available: 
 
-- \`play\`
-- \`ytmp3\`
-- \`ytmp4\`
-- \`instagram\`
-> Previously this feature could not be used because the bot got an error code 403 due to the security of the website/data source which was getting tighter. we have fixed it by changing the data source. However, some videos/music may experience errors.
-
-Additional features:
-- \`text2img\`
-> text2img is a feature for generate image from text/prompt.
+- \`remini/tohd/hd\`
+> Previously this feature could not be used because the bot got an \`\`\`error code 502\`\`\` so the server crashes when processing data.
 
 for questions please pm the owner by typing:
 *!owner*

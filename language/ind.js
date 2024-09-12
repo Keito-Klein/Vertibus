@@ -224,24 +224,20 @@ exports.changelog = () => {
 
 ===== *30 - 08 - 2024* =====
 - Add mp4 to mp3 converter
+
+===== *12 - 09 - 2024* =====
+- Fix Remini
 `
 }
 
 exports.update = (pushname) => {
 return `
-*New Update V. 3.9.56a*
+*New Update V. 3.9.57a*
 Hi ${pushname}.
-Kami telah memperbarui versi bot. Untuk *User* perbaikan/fitur berikut telah hadir: 
+Kami telah memperbarui versi bot. Untuk *User* perbaikan berikut telah hadir: 
 
-- \`play\`
-- \`ytmp3\`
-- \`ytmp4\`
-- \`instagram\`
-> Sebelumnya fitur ini tidak dapat digunakan karena bot mendapat \`\`\`error code 403\`\`\` disebabkan oleh keamanan website/sumber data yang mulai ketat. kami telah memperbaiki dengan mengganti sumber data. namun, beberapa video/music mungkin mengalami error.
-
-Penambahan fitur:
-- \`text2img\`
-> text2img adalah fitur _generate image_ dari text yang dikirimkan.
+- \`remini/tohd/hd\`
+> Sebelumnya fitur ini tidak dapat digunakan karena bot mendapat \`\`\`error code 502\`\`\`, sehingga server mengalami _crash_.
 
 tanya tanya silahkan pm owner dengan mengetik:
 *!owner*
