@@ -45,6 +45,13 @@ return `
  │•${prefix}ytmp3
  │•${prefix}ytmp4
  ╰•${prefix}play
+
+ ❏ *Group Menu*
+ │•${prefix}add
+ │•${prefix}kick
+ │•${prefix}promote
+ │•${prefix}demote
+ ╰•${prefix}metadata
  
 ❏ *Other Menu*
  │•${prefix}owner
@@ -218,17 +225,30 @@ exports.changelog = () => {
 
 ===== *12 - 09 - 2024* =====
 - Fix Remini
+
+===== *17 - 09 - 2024* =====
+- Add add at list
+- Add promote at list
+- Add demote at list
+- Add kick at list
+- Add metadata at list
 `
 }
 
 exports.update = (pushname) => {
 return `
-*New Update V. 3.9.57a*
+*New Update V. 3.13.57a*
 Hi ${pushname}.
 We have updated the bot version. For *Users* the following improvements are available: 
 
-- \`remini/tohd/hd\`
-> Previously this feature could not be used because the bot got an \`\`\`error code 502\`\`\` so the server crashes when processing data.
+- \`add\`
+- \`kick\`
+- \`promote\`
+- \`demote\`
+> This feature is used to manage members in a group, such as promote a member as admin/demoting admin to member, removing/adding members.
+
+- \`metadata\`
+> This feature is used to display group info.
 
 for questions please pm the owner by typing:
 *!owner*

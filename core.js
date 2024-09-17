@@ -1650,19 +1650,6 @@ tolang = args[0]
                         client.sendText(from, teks, mek)
                       break
 
-                    case 'promote':
-                      if(!m.isGroup) return reply(lang.onGroup())
-                      if (!isGroupAdmins) return reply(lang.onAdmin())
-                      if(!botAdmin) return reply(lang.botAdmin())
-                      if (m.message.extendedTextMessage === undefined || m.message.extendedTextMessage === null) return reply('tag member!')
-                        ppl = m.mentionedJid
-                      console.log(ppl)
-                      await client.groupParticipantsUpdate(from, ppl, "promote").then(() => {
-                        client.sendText(from, lang.success(), mek)
-                      })
-
-                      break
-
 case 'ping':
 case 'botstatus':
 case 'statusbot': 
@@ -1885,15 +1872,95 @@ case 'play':
   break
 
 
-        case 'addmem':
-          if(!q) return reply(lang.format(prefix, command))
-          if(isNaN(q)) return reply('use number!')
-          await client.groupParticipantsUpdate(from, [`${q}@s.whatsapp.net`], 'add')
+        case 'add':
+          if(!m.isGroup) return reply(lang.onGroup())
+          if(!botAdmin) return reply(lang.botAdmin())
+          if (!isGroupAdmins || !groupMetadata.memberAddMode) return reply(lang.onAdmin())
+          if(!text) return reply(lang.format(prefix, command))
+          if(isNaN(text)) return reply('use number!')
+              await client.groupParticipantsUpdate(from, [`${text}@s.whatsapp.net`], 'add')
+
           break
+
+        case 'kick':
+          if(!m.isGroup) return reply(lang.onGroup())
+          if(!botAdmin) return reply(lang.botAdmin())
+          if (!isGroupAdmins) return reply(lang.onAdmin())
+            if (m.mentionedJid.length > 0) {
+              removePPL = m.mentionedJid
+            await client.groupParticipantsUpdate(from, removePPL, "remove").then(() => {
+              client.sendText(from, lang.success(), mek)
+            })
+            } else if (m.quoted) {
+              removePPL = [m.quoted.sender]
+              await client.groupParticipantsUpdate(from, removePPL, "remove").then(() => {
+                client.sendText(from, lang.success(), mek)
+              })
+            } else {
+              reply("tag/reply member!")
+            }
+        break
+
+          case 'promote':
+            if(!m.isGroup) return reply(lang.onGroup())
+            if(!botAdmin) return reply(lang.botAdmin())
+            if (!isGroupAdmins) return reply(lang.onAdmin())
+            if (m.mentionedJid.length > 0) {
+              promotePPL = m.mentionedJid
+            await client.groupParticipantsUpdate(from, promotePPL, "promote").then(() => {
+              client.sendText(from, lang.success(), mek)
+            })
+            } else if (m.quoted) {
+              promotePPL = [m.quoted.sender]
+              await client.groupParticipantsUpdate(from, promotePPL, "promote").then(() => {
+                client.sendText(from, lang.success(), mek)
+              })
+            } else {
+              reply("tag/reply member!")
+            }
+
+            break
+
+            case 'demote':
+            if(!m.isGroup) return reply(lang.onGroup())
+            if (!isGroupAdmins) return reply(lang.onAdmin())
+            if(!botAdmin) return reply(lang.botAdmin())
+            if (m.mentionedJid.length > 0) {
+              demotePPL = m.mentionedJid
+            await client.groupParticipantsUpdate(from, demotePPL, "demote").then(() => {
+              client.sendText(from, lang.success(), mek)
+            })
+            } else if (m.quoted) {
+              demotePPL = [m.quoted.sender]
+              await client.groupParticipantsUpdate(from, demotePPL, "demote").then(() => {
+                client.sendText(from, lang.success(), mek)
+              })
+            } else {
+              reply("tag/reply member!")
+            }
+
+            break
+
+            case 'metadata':
+              if(!m.isGroup) return reply(lang.onGroup())
+              timeUnix = (timeStamp) => {
+            months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+            date = new Date(timeStamp * 1000)
+            year = date.getFullYear()
+            month = months[date.getMonth()]
+            day = date.getDate()
+            hour = date.getHours()
+            minute = date.getMinutes()
+            second = date.getSeconds()
+            time = `${day} ${month} ${year} ${hour}:${minute}:${second}`
+            return time
+            } 
+              infoGroup = `*- Group Metadata Info -*\n\n*Group ID:* ${groupMetadata.id}\n*Group Name:* ${groupName}\n*Name Since:* ${timeUnix(groupMetadata.subjectTime)}\n*Group Creation:* ${timeUnix(groupMetadata.creation)}\n*Owner Group:* ${groupMetadata.owner !== undefined ? client.getName(groupMetadata.owner) : "-"}\n*Members:* ${groupMetadata.size} member.\n*Join Approval:* ${groupMetadata.joinApprovalMode ? "Yes" : "No"}.\n*Member Add Mode:* ${groupMetadata.memberAddMode ? "Yes" : "No"}.\n*Disappearing Message:* ${groupMetadata.ephemeralDuration !== undefined ? groupMetadata.ephemeralDuration / (24 * 60 * 60) + " Days" : "OFF"}.\n*Description:*\n${groupMetadata.desc}`
+              reply(infoGroup) 
+            break
 
   case 'vn':
         //if(m.type === 'extendedTextMessage') reply(JSON.parse(content))
-        if(!isQuotedAudio) return reply('reply audioMessage!');
           ranp = getRandom('99')
         media = await client.downloadAndSaveMediaMessage(qms, ranp)
         await client.sendMessage(from, { audio: { url: media }, mimetype: 'audio/mp4', ptt: true })

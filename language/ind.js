@@ -33,7 +33,7 @@ return `
  │•${prefix}cb
  ╰•${prefix}mq
 
- ❏ *Media Menu*
+❏ *Media Menu*
  │•${prefix}sticker
  │•${prefix}smeme
  │•${prefix}toimg
@@ -48,6 +48,13 @@ return `
  │•${prefix}ytmp3
  │•${prefix}ytmp4
  ╰•${prefix}play
+
+❏ *Group Menu*
+ │•${prefix}add
+ │•${prefix}kick
+ │•${prefix}promote
+ │•${prefix}demote
+ ╰•${prefix}metadata
  
 ❏ *Other Menu*
  │•${prefix}owner
@@ -227,17 +234,30 @@ exports.changelog = () => {
 
 ===== *12 - 09 - 2024* =====
 - Fix Remini
+
+===== *17 - 09 - 2024* =====
+- Add add at list
+- Add promote at list
+- Add demote at list
+- Add kick at list
+- Add metadata at list
 `
 }
 
 exports.update = (pushname) => {
 return `
-*New Update V. 3.9.57a*
+*New Update V. 3.13.57a*
 Hi ${pushname}.
 Kami telah memperbarui versi bot. Untuk *User* perbaikan berikut telah hadir: 
 
-- \`remini/tohd/hd\`
-> Sebelumnya fitur ini tidak dapat digunakan karena bot mendapat \`\`\`error code 502\`\`\`, sehingga server mengalami _crash_.
+- \`add\`
+- \`kick\`
+- \`promote\`
+- \`demote\`
+> fitur ini digunakan untuk mengatur member yang ada dalam grup, seperti menaikan member sebagai admin/menurunkan admin menjadi member, mengeluarkan/menambahkan anggota.
+
+- \`metadata\`
+> fitur ini digunakan untuk menampilkan info grup.
 
 tanya tanya silahkan pm owner dengan mengetik:
 *!owner*
