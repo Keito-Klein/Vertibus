@@ -1875,7 +1875,7 @@ case 'play':
         case 'add':
           if(!m.isGroup) return reply(lang.onGroup())
           if(!botAdmin) return reply(lang.botAdmin())
-          if (!isGroupAdmins || !groupMetadata.memberAddMode) return reply(lang.onAdmin())
+          if (!isGroupAdmins && !groupMetadata.memberAddMode) return reply(lang.onAdmin())
           if(!text) return reply(lang.format(prefix, command))
           if(isNaN(text)) return reply('use number!')
               await client.groupParticipantsUpdate(from, [`${text}@s.whatsapp.net`], 'add')
@@ -1923,8 +1923,8 @@ case 'play':
 
             case 'demote':
             if(!m.isGroup) return reply(lang.onGroup())
-            if (!isGroupAdmins) return reply(lang.onAdmin())
             if(!botAdmin) return reply(lang.botAdmin())
+            if (!isGroupAdmins) return reply(lang.onAdmin())
             if (m.mentionedJid.length > 0) {
               demotePPL = m.mentionedJid
             await client.groupParticipantsUpdate(from, demotePPL, "demote").then(() => {
