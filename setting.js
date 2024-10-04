@@ -17,7 +17,7 @@ global.facebook = 'https://facebook.com/taufik.qillah.73'
 global.instagram = 'https://instagram.com/fritz_icarius'
 
 /*ApiKey*/
-global.ocr = "816e2ac3f588957";
+global.ocr = "K87061951288957";
 global.imgbb = "bfe53fe15a978cf1938d96123f065206";
 
 
