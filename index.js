@@ -51,6 +51,23 @@ const color = (text, color) => {
   return !color ? chalk.green(text) : chalk.keyword(color)(text);
 };
 
+//Auto Delete Trash function
+function remove(root, extention) {
+  fs.readdir(root, (err, files) => {
+      if(err) console.error("Tidak dapat membaca direktor!")
+      const filteredFile = files.filter(file => path.extname(file) === extention);
+      
+      filteredFile.forEach(file => {
+          const filePath = path.join(root, file);
+          fs.unlink(filePath, err => {
+              if(err) console.error(`Tidak dapat menghapus ${filePath}`)
+              else console.log(`Berhasil menghapus ${filePath}`)
+          })
+      })
+      console.log(`${filteredFile.length} Files as ${extention} file deleted!`)
+  })
+}
+
 function smsg(conn, m, store) {
   if (!m) return m;
   let M = proto.WebMessageInfo;
@@ -453,12 +470,12 @@ console.log(err)
       client.sendMessage(target, {text: text, mentions: mem})
   }
 
-  /*setInterval( async function() {
+  setInterval( async function() {
     now = moment().tz("Asia/Jakarta").format("HH:mm")
     day = moment().tz('Asia/Jakarta').format('dddd')
-    onRaid = await inRaid.raid
+    //onRaid = await inRaid.raid
     
-    if (global.reminder == true && now == "06:15") {
+    /*if (global.reminder == true && now == "06:15") {
       client.sendMessage(global.owner + "@s.whatsapp.net", { text: `Time to Cooking buff on Toram Online\n\n${now}` });
       hidetag('120363023056066862@g.us', `*Jangan Lupa untuk memasak buff*\nReminder ini muncul setiap 12 jam\n\n- ${global.botName} -\n${now}`)
     }
@@ -478,9 +495,23 @@ console.log(err)
       inRaid = true
       fs.writeFileSync('./lib/guild.json', JSON.stringify(inRaid));
       client.sendMessage("6289675651966-1611471388@g.us", { text: "Raid telah di set ON otomatis" })
-    }
-    
-  }, 30000)*/
+    }*/
+
+      if(now == "05:00" || now == "12:00" || now == "18:00") {
+        setTimeout(() => {
+          remove('./', ".jpg")
+          remove('./', '.png')
+          remove('./', '.mp4')
+          remove('./', '.webp')
+        }, 1000)
+        
+        setTimeout(() => {
+          remove('./tmp', ".pdf")
+          remove('./tmp', '.mp3')
+        }, 3000)
+
+      }
+  }, 30000)
 
   client.toImage = async (jid, path, quoted = "") => {
     let buff = Buffer.isBuffer(path)
