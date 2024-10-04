@@ -55,10 +55,10 @@ const color = (text, color) => {
 function remove(root, extention) {
   fs.readdir(root, (err, files) => {
       if(err) console.error("Tidak dapat membaca direktor!")
-      const filteredFile = files.filter(file => path.extname(file) === extention);
-      
+      const filteredFile = files.filter(file => cpath.extname(file) === extention);
+    
       filteredFile.forEach(file => {
-          const filePath = path.join(root, file);
+          const filePath = cpath.join(root, file);
           fs.unlink(filePath, err => {
               if(err) console.error(`Tidak dapat menghapus ${filePath}`)
               else console.log(`Berhasil menghapus ${filePath}`)
