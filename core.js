@@ -358,7 +358,7 @@ module.exports = core = async (client, m, chatUpdate, store) => {
               const videoTitle = searchResponse.data.title;
               const mp4Options = searchResponse.data.links.mp4;
               const mp3Options = searchResponse.data.links.mp3;
-              const mediumQualityMp4Option = mp4Options[136]; 
+              const mediumQualityMp4Option = mp4Options[135] == undefined ? mp4Options[136] : mp4Options[135]; 
               const mp3Option = mp3Options['mp3128']; 
               const mp4ConvertParams = new URLSearchParams();
               mp4ConvertParams.append('vid', videoId);
