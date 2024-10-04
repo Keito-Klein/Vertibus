@@ -776,7 +776,7 @@ case 'getimage':
                 let wipi = wipu[Math.floor(Math.random() * (wipu.length))]
                 console.log(wipi)
                 let kentir = await getBuffer(wipi)                             
-                client.sendImage(from, kentir, mek)
+                client.sendImage(from, kentir, '', mek)
                 proses("✔")
             } catch(err) {
                 proses("❌")
