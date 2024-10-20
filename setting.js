@@ -18,6 +18,7 @@ global.rconHost = "localhost" //Enter your host minecraft server
 global.rconPort = 25565 //Enter your port minecraft server. recomended using additional port on minecraft server
 global.rconPassword = ""
 global.authenticated = false //Keep it false, it will be changed if rcon connected
+global.mcgc = "-" //set your minecraft group
 
 /* --SosMed-- */
 global.facebook = 'https://facebook.com/taufik.qillah.73'

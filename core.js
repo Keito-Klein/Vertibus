@@ -624,13 +624,13 @@ case 'server':
 teks = `
 *_Vertibus Minecraft Server_*
 *Java*
-Address/IP: serversirkel.my.id
+Address/IP: ${global.rconHost}
 
 *Bedrock* (java server)
-Address/IP: serversirkel.my.id
-Port: 25576
+Address/IP: ${global.rconHost}
+Port: 25575
 
-GC: https://chat.whatsapp.com/EJLnqCKaNHQ0yOr2QlNQLM
+GC: ${global.mcgc}
 note: Join gc untuk dimasukan kedalam server/whitelist.
 
 Nama/Address server cuma sekedar jokes rek.`
