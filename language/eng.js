@@ -6,10 +6,19 @@ exports.menu = (prefix) => {
 return `
 ❏ *${global.botName} Toram DB* ❏
 
-
  *${prefix}info*
  *${prefix}donasi*
 
+❏ *Minecraft RCON*
+ │•${prefix}server
+ │•${prefix}version
+ │•${prefix}list
+ │•${prefix}say
+ │•${prefix}summon
+ │•${prefix}whitelist
+ │•${prefix}restart
+ ╰•${prefix}stop
+ 
 ❏ *Toram Online DB*
  │•${prefix}maintenance
  │•${prefix}blacksmith
@@ -232,23 +241,30 @@ exports.changelog = () => {
 - Add demote at list
 - Add kick at list
 - Add metadata at list
+
+===== *05 - 10 - 2024* =====
+- Add auto read message
+
+===== *10 - 10 - 2024* =====
+- Fix remini
+- Fix nhentai
+
+===== *20 - 10 - 2024* =====
+- Binding minecraft server to bot
 `
 }
 
 exports.update = (pushname) => {
 return `
-*New Update V. 3.13.57a*
+*New Update V. 4.9.60a*
 Hi ${pushname}.
 We have updated the bot version. For *Users* the following improvements are available: 
 
-- \`add\`
-- \`kick\`
-- \`promote\`
-- \`demote\`
-> This feature is used to manage members in a group, such as promote a member as admin/demoting admin to member, removing/adding members.
-
-- \`metadata\`
-> This feature is used to display group info.
+- \`Minecraft Server\`
+> we already have a minecraft server to play together,
+> and its connection to the bot menu to make it easier for the operator/owner to control the server.
+> to see the list of commands type *_!menu_*
+> To request to enter the Minecraft server, type *_!server_*
 
 for questions please pm the owner by typing:
 *!owner*

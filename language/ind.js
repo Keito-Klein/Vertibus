@@ -9,9 +9,18 @@ exports.menu = (prefix) => {
 return `
 ❏ *${global.botName} Toram DB* ❏
 
-
  *${prefix}info*
  *${prefix}donasi*
+
+ ❏ *Minecraft RCON*
+ │•${prefix}server
+ │•${prefix}version
+ │•${prefix}list
+ │•${prefix}say
+ │•${prefix}summon
+ │•${prefix}whitelist
+ │•${prefix}restart
+ ╰•${prefix}stop
 
 ❏ *Toram Online DB*
  │•${prefix}maintenance
@@ -241,23 +250,30 @@ exports.changelog = () => {
 - Add demote at list
 - Add kick at list
 - Add metadata at list
+
+===== *05 - 10 - 2024* =====
+- Add auto read message
+
+===== *10 - 10 - 2024* =====
+- Fix remini
+- Fix nhentai
+
+===== *20 - 10 - 2024* =====
+- Binding minecraft server to bot
 `
 }
 
 exports.update = (pushname) => {
 return `
-*New Update V. 3.13.57a*
+*New Update V. 4.9.60a*
 Hi ${pushname}.
 Kami telah memperbarui versi bot. Untuk *User* perbaikan berikut telah hadir: 
 
-- \`add\`
-- \`kick\`
-- \`promote\`
-- \`demote\`
-> fitur ini digunakan untuk mengatur member yang ada dalam grup, seperti menaikan member sebagai admin/menurunkan admin menjadi member, mengeluarkan/menambahkan anggota.
-
-- \`metadata\`
-> fitur ini digunakan untuk menampilkan info grup.
+- \`Minecraft Server\`
+> kami telah memiliki minecraft server untuk bermain bersama, 
+> dan menghubungkannya ke dalam menu bot untuk memudahkan operator/owner mengontrol server.
+> untuk melihat daftar command ketik *_!menu_*
+> untuk request masuk server minecraft ketik *_!server_*
 
 tanya tanya silahkan pm owner dengan mengetik:
 *!owner*
