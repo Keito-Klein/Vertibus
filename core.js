@@ -26,6 +26,7 @@ const { mt } = require("./lib/mt.js")
 const { ind } = require("./language")
 const { eng } = require("./language")
 const { igDownloader, tiktok, fb, pinterest } = require("./lib/downloader");
+const { owner } = require("./language/ind.js");
 
 
 var ipackName = false//Don't fill. sett packName on setting.js
@@ -105,6 +106,23 @@ const dotting = (int) => {
   reverses = dotReserve.split('').reverse().join('');
 
   return reverses;
+}
+
+//Auto Delete Function
+function remove(root, extention) {
+  fs.readdir(root, (err, files) => {
+      if(err) console.error("Tidak dapat membaca direktor!")
+      const filteredFile = files.filter(file => path.extname(file) === extention);
+    
+      filteredFile.forEach(file => {
+          const filePath = path.join(root, file);
+          fs.unlink(filePath, err => {
+              if(err) console.error(`Tidak dapat menghapus ${filePath}`)
+              else console.log(`Berhasil menghapus ${filePath}`)
+          })
+      })
+      console.log(`${filteredFile.length} Files as ${extention} file deleted!`)
+  })
 }
 
 
@@ -206,7 +224,7 @@ const delBuff = (name) => {
 
 
 
-module.exports = core = async (client, m, chatUpdate, store) => {
+module.exports = core = async (client, m, chatUpdate, store, rcon) => {
   try {
     var body =
       m.mtype === "conversation"
@@ -358,11 +376,19 @@ module.exports = core = async (client, m, chatUpdate, store) => {
               const videoTitle = searchResponse.data.title;
               const mp4Options = searchResponse.data.links.mp4;
               const mp3Options = searchResponse.data.links.mp3;
-              const mediumQualityMp4Option = mp4Options[135] == undefined ? mp4Options[136] : mp4Options[135]; 
+              //const mediumQualityMp4Option = mp4Options[135] == undefined ? mp4Options[136] : mp4Options[135] == undefined ?  mp4Options[160] : mp4Options[135] == undefined ? mp4Options[134] : mp4Options[135]; 
+              const keys = [135, 136, 160, 298, 134 ,299]
+              const qualityMp4Option = (quality, keys) => {
+                for(let key of keys) {
+                  if(quality[key] !== undefined) {
+                    return quality[key].k;
+                  }
+                }
+              }
               const mp3Option = mp3Options['mp3128']; 
               const mp4ConvertParams = new URLSearchParams();
               mp4ConvertParams.append('vid', videoId);
-              mp4ConvertParams.append('k', mediumQualityMp4Option.k);
+              mp4ConvertParams.append('k', qualityMp4Option(mp4Options, keys));
               proses("🔄")
               const mp4ConvertResponse = await axios.post(
                   'https://tomp3.cc/api/ajax/convert?hl=en',
@@ -559,52 +585,12 @@ function sendMessageWithMentions(text, mentions = [], quoted = false) {
       Sender: ${sender}
       Group: ${groupName}
       Text: ${m.quoted ? m.message.extendedTextMessage.contextInfo.quotedMessage.conversation : text}`
-      client.sendText(global.owner[0], teks);
+      client.sendText(global.owner[0] + "@s.whatsapp.net", teks);
     }
 
-    //File Auto Detelete
-    if(isCmd2) {
 
-      date = moment().tz("Asia/Jakarta").format("DD/MM/YYYY")
-      if (localeTime.date !== date) {
-          //tmp folder
-        fs.readdir("./tmp", (err, files)  => {
-          if (err) {
-            return console.log(err)
-          }
-          files.forEach((file) => {
-            if (path.extname(file) == '.mp3') {
-              fs.unlinkSync(path.join('./tmp', file))
-            }
-            if (path.extname(file) == '.webp') {
-              fs.unlinkSync(path.join('./tmp', file))
-            }
-          })
-        })
-          //root folder
-        fs.readdir("./", (err, files)  => {
-          if (err) {
-            return console.log(err)
-          }
-          files.forEach((file) => {
-            if (path.extname(file) == '.webp') {
-              fs.unlinkSync(path.join('./', file))
-            }
-          })
-        })
-        localeTime.date = date;
-        fs.writeFileSync('./db/date.json', JSON.stringify(localeTime))
-      }
-      trash = './core'
-      if( fs.existsSync(trash) ) {
-        try {
-          fs.unlinkSync(trash);
-          console.log(`${trash} has been deleted...`)
-        } catch (err) {
-          console.log(err)
-        }
-      }
-    }
+    //Auto Read Message
+    await client.readMessages([m.key])
 
 
     // Push Message To Console
@@ -631,6 +617,85 @@ case "help":
 case "menu":
   m.reply(lang.menu(prefix))
 break;
+
+/* ================ Minecraft RCON ================ */
+
+case 'server':
+teks = `
+*_Vertibus Minecraft Server_*
+*Java*
+Address/IP: serversirkel.my.id
+
+*Bedrock* (java server)
+Address/IP: serversirkel.my.id
+Port: 25576
+
+GC: https://chat.whatsapp.com/EJLnqCKaNHQ0yOr2QlNQLM
+note: Join gc untuk dimasukan kedalam server/whitelist.
+
+Nama/Address server cuma sekedar jokes rek.`
+client.sendText(from, teks, mek)
+break
+
+case 'list': 
+if (!global.authenticated) reply("this bot currently not connected to a minecraft server!")
+rcon.send('list')
+break
+
+case 'version':
+  if (!global.authenticated) reply("this bot currently not connected to a minecraft server!")
+  rcon.send('version')
+break
+
+case 'say': 
+if (!global.authenticated) reply("this bot currently not connected to a minecraft server!")
+  if (!q) reply("Example:\n"+prefix+"say <Text>")
+  rcon.send(`say [${pushname}] ${text}`)
+break
+
+case 'summon':
+  if (!global.authenticated) reply("this bot currently not connected to a minecraft server!")
+  if (!owner) reply(lang.owner())
+  if (!q) reply("Example:\n"+prefix+"summon <entities> <coordinates>")
+    rcon.send(`summon ${text}`)
+break
+
+
+
+case 'give':
+  if (!global.authenticated) reply("this bot currently not connected to a minecraft server!")
+    if (!owner) reply(lang.owner())
+    if (!q) reply("Example:\n"+prefix+"give <nametag> <item> <amount:optional>")
+    rcon.send(`give ${text}`)
+  break
+
+case 'whitelist': 
+if (!global.authenticated) reply("this bot currently not connected to a minecraft server!")
+if (!owner) reply(lang.owner())
+if (!text) reply(`Example:\n${prefix}whitelist <add/remove> <nametag>\n\nnote: use " if there any spesial char in nametag!`)
+  if (q.split(" ")[0] == "add") {
+    rcon.send(`whitelist add ${q.split(" ")[1]}`)
+  } else if (q.split(" ")[0] == "remove") {
+    rcon.send(`whitelist remove ${q.split(" ")[1]}`)
+  } else {
+    reply(`Example:\n${prefix}whitelist <add/remove> <nametag>\n\nnote: use " if there any spesial char in nametag!`)
+  }
+break
+
+case 'stop': 
+if (!global.authenticated) reply("this bot currently not connected to a minecraft server!")
+if (!owner) reply(lang.owner())
+  rcon.send('stop')
+break
+
+case 'restart': 
+if (!global.authenticated) reply("this bot currently not connected to a minecraft server!")
+if (!owner) reply(lang.owner())
+  rcon.send('restart')
+break
+
+
+/* ================ Minecraft RCON ================ */
 
 case 'text2img':
 case 'dalle':
@@ -775,7 +840,7 @@ case 'getimage':
                 let wipu = (await axios.get(`https://raw.githubusercontent.com/Arya-was/endak-tau/main/milf.json`)).data
                 let wipi = wipu[Math.floor(Math.random() * (wipu.length))]
                 console.log(wipi)
-                let kentir = await getBuffer(wipi)                             
+                let kentir = await getBuffer(wipi)                
                 client.sendImage(from, kentir, '', mek)
                 proses("✔")
             } catch(err) {
@@ -1822,8 +1887,17 @@ case "join":
 case 'ytmp3': 
   if (!text) return reply(lang.format(prefix, command))
   proses("⌛")
-  searchResponse = await ytdlnew(text)
-  await client.sendMessage(from, { audio: {url: searchResponse.mp3DownloadLink}, mimetype: "audio/mp4", ptt: false}, { quoted: m })
+  const header = {
+    'Content-Type': 'application/json',
+    'Accept': 'application/json',
+    'Origin': 'https://submagic-free-tools.fly.dev',
+    'Referer': 'https://submagic-free-tools.fly.dev/youtube-to-mp3'
+}
+const data = {
+    url: text
+}
+  searchResponse = await axios.post("https://submagic-free-tools.fly.dev/api/youtube-to-audio", qs.stringify(data), {header})
+  client.sendMessage(from, { audio: {url: searchResponse.data.audioUrl}, mimetype: "audio/mp4", ptt: false}, { quoted: m })
   proses("✔")
 break
 
@@ -1995,11 +2069,12 @@ case 'play':
     if(!text) return reply(lang.format(prefix,command))
     proses("⏳")
     fetcher = await axios({
-      url: `https://widipe.com/download/igdl?url=${encodeURIComponent(text)}`,
+      url: `https://aemt.uk.to/download/igdl?url=${encodeURIComponent(text)}`,
       method: 'GET',
       responseType: 'json'
     })
-    client.sendMessage(from, { video: {url: fetcher.data.result[0].url}, caption: `*Video from Instagram*:\n*User:* ${fetcher.data.result[0].wm}`}, mek)
+    //fetcher = await igDownloader(text)
+    client.sendMessage(from, { video: {url: fetcher.data.result[0].url}, caption: `*Video from Instagram*`}, mek)
     proses("✔")
     } catch(err) {
       proses("❌");
@@ -2121,6 +2196,19 @@ case 'reset':
   proses("✔")
   reply("success!")
   break
+
+  case 'clear': 
+        if(!isOwner) return
+        proses("⌛")
+          remove('./', ".jpg")
+          remove('./', '.png')
+          remove('./', '.mp4')
+          remove('./', '.webp')
+          remove('./tmp', ".pdf")
+          remove('./tmp', '.mp3')
+          remove('./tmp', '.webp')
+          proses("✔")
+            break
 
 
 

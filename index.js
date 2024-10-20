@@ -18,6 +18,7 @@ const {
   getContentType,
   useMultiFileAuthState,
 } = require("@whiskeysockets/baileys");
+const Rcon = require("rcon")
 
 const pino = require("pino");
 const { Boom } = require("@hapi/boom");
@@ -52,7 +53,7 @@ const color = (text, color) => {
 };
 
 //Auto Delete Trash function
-function remove(root, extention) {
+/*function remove(root, extention) {
   fs.readdir(root, (err, files) => {
       if(err) console.error("Tidak dapat membaca direktor!")
       const filteredFile = files.filter(file => cpath.extname(file) === extention);
@@ -66,7 +67,7 @@ function remove(root, extention) {
       })
       console.log(`${filteredFile.length} Files as ${extention} file deleted!`)
   })
-}
+}*/
 
 function smsg(conn, m, store) {
   if (!m) return m;
@@ -183,6 +184,12 @@ async function startHisoka() {
     )
   );
   const msgRetryCounterCache = new NodeCache() // for retry message, "waiting message"
+
+  /* =========Rcon Minecraft connection========= */
+  rcon = new Rcon(global.rconHost, global.rconPort, global.rconPassword);
+  if (global.rcon) rcon.connect()
+  /* =========Rcon Minecraft connection========= */
+
   const client = sansekaiConnect({
     version,
     logger: pino({ level: "silent" }),
@@ -255,7 +262,7 @@ async function startHisoka() {
       if (!client.public && !mek.key.fromMe && chatUpdate.type === "notify") return;
       if (mek.key.id.startsWith("BAE5") && mek.key.id.length === 16) return;
       m = smsg(client, mek, store);
-      require("./core")(client, m, chatUpdate, store);
+      require("./core")(client, m, chatUpdate, store, rcon);
     } catch (err) {
       console.log(err);
     }
@@ -377,7 +384,27 @@ async function startHisoka() {
     }
     // console.log('Connected...', update)
   });
+
+  /* =========Rcon Minecraft connection========= */
+
+
+  rcon.on('auth', function() {
+    // You must wait until this event is fired before sending any commands,
+    // otherwise those commands will fail.
+    console.log("RCON Minecraft Connected!");
+    global.authenticated = true
+  }).on('response', function(str) {
+    client.sendMessage(m.chat, { text: `Server:\n${str.replace(/§e|§f|§7|§6|§r|§o/g, "")}`}, { m })
+  }).on('error', function(err) {
+    console.log("Error: " + err);
+  }).on('end', function() {
+    console.log("Connection closed");
+    global.authenticated = false
+    process.exit();
+  });
+
   
+  /* =========Rcon Minecraft connection========= */
 
   client.ev.on("creds.update", saveCreds);
   
@@ -470,12 +497,12 @@ console.log(err)
       client.sendMessage(target, {text: text, mentions: mem})
   }
 
-  setInterval( async function() {
+  /*setInterval( async function() {
     now = moment().tz("Asia/Jakarta").format("HH:mm")
     day = moment().tz('Asia/Jakarta').format('dddd')
     //onRaid = await inRaid.raid
     
-    /*if (global.reminder == true && now == "06:15") {
+    if (global.reminder == true && now == "06:15") {
       client.sendMessage(global.owner + "@s.whatsapp.net", { text: `Time to Cooking buff on Toram Online\n\n${now}` });
       hidetag('120363023056066862@g.us', `*Jangan Lupa untuk memasak buff*\nReminder ini muncul setiap 12 jam\n\n- ${global.botName} -\n${now}`)
     }
@@ -495,7 +522,7 @@ console.log(err)
       inRaid = true
       fs.writeFileSync('./lib/guild.json', JSON.stringify(inRaid));
       client.sendMessage("6289675651966-1611471388@g.us", { text: "Raid telah di set ON otomatis" })
-    }*/
+    }
 
       if(now == "05:00" || now == "12:00" || now == "18:00") {
         setTimeout(() => {
@@ -509,9 +536,10 @@ console.log(err)
           remove('./tmp', ".pdf")
           remove('./tmp', '.mp3')
         }, 3000)
-
+        client.sendMessage(global.owner[0] + "@s.whatsapp.net", {text: "Auto delete trash complete!"}
+        )
       }
-  }, 30000)
+  }, 30000)*/
 
   client.toImage = async (jid, path, quoted = "") => {
     let buff = Buffer.isBuffer(path)
