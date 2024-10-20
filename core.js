@@ -638,59 +638,61 @@ client.sendText(from, teks, mek)
 break
 
 case 'list': 
-if (!global.authenticated) reply("this bot currently not connected to a minecraft server!")
+if (!global.authenticated) return reply("this bot currently not connected to a minecraft server!")
 rcon.send('list')
 break
 
 case 'version':
-  if (!global.authenticated) reply("this bot currently not connected to a minecraft server!")
+  if (!global.authenticated) return reply("this bot currently not connected to a minecraft server!")
   rcon.send('version')
 break
 
 case 'say': 
-if (!global.authenticated) reply("this bot currently not connected to a minecraft server!")
-  if (!q) reply("Example:\n"+prefix+"say <Text>")
+if (!global.authenticated) return reply("this bot currently not connected to a minecraft server!")
+  if (!q) return reply("Example:\n"+prefix+"say <Text>")
   rcon.send(`say [${pushname}] ${text}`)
 break
 
 case 'summon':
-  if (!global.authenticated) reply("this bot currently not connected to a minecraft server!")
-  if (!owner) reply(lang.owner())
-  if (!q) reply("Example:\n"+prefix+"summon <entities> <coordinates>")
+  if (!global.authenticated) return reply("this bot currently not connected to a minecraft server!")
+  if (!owner) return reply(lang.owner())
+  if (!q) return reply("Example:\n"+prefix+"summon <entities> <coordinates>")
     rcon.send(`summon ${text}`)
 break
 
 
 
 case 'give':
-  if (!global.authenticated) reply("this bot currently not connected to a minecraft server!")
-    if (!owner) reply(lang.owner())
-    if (!q) reply("Example:\n"+prefix+"give <nametag> <item> <amount:optional>")
+  if (!global.authenticated) return reply("this bot currently not connected to a minecraft server!")
+    if (!owner) return reply(lang.owner())
+    if (!q) return reply("Example:\n"+prefix+"give <nametag> <item> <amount:optional>")
     rcon.send(`give ${text}`)
   break
 
 case 'whitelist': 
-if (!global.authenticated) reply("this bot currently not connected to a minecraft server!")
-if (!owner) reply(lang.owner())
-if (!text) reply(`Example:\n${prefix}whitelist <add/remove> <nametag>\n\nnote: use " if there any spesial char in nametag!`)
+if (!global.authenticated) return reply("this bot currently not connected to a minecraft server!")
+if (!owner) return reply(lang.owner())
+if (!text) return reply(`Example:\n${prefix}whitelist <add/remove> <nametag>\n\nnote: use " if there any spesial char in nametag!`)
   if (q.split(" ")[0] == "add") {
     rcon.send(`whitelist add ${q.split(" ")[1]}`)
   } else if (q.split(" ")[0] == "remove") {
     rcon.send(`whitelist remove ${q.split(" ")[1]}`)
+  } else if (q.split(" ")[0] == "reload") {
+    rcon.send(`whitelist reload`)
   } else {
     reply(`Example:\n${prefix}whitelist <add/remove> <nametag>\n\nnote: use " if there any spesial char in nametag!`)
   }
 break
 
 case 'stop': 
-if (!global.authenticated) reply("this bot currently not connected to a minecraft server!")
-if (!owner) reply(lang.owner())
+if (!global.authenticated) return reply("this bot currently not connected to a minecraft server!")
+if (!owner) return reply(lang.owner())
   rcon.send('stop')
 break
 
 case 'restart': 
-if (!global.authenticated) reply("this bot currently not connected to a minecraft server!")
-if (!owner) reply(lang.owner())
+if (!global.authenticated) return reply("this bot currently not connected to a minecraft server!")
+if (!owner) return reply(lang.owner())
   rcon.send('restart')
 break
 
