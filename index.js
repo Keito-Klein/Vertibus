@@ -187,7 +187,9 @@ async function startHisoka() {
 
   /* =========Rcon Minecraft connection========= */
   rcon = new Rcon(global.rconHost, global.rconPort, global.rconPassword);
-  if (global.rcon) rcon.connect()
+  if (global.rcon === true) {
+    rcon.connect()
+  }
   /* =========Rcon Minecraft connection========= */
 
   const client = sansekaiConnect({
@@ -219,36 +221,11 @@ async function startHisoka() {
   // login use pairing code
    // source code https://github.com/WhiskeySockets/Baileys/blob/master/Example/example.ts#L61
    if (pairingCode && !client.authState.creds.registered) {
-      if (useMobile) throw new Error('Cannot use pairing code with mobile api')
+    const phoneNumber = await question('Enter your bot number startswith your region code :\n');
+    const code = await client.requestPairingCode(phoneNumber.trim())
+    console.log(`🎁  Pairing Code : ${code}`)
 
-      let phoneNumber
-      if (!!phoneNumber) {
-         phoneNumber = phoneNumber.replace(/[^0-9]/g, '')
-
-         if (!Object.keys(PHONENUMBER_MCC).some(v => phoneNumber.startsWith(v))) {
-            console.log(chalk.bgBlack(chalk.redBright("Start with country code of your WhatsApp Number, Example : +6289329820760")))
-            process.exit(0)
-         }
-      } else {
-         phoneNumber = await question(chalk.bgBlack(chalk.greenBright(`Please type your WhatsApp number \nFor example: +6289329820760 : `)))
-         phoneNumber = phoneNumber.replace(/[^0-9]/g, '')
-
-         // Ask again when entering the wrong number
-         if (!Object.keys(PHONENUMBER_MCC).some(v => phoneNumber.startsWith(v))) {
-            console.log(chalk.bgBlack(chalk.redBright("Start with country code of your WhatsApp Number, Example : +6289329820760")))
-
-            phoneNumber = await question(chalk.bgBlack(chalk.greenBright(`Please type your WhatsApp number \nFor example: +6289329820760 : `)))
-            phoneNumber = phoneNumber.replace(/[^0-9]/g, '')
-            rl.close()
-         }
-      }
-
-      setTimeout(async () => {
-         let code = await client.requestPairingCode(phoneNumber)
-         code = code?.match(/.{1,4}/g)?.join("-") || code
-         console.log(chalk.black(chalk.bgGreen(`Your Pairing Code : `)), chalk.black(chalk.white(code)))
-      }, 5000)
-   }
+}
   
 
 

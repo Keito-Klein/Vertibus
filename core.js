@@ -660,14 +660,19 @@ case 'summon':
     rcon.send(`summon ${text}`)
 break
 
-
+case 'kill':
+  if (!global.authenticated) return reply("this bot currently not connected to a minecraft server!")
+    if (!owner) return reply(lang.owner())
+    if (!q) return reply("Example:\n"+prefix+"kill <entities>")
+    rcon.send(`kill ${text}`)
+break
 
 case 'give':
   if (!global.authenticated) return reply("this bot currently not connected to a minecraft server!")
     if (!owner) return reply(lang.owner())
     if (!q) return reply("Example:\n"+prefix+"give <nametag> <item> <amount:optional>")
     rcon.send(`give ${text}`)
-  break
+break
 
 case 'whitelist': 
 if (!global.authenticated) return reply("this bot currently not connected to a minecraft server!")
@@ -682,6 +687,11 @@ if (!text) return reply(`Example:\n${prefix}whitelist <add/remove> <nametag>\n\n
   } else {
     reply(`Example:\n${prefix}whitelist <add/remove> <nametag>\n\nnote: use " if there any spesial char in nametag!`)
   }
+break
+
+case 'connect':
+  if (global.authenticated) return reply("this bot already connected to a minecraft server!")
+  rcon.connect()
 break
 
 case 'stop': 
