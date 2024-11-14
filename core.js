@@ -1,5 +1,5 @@
 
-const { BufferJSON, WA_DEFAULT_EPHEMERAL, generateWAMessageFromContent, proto, generateWAMessageContent, generateWAMessage, prepareWAMessageMedia, areJidsSameUser, getContentType } = require("@whiskeysockets/baileys");
+const { BufferJSON, WA_DEFAULT_EPHEMERAL, generateWAMessageFromContent, proto, generateWAMessageContent, generateWAMessage, prepareWAMessageMedia, areJidsSameUser, getContentType, processSyncAction } = require("@whiskeysockets/baileys");
 const fs = require("fs");
 const os = require('os');
 const speed = require('performance-now')
@@ -25,7 +25,7 @@ const { remini } = require("./lib/remini")
 const { mt } = require("./lib/mt.js")
 const { ind } = require("./language")
 const { eng } = require("./language")
-const { igDownloader, tiktok, fb, pinterest } = require("./lib/downloader");
+const { tiktok, fb, pinterest } = require("./lib/downloader");
 const { owner } = require("./language/ind.js");
 
 
@@ -38,7 +38,6 @@ const guild = JSON.parse(fs.readFileSync('./db/guild.json'));
 const inRaid = JSON.parse(fs.readFileSync("./lib/guild.json"));
 const welkom = JSON.parse(fs.readFileSync('./db/welcome.json'));
 const akronim = JSON.parse(fs.readFileSync("./db/guide-data/akronim.json"));
-const localeTime = JSON.parse(fs.readFileSync("./db/date.json"));
 const mobs = JSON.parse(fs.readFileSync("./db/guide-data/farm.json"));
 let Usage 
 let User
@@ -142,7 +141,7 @@ const acronime = (query) => {
 const addBuff = (name, buff) => {
         const ovj = {id: name, buff: buff}
         guild.push(ovj)
-        fs.writeFileSync('./db/guild.json', JSON.stringify(guild))
+        fs.writeFileSync('./db/guild.json', JSON.stringify(guild, null, 2))
         }
 
 //OK
@@ -204,12 +203,12 @@ const changeBuff = (name, lvl) => {
   })
   if(position !== false) {
     guild[position].buff = lvl
-    fs.writeFileSync('./db/guild.json', JSON.stringify(guild))
+    fs.writeFileSync('./db/guild.json', JSON.stringify(guild, null, 2))
   }
 }
 
 //OK
-const delBuff = (name) => {
+const delName = (name) => {
   let position = false
   Object.keys(guild).forEach((i) => {
     if (guild[i].id.toLowerCase() == name.toLowerCase()) {
@@ -218,7 +217,7 @@ const delBuff = (name) => {
   })
   if (position !== false) {
     guild.splice(position, 1)
-    fs.writeFileSync('./db/guild.json', JSON.stringify(guild))
+    fs.writeFileSync('./db/guild.json', JSON.stringify(guild, null, 2))
   }
 }
 
@@ -351,7 +350,7 @@ module.exports = core = async (client, m, chatUpdate, store, rcon) => {
     async function ytdlnew(videoUrl) {
       return new Promise(async (resolve, reject) => {
           try {
-              cookie = '_ga_JRWV2N11YN=GS1.1.1724395040.3.0.1724395040.0.0.0; _ga=GA1.2.1519648462.1723894496; _gid=GA1.2.23324566.1724395040'
+              cookie = '_ga_JRWV2N11YN=GS1.1.1730601593.4.0.1730601593.0.0.0; _ga=GA1.2.1519648462.1723894496; _gid=GA1.2.1648697099.1730601594; prefetchAd_8303905=true'
               const searchParams = new URLSearchParams();
               searchParams.append('query', videoUrl);
               searchParams.append('vt', 'mp3');
@@ -1471,11 +1470,7 @@ case 'buff':
       Enable this to force your image to be deleted after that time. */,
     };
   anu = await imgbb(options)
-    if (text && text === "2") {
-      encmedia = await remini(anu.display_url, text)
-    } else {
       encmedia = await remini(anu.display_url, "4")
-    }
     client.sendImage(from, encmedia, 'Done!', mek)
     proses("✔")
   }
@@ -1615,6 +1610,11 @@ break
         case 'forward':
           client.sendMessage(from, {text, contextInfo : {forwardingScore: 896, isForwarded: true}})
           break
+
+          case 'delete':
+            case 'd':
+              client.sendMessage(from, { delete: qms })
+              break
           
 
                         case 'translate':
@@ -2058,16 +2058,10 @@ case 'play':
             if (!q) return reply(lang.format(prefix, command))
             try{
             proses("⌛")
-                const cookies = "sb=5I2dZn1rnh9tBdjOXXgSQShS; datr=5I2dZkHRAkzxaf2rxTFubtiB; c_user=100015904271015; ps_n=1; ps_l=1; xs=6%3A0xGff6aMZYvcZg%3A2%3A1721601512%3A-1%3A10797%3A%3AAcVa10Dc4lgGwkP3FoHoyedB8_UtLfzd1vcf4AkxQQ; fr=1Rb7Zo7TquPmZ8mse.AWU3_UavGOlUG2nyb03eQ5jhLMc.Bmnj1w..AAA.0.0.Bmnj1w.AWVu_N2p26o; wd=1280x559; presence=C%7B%22t3%22%3A%5B%5D%2C%22utc3%22%3A1721646452820%2C%22v%22%3A1%7D"
-                const user_agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36"
-                const fbdl = require("fb-downloader-scrapper")
-            fbdl(text, cookies, user_agent)
-			.then((result)=>{
-    		client.sendMessage(from, {video: {url: result.hd ? result.hd : result.sd}, caption: result.title !== undefined ? result.title : "Facebook"}, mek)
+            source = await axios.get(`https://api.tioprm.eu.org/download/fbdown?url=${encodeURIComponent(text)}`)
+      			res = source.data.result.url.isHdAvailable ? source.data.result.url.urls[0].hd : source.data.result.url.urls[1].sd
+       			client.sendMessage(from, {video: {url: res}, caption: ``}, mek)
                 proses("✔")
-			}).catch((err)=>{
-    			console.log(err)
-			})
             
             } catch(err) {
                 proses("❌")
