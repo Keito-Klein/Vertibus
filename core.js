@@ -16,6 +16,7 @@ const neko_modules = require('nekos.life');
 const moment = require('moment-timezone');
 const fileType = require("file-type");
 const ffmpeg = require('fluent-ffmpeg');
+const fbdl = require('fb-downloader-scrapper');
 const path = require('path');
 const { ocrSpace } = require('ocr-space-api-wrapper');
 const { nhentai } = require("./lib/nh");
@@ -25,7 +26,7 @@ const { remini } = require("./lib/remini")
 const { mt } = require("./lib/mt.js")
 const { ind } = require("./language")
 const { eng } = require("./language")
-const { tiktok, tiktok2, fb, pinterest } = require("./lib/downloader");
+const { tiktok, tiktok2, fb, fb2, pinterest } = require("./lib/downloader");
 const { owner } = require("./language/ind.js");
 
 
@@ -835,9 +836,7 @@ case 'getimage':
           proses("⏳")
           url = 'https://loli-api.glitch.me/api/v1/twintails'
           response = await axios.get(url)
-          res = await fetch(response.data.url)
-          data = await res.buffer()
-          client.sendImage(from, data, " ", mek)
+          client.sendImage(from, response.data.url, " ", mek)
           proses("✔")
         } catch(err) {
           proses("❌")
@@ -2058,9 +2057,12 @@ case 'play':
             if (!q) return reply(lang.format(prefix, command))
             try{
             proses("⌛")
-            source = await axios.get(`https://api.tioprm.eu.org/download/fbdown?url=${encodeURIComponent(text)}`)
-      			res = source.data.result.url.isHdAvailable ? source.data.result.url.urls[0].hd : source.data.result.url.urls[1].sd
-       			client.sendMessage(from, {video: {url: res}, caption: ``}, mek)
+            source = await fbdl(text);
+            fbQuality = source.hd ? source.hd : source.sd
+            client.sendMessage(from, {video: {url: fbQuality}, caption: source.title ? source.title : ' '}, mek)
+            // source = await axios.get(`https://api.tioprm.eu.org/download/fbdown?url=${encodeURIComponent(text)}`)
+      			// res = source.data.result.url.isHdAvailable ? source.data.result.url.urls[0].hd : source.data.result.url.urls[1].sd
+       			// client.sendMessage(from, {video: {url: res}, caption: ``}, mek)
                 proses("✔")
             
             } catch(err) {
@@ -2094,7 +2096,7 @@ case 'play':
     try {
     proses("⏳")
     link = await tiktok2(text);
-    teks = `*Tiktok video from:*\n*Name:* ${link.name}\n*Username:* ${link.username}\n*Description:* ${link.description}\n🕒: ${link.duration}\n▶: ${link.play_count}\n❤: ${link.like}\n💬: ${link.comment}\n⏩: ${link.share}`
+    teks = `*Tiktok video from:*\n*Name:* ${link.name}\n*Username:* ${link.username}\n*Description:* ${link.description}\n🕒: ${link.duration}\n▶: ${link.play_count}\n❤: ${link.like}\n💬: ${link.comment}\n⏩: ${link.share}\n`
     client.sendVideo(from, link.videoUrl, teks, mek)
     proses("✔")
     } catch(err) {
