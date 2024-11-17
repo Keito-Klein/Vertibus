@@ -25,7 +25,7 @@ const { remini } = require("./lib/remini")
 const { mt } = require("./lib/mt.js")
 const { ind } = require("./language")
 const { eng } = require("./language")
-const { tiktok, fb, pinterest } = require("./lib/downloader");
+const { tiktok, tiktok2, fb, pinterest } = require("./lib/downloader");
 const { owner } = require("./language/ind.js");
 
 
@@ -2093,8 +2093,8 @@ case 'play':
     if(!text) return reply(lang.format(prefix, command))
     try {
     proses("⏳")
-    link = await tiktok(text);
-    teks = `*Video from:*\n*User:* ${link.user}\n*Description:*\n\`${link.desc}\``
+    link = await tiktok2(text);
+    teks = `*Tiktok video from:*\n*Name:* ${link.name}\n*Username:* ${link.username}\n*Description:* ${link.description}\n🕒: ${link.duration}\n▶: ${link.play_count}\n❤: ${link.like}\n💬: ${link.comment}\n⏩: ${link.share}`
     client.sendVideo(from, link.videoUrl, teks, mek)
     proses("✔")
     } catch(err) {
