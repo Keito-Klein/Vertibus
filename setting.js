@@ -1,5 +1,5 @@
 /* --Your Setting-- */
-global.owner = ["6283831853737", "62895329820760"];
+global.owner = ["6283831853737", "62895329820760"];// your number and your bot number
 global.botName = "Vertibus";
 global.ownerName = "MiKako";
 global.donet = "https://saweria.co/mikako";
