@@ -6,7 +6,7 @@
   "type": "commonjs",
   "scripts": {
     "start": "node index.js",
-    "test": ""
+    "test": "nodemon index.js"
   },
   "keywords": [
     "termux",
