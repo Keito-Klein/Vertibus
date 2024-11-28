@@ -441,15 +441,7 @@ module.exports = core = async (client, m, chatUpdate, store, rcon) => {
 
 
 
-    //Tag Detector
-    if(budy.includes(`@${global.owner[1]}`)) {
-      teks = `
-      Tag/Reply
-      Sender: ${sender}
-      Group: ${groupName}
-      Text: ${body}`
-      client.sendText(global.owner[0] + "@s.whatsapp.net", teks);
-    }
+    //Message Detector
     if (!isCmd2 && !m.isGroup && !itsMe ) {
       if (body) {
         teks = `
@@ -803,6 +795,8 @@ case 'getimage':
               if(!text || isNaN(text)) return reply("please enter code!");
               try{
                 proses("⌛")
+                reply("please wait a minute!")
+                if(fs.existsSync('./tmp/' + text + '.pdf')) return client.sendMessage(from, {document: fs.readFileSync(text), mimetype: 'application/pdf', fileName: `${text}.pdf`} )
                 nuclearCode = await nhentai(text, text);
                 file = fs.readFileSync(nuclearCode);
                 await client.sendMessage(from, {document: file, mimetype: 'application/pdf', fileName: `${text}.pdf`} )
