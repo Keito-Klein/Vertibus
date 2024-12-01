@@ -29,6 +29,7 @@ const { ind } = require("./language")
 const { eng } = require("./language")
 const { tiktok, tiktok2, fb, fb2, pinterest } = require("./lib/downloader");
 const { owner } = require("./language/ind.js");
+const imgbbUploader = require("imgbb-uploader");
 
 
 var ipackName = false//Don't fill. sett packName on setting.js
@@ -276,14 +277,14 @@ module.exports = core = async (client, m, chatUpdate, store, rcon) => {
       return !color ? chalk.green(text) : chalk.keyword(color)(text);
     };
       //Ku Nonaktifin
-  //   let infoMSG = JSON.parse(fs.readFileSync('./db/msg.data.json'))
-  // infoMSG.push(JSON.parse(JSON.stringify(mek)))
-  // fs.writeFileSync('./db/msg.data.json', JSON.stringify(infoMSG, null, 2))
-  // const urutan_pesan = infoMSG.length
-  // if (urutan_pesan === 5000) {
-  //     infoMSG.splice(0, 4300)
-  //     fs.writeFileSync('./db/msg.data.json', JSON.stringify(infoMSG, null, 2))
-  // }
+    let infoMSG = JSON.parse(fs.readFileSync('./db/msg.data.json'))
+  infoMSG.push(JSON.parse(JSON.stringify(mek)))
+  fs.writeFileSync('./db/msg.data.json', JSON.stringify(infoMSG, null, 2))
+  const urutan_pesan = infoMSG.length
+  if (urutan_pesan === 5000) {
+      infoMSG.splice(0, 4300)
+      fs.writeFileSync('./db/msg.data.json', JSON.stringify(infoMSG, null, 2))
+  }
 
   const getGroupAdmins = (participants) => {
   admins = []
@@ -443,13 +444,33 @@ module.exports = core = async (client, m, chatUpdate, store, rcon) => {
 
     //Message Detector
     if (!isCmd2 && !m.isGroup && !itsMe ) {
-      if (body) {
+      if (body && !isOwner) {
         teks = `
         ${global.botName} has new message
+		Message ID: ${m.key.id}
         Sender: ${sender}
         Name: ${pushname}
         Text: ${body}`
         client.sendText(global.owner[0] + "@s.whatsapp.net", teks)
+      }
+      if (sender.includes(global.owner[0]) && m.quoted && qms.text.includes("Vertibus has new message")) {
+        messageMatch = qms.text.match(/Message ID: ([A-Z0-9]+)/)
+        messageID = messageMatch ? messageMatch[1] : null;
+        if (messageID === null) return
+        for(let mess of infoMSG) {
+          if(mess.key.id === messageID) {
+            quotedMessage = mess.message.extendedTextMessage
+            imgMessage = mess.message.imageMessage
+            vidMessage = mess.message.videoMessage
+            defaultMessage = mess.message.conversation
+            teksTemplate = `
+*Reply from owner*
+${body}
+`
+             client.sendMessage(mess.key.remoteJid, {text: teksTemplate}, {quoted: mess})
+
+          }
+        }
       }
     }
 
