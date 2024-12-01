@@ -1750,6 +1750,19 @@ case "join":
       client.sendMessage(from, {text: q, mentions: mem})
           break
 
+          case 'tagall': 
+          if(!m.isGroup) return reply(ind.group())
+          if(!isGroupAdmins) return reply(lang.onAdmin())
+          members = groupMetadata.participants
+          mem = []
+          teks = `${text ? text : "Tag all!!"}\n\n`
+          for (let member of members) {
+            mem.push((member.id))
+            teks += `- @${member.id.split("@")[0]}\n`
+          }
+          client.sendMessage(from, {text: teks, mentions: mem}, {quoted: m})
+          break
+
           case 'tomp3':
             if(!isQuotedVideo) return reply("send/reply videoMessage!")
               try{
