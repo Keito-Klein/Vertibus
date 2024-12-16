@@ -1,8 +1,8 @@
 /* --Your Setting-- */
-global.owner = ["6283831853737", "62895329820760"];// your number and your bot number
+global.owner = ["08585857419921", "085732866948"];// your number and your bot number
 global.botName = "Vertibus";
-global.ownerName = "MiKako";
-global.donet = "https://saweria.co/mikako";
+global.ownerName = "yoon";
+global.donet = "none";
 global.sessionName = "client";
 global.packName = 'Jawir';
 global.author = 'Vertibus';
@@ -21,8 +21,8 @@ global.authenticated = false //Keep it false, it will be changed if rcon connect
 global.mcgc = "-" //set your minecraft group chat
 
 /* --SosMed-- */
-global.facebook = 'https://facebook.com/taufik.qillah.73'
-global.instagram = 'https://instagram.com/fritz_icarius'
+global.facebook = 'none'
+global.instagram = 'none'
 
 /* --ApiKey-- */
 global.ocr = "K87061951288957";
