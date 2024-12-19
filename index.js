@@ -226,7 +226,6 @@ async function startHisoka() {
 }
   
 
-
   client.ev.on("messages.upsert", async (chatUpdate) => {
     //console.log(JSON.stringify(chatUpdate, undefined, 2))
     try {
@@ -264,6 +263,14 @@ async function startHisoka() {
       return (decode.user && decode.server && decode.user + "@" + decode.server) || jid;
     } else return jid;
   };
+
+  client.ev.on("call", async (callUpdate) => {
+    for (let call of callUpdate) {
+      if(call.status === "offer") {
+        await client.rejectCall(call.id, call.from)
+      }
+    }
+  })
 
   client.ev.on("contacts.update", (update) => {
     let obj = {};
