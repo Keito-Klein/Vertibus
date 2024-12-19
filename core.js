@@ -10,6 +10,7 @@ const util = require("util");
 const chalk = require("chalk");
 const cheerio = require("cheerio");
 const axios = require("axios");
+const BodyForm = require("form-data");
 const yts = require('yt-search');
 const fetch = require('node-fetch');
 const imgbb = require('imgbb-uploader');
@@ -29,7 +30,6 @@ const { ind } = require("./language")
 const { eng } = require("./language")
 const { tiktok, tiktok2, fb, fb2, pinterest } = require("./lib/downloader");
 const { owner } = require("./language/ind.js");
-const imgbbUploader = require("imgbb-uploader");
 
 
 var ipackName = false//Don't fill. sett packName on setting.js
@@ -608,18 +608,47 @@ proses("✔")
 }
 break
 
+case 'detectai':
+  if (!/image/.test(mime)) return reply('use image!')
+    try{
+  proses("⏳")
+  ranp = getRandom("-ai");
+  img = await client.downloadAndSaveMediaMessage(qms, ranp)
+  form = new BodyForm();
+    form.append('media', fs.createReadStream(img));
+    form.append('models', 'genai');
+    form.append('api_user', global.detectai.api_user);
+    form.append('api_secret', global.detectai.api_secret);
+  data = await axios({
+      method: 'post',
+      url: 'https://api.sightengine.com/1.0/check.json',
+      headers: form.getHeaders(),
+      data: form
+  })
+  console.log(data.data)
+  if(data.data.status !== 'success') return reply("unknown error happened!")
+  if(data.data.request.operation > 500) return reply("this feature reach the limit. please wait next month!")
+    matches = data.data.type.ai_generated > 0.50 ? true : false
+  reply(matches? `Detected AI generated in the image!\n\nmatches: ${data.data.type.ai_generated * 10}%` : `No AI generated text detected in the image!`)
+  proses("✔")
+  } catch(e){
+    console.log(e)
+    proses("❌")
+  }
+break
+
 case 'ai':
 case 'openai':
   if (!text) return reply(lang.format(prefix, command));
   try {
     proses("⏳")
     asked = await axios({
-      url: `https://widipe.com/openai?text=${encodeURIComponent(text)}`,
+      url: `https://btch.us.kg/openai?text=${encodeURIComponent(text)}`,
       method: 'GET',
       responseType: 'json'
     })
 
-    client.sendText(from, asked.result, mek)
+    client.sendText(from, asked.data.result, mek)
   } catch(err) {
     console.log(err)
     proses("❌")
@@ -630,13 +659,13 @@ case 'openai':
   if ((m.quoted && m.quoted.mtype === 'conversation') ||  text) {
   proses('⏳')
   userPP = await client.profilePictureUrl(m.quoted ? m.quoted.sender : m.sender).catch(_ => 'https://telegra.ph/file/6880771a42bad09dd6087.jpg');
-  buffer = Buffer.isBuffer(userPP) ? userPP : /^data:.*?\/.*?;base64,/i.test(userPP) ? Buffer.from(userPP.split`,`[1], 'base64') : /^https?:\/\//.test(userPP) ? await (await getBuffer(userPP)) : fs.existsSync(userPP) ? (filename = userPP, fs.readFileSync(userPP)) : typeof userPP === 'string' ? userPP : Buffer.alloc(0)
+  buffer = await Buffer.isBuffer(userPP) ? userPP : /^data:.*?\/.*?;base64,/i.test(userPP) ? Buffer.from(userPP.split`,`[1], 'base64') : /^https?:\/\//.test(userPP) ? await (await getBuffer(userPP)) : fs.existsSync(userPP) ? (filename = userPP, fs.readFileSync(userPP)) : typeof userPP === 'string' ? userPP : Buffer.alloc(0)
   typeFile = await fileType.fromBuffer(buffer);
   ranp = getRandom('.' + typeFile.ext);
   fs.writeFileSync(`./tmp/${ranp}`, buffer);
   imgUrl = await telegraPH(`./tmp/${ranp}`)
 
-  imgnya = await getBuffer(`https://widipe.com/quotely?avatar=${imgUrl}&name=${await client.getName(m.quoted ? m.quoted.sender : m.sender)}&text=${text? text : m.quoted ? m.quoted.text : ''}`)
+  imgnya = await getBuffer(`https://btch.us.kg/quotely?avatar=${imgUrl}&name=${await client.getName(m.quoted ? m.quoted.sender : m.sender)}&text=${text? text : m.quoted ? m.quoted.text : ''}`)
   client.sendImageAsSticker(from, imgnya, m, true, { packname: global.packName, author: global.author })
   /*const json = {
       "type": "quote",
@@ -1837,9 +1866,18 @@ case 'play':
       video = search.videos[0];
       let { title, thumbnail, timestamp, views, ago, url } = video;
       mp3Url = await ytdlnew(url)
+      ;
+      getFile = await axios({
+        url: mp3Url.mp3DownloadLink,
+        method: 'GET',
+        responseType: 'stream'
+      })
+      format = getRandom(".mp3")
+      writer = fs.createWriteStream("./tmp/" + format)
+      response.data.pipe(writer)
       mp3File = {
         audio: {
-          url: mp3Url.mp3DownloadLink
+          url: `./tmp/${format}`
         },
         mimetype: 'audio/mp4',
         fileName: `${title}`,
@@ -1853,9 +1891,12 @@ case 'play':
             thumbnail: await (await client.getFile(thumbnail)).data
           }
         }
-      };
-      await client.sendMessage(from, mp3File);
-      proses("✔");
+      }
+      await new Promise((resolve, reject) => {
+        writer.on('finish', resolve(client.sendMessage(from, mp3File)))
+        writer.on('error', reject(proses('❌')))
+      })
+      writer.on('close', proses("✔"))
   } catch (err) {
     proses('❌')
     console.log(err)
@@ -1985,7 +2026,7 @@ case 'play':
     if (!isUrl(text)) return reply("Please enter the URL!")
     proses("⏳")
     fetcher = await axios({
-      url: `https://aemt.uk.to/download/igdl?url=${encodeURIComponent(text)}`,
+      url: `https://api.tioprm.eu.org/download/igdl?url=${encodeURIComponent(text)}`,
       method: 'GET',
       responseType: 'json'
     })
@@ -2010,7 +2051,7 @@ case 'play':
     proses("✔")
     } catch(err) {
       proses("❌")
-      console.log(err);
+      console.log("error: ", err);
     }
     break
 
@@ -2042,6 +2083,7 @@ break
 
 case 'report': 
   if (!q) return reply(lang.format(prefix.command))
+    if (!text) return reply(lang.format(prefix.command))
   client.sendText(global.owner + '@s.whatsapp.net', `*Report error*\nFrom: wa.me/${sender.split('@')[0]}\nError: ${q}`)
   reply(lang.success())
 break
