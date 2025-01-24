@@ -29,8 +29,9 @@ global.ocr = "K87061951288957";
 global.imgbb = "bfe53fe15a978cf1938d96123f065206";
 global.detectai = {
     api_user: "482609558",
-    api_secret: "JfMGexH2KAismEVkwhSNHsNdbohrweh5",
-}
+    api_secret: "JfMGexH2KAismEVkwhSNHsNdbohrweh5"
+};
+global.apikey = "-"; //Apikey botcahX
 
 
 /* --Info-- */
