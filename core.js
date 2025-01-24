@@ -34,7 +34,7 @@ const { ocrSpace } = require('ocr-space-api-wrapper');
 const { nhentai } = require("./lib/nh");
 const { doing } = require('./lib/translate')
 const { event } = require("./lib/event.js")
-const { remini } = require("./lib/remini")
+const { remini, fhd } = require("./lib/remini")
 const { ytdls } = require("./lib/youtube-dl.js")
 const { mt } = require("./lib/mt.js")
 const { ind } = require("./language")
@@ -611,7 +611,7 @@ case 'dalle':
 if (!text) return reply(lang.format(prefix, command));
 try {
 proses("⏳")
-client.sendImage(from, `https://meitang.xyz/ai/text2img?text=${encodeURIComponent(text)}`, text, mek);
+client.sendImage(from, `https://api.botcahx.eu.org/api/maker/text2img?text=${encodeURIComponent(text)}&apikey=${global.apikey}`, text, mek);
 proses("✔")
 } catch(err) {
   proses("❌")
@@ -654,50 +654,76 @@ case 'openai':
   try {
     proses("⏳")
     asked = await axios({
-      url: `https://btch.us.kg/openai?text=${encodeURIComponent(text)}`,
+      url: `https://api.botcahx.eu.org/api/search/openai-chat?text=${encodeURIComponent(text)}&apikey=${global.apikey}`,
       method: 'GET',
       responseType: 'json'
     })
 
-    client.sendText(from, asked.data.result, mek)
+    client.sendText(from, asked.data.message, mek)
   } catch(err) {
     console.log(err)
     proses("❌")
   }
   break
 
+  case 'toanime':
+    case 'jadianime':
+    if (!/image\/(jpe?g|png)/.test(mime)) return reply('image format isn\'nt supported!')
+    if (/image/.test(mime)) {
+      proses("⏳")
+    ranp = getRandom(' - anime')
+    owgi = await  client.downloadAndSaveMediaMessage(qms, ranp)
+    options = {
+      apiKey: global.imgbb, // MANDATORY
+      imagePath: owgi, // OPTIONAL: pass a local file (max 32Mb)
+      name: ranp, // OPTIONAL: pass a custom filename to imgBB API
+      expiration: 3600 /* OPTIONAL: pass a numeric value in seconds.
+      It must be in the 60-15552000 range.
+      Enable this to force your image to be deleted after that time. */,
+    };
+    anu = await imgbb(options)
+    proc = await axios({
+      url: `https://api.botcahx.eu.org/api/maker/jadianime?url=${anu.display_url}&apikey=${global.apikey}`,
+      method: 'GET',
+      responseType: 'json',
+      timeout: 60000
+    })
+    client.sendImage(from, proc.data.result.img_crop_single, '' , mek)
+    proses("✔")
+    } else {
+      proses("❌")
+      reply('image only!')
+    }
+
+    break
+
   case 'qc': 
   if ((m.quoted && m.quoted.mtype === 'conversation') ||  text) {
   proses('⏳')
-  userPP = await client.profilePictureUrl(m.quoted ? m.quoted.sender : m.sender).catch(_ => 'https://telegra.ph/file/6880771a42bad09dd6087.jpg');
+  userPP = await client.profilePictureUrl(m.quoted ? m.quoted.sender : m.sender, 'image').catch(_ => 'https://telegra.ph/file/6880771a42bad09dd6087.jpg');
   buffer = await Buffer.isBuffer(userPP) ? userPP : /^data:.*?\/.*?;base64,/i.test(userPP) ? Buffer.from(userPP.split`,`[1], 'base64') : /^https?:\/\//.test(userPP) ? await (await getBuffer(userPP)) : fs.existsSync(userPP) ? (filename = userPP, fs.readFileSync(userPP)) : typeof userPP === 'string' ? userPP : Buffer.alloc(0)
   typeFile = await fileType.fromBuffer(buffer);
-  ranp = getRandom('.' + typeFile.ext);
-  fs.writeFileSync(`./tmp/${ranp}`, buffer);
-  imgUrl = await telegraPH(`./tmp/${ranp}`)
 
-  imgnya = await getBuffer(`https://btch.us.kg/quotely?avatar=${imgUrl}&name=${await client.getName(m.quoted ? m.quoted.sender : m.sender)}&text=${text? text : m.quoted ? m.quoted.text : ''}`)
-  client.sendImageAsSticker(from, imgnya, m, true, { packname: global.packName, author: global.author })
-  /*const json = {
-      "type": "quote",
-      "format": typeFile.ext,
-      "backgroundColor": "#FFFFFF",
-      "width": 512,
-      "height": 768,
-      "scale": 2,
-      "messages": [
+  const json = {
+      typ: "quote",
+      format: typeFile.ext,
+      backgroundColor: "#FFFFFF",
+      width: 700,
+      height: 580,
+      scale: 2,
+      messages: [
           {
-              "entities": [],
-              "avatar": true,
-              "from": {
-                  "id": 1,
-                  "name": await client.getName(m.quoted ? m.quoted.sender : pushname),
-                  "photo": {
-                      "url": imgUrl.
+              entities: [],
+              avatar: true,
+              from: {
+                  id: 1,
+                  name: text.includes("|") ? text.split("|")[0] : m.quoted ?  await client.getName(m.quoted.sender) : pushname,
+                  photo: {
+                      url: userPP
                   }
               },
-              "text": text? text : m.quoted ? m.quoted.text : '',
-              "replyMessage": {}
+              text: text.includes("|") ? text.split("|")[1] : m.quoted ? m.quoted.text : text,
+              'm.replyMessage' : {}
           }
       ]
   };
@@ -706,16 +732,12 @@ case 'openai':
       headers: {'Content-Type': 'application/json'}
   });
   buffer = Buffer.from(res.data.result.image, 'base64');
-  rest = { 
-      status: "200", 
-      creator: "AdrianTzy",
-      result: buffer
-  };
 
-  client.sendImageAsSticker(from, rest.result, m, true, {
+  client.sendImageAsSticker(from, buffer, m, true, {
       packname: `${global.packname}`,
       author: `${global.author}`
-  });*/
+  });
+  proses("✔")
   }
 break;
 
@@ -1397,7 +1419,7 @@ case 'buff':
       Enable this to force your image to be deleted after that time. */,
     };
   anu = await imgbb(options)
-      encmedia = await remini(anu.display_url, "4")
+      encmedia = await remini(anu.display_url)
     client.sendImage(from, encmedia, 'Done!', mek)
     proses("✔")
   }
@@ -1407,6 +1429,36 @@ case 'buff':
     proses("❌")
   }
     break
+
+
+    case 'fhd':
+      if (!/image/.test(mime)) return reply('gunakan foto!')
+        if (!/image\/(jpe?g|png)/.test(mime)) return reply('Format gambar tidak didukung!')
+          try {
+        if (/image/.test(mime)) {
+          proses("⏳")
+          reply("mohon tunggu beberapa menit, estimasi file 50mb+")
+          ranp = getRandom(' - fhd')
+          owgi = await  client.downloadAndSaveMediaMessage(qms, ranp)
+          options = {
+            apiKey: global.imgbb, // MANDATORY
+            imagePath: owgi, // OPTIONAL: pass a local file (max 32Mb)
+            name: ranp, // OPTIONAL: pass a custom filename to imgBB API
+            expiration: 3600 /* OPTIONAL: pass a numeric value in seconds.
+            It must be in the 60-15552000 range.
+            Enable this to force your image to be deleted after that time. */,
+          };
+        anu = await imgbb(options)
+            encmedia = await fhd(anu.display_url)
+          client.sendImage(from, encmedia, 'Done!', mek)
+          proses("✔")
+        }
+        } catch(e) {
+          if (e.status === 502) reply(e)
+          console.error(e)
+          proses("❌")
+        }
+      break
 
   case 'sticker':
   case 's':
@@ -1483,6 +1535,21 @@ m.reply('Gunakan foto/stiker!')
   console.log(err);
 }
 break
+
+case 'brat':
+case 'bart':
+if (!text) return reply("Use text!")
+  try {
+proses("⏳")
+    buffer = await getBuffer(`https://termai-brat.hf.space/?q=${encodeURIComponent(text)}`);
+    client.sendImageAsSticker(from, buffer, mek, false, { packname: global.packName, author: global.author })
+    proses("✔")
+  } catch (err) {
+    console.error(err)
+    proses("❌")
+  }
+  break
+
 
 case 'toimg':
 case 'toimage':
@@ -2061,32 +2128,21 @@ case 'play':
             } catch(err) {
 
                 proses("❌")
+                reply(`Error occurred!\nPlease use ${prefix}fb2`)
                 console.log(err)
             }
             break
 
             case 'fb2': 
-            case 'fb3':
             if (!q) return reply(lang.format(prefix, command))
             if (!isUrl(text)) return reply("Please enter the URL!")
               try{
             proses("⏳")
-            if(command === "fb2") {
-              data = await axios({
-                url: `https://btch.us.kg/download/fbdl?url=${encodeURIComponent(text)}`,
-                method: 'GET',
-                responseType: 'json'
-              })
-              res = data.data.result.HD ? data.data.result.HD : data.data.result.Normal_video
-              client.sendMessage(from, {video: {url: res}, caption: ` `}, mek)
-              proses("✔")
-            }
-            if(command == "fb3") {
-              source = await axios.get(`https://api.tioprm.eu.org/download/fbdown?url=${encodeURIComponent(text)}`)
+              source = await axios.get(`https://api.botcahx.eu.org/api/dowloader/fbdown?url=${encodeURIComponent(text)}&apikey=${global.apikey}`)
       			  res = source.data.result.url.isHdAvailable ? source.data.result.url.urls[0].hd : source.data.result.url.urls[1].sd
        			  client.sendMessage(from, {video: {url: res}, caption: ` `}, mek)
               proses("✔")
-            }
+
             }catch(e) {
 
               proses("❌")
@@ -2101,13 +2157,12 @@ case 'play':
     if(!text) return reply(lang.format(prefix,command))
     if (!isUrl(text)) return reply("Please enter the URL!")
     proses("⏳")
-    fetcher = await axios({
-      url: `https://api.tioprm.eu.org/download/igdl?url=${encodeURIComponent(text)}`,
-      method: 'GET',
-      responseType: 'json'
-    })
-    //fetcher = await igDownloader(text)
-    client.sendMessage(from, { video: {url: fetcher.data.result[0].url}, caption: `*Video from Instagram*`}, mek)
+      fetcher = axios({
+        url: `https://api.botcahx.eu.org/api/dowloader/igdowloader?url=${encodeURIComponent(text)}&apikey=${global.apikey}`,
+        method: 'GET',
+        responseType: 'json'
+      })
+      client.sendVideo(from, fetcher.data.result[0].url, "*Video Ffrom Instagram*", mek)
     proses("✔")
     } catch(err) {
       proses("❌");
@@ -2157,7 +2212,7 @@ break
   break
             
 
-case 'report': 
+case 'report':
   if (!q) return reply(lang.format(prefix.command))
     if (!text) return reply(lang.format(prefix.command))
   client.sendText(global.owner + '@s.whatsapp.net', `*Report error*\nFrom: wa.me/${sender.split('@')[0]}\nError: ${q}`)

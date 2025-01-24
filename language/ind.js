@@ -45,7 +45,10 @@ return `
 ❏ *Media Menu*
  │•${prefix}sticker
  │•${prefix}smeme
+ │•${prefix}brat
+ │•${prefix}qc
  │•${prefix}toimg
+ │•${prefix}toanime
  │•${prefix}text2img
  │•${prefix}remini
  │•${prefix}nhentai
@@ -71,10 +74,13 @@ return `
  │•${prefix}wallpaper
  │•${prefix}pixiv
  │•${prefix}pinterest
+ │•${prefix}getimage
  │•${prefix}bahasa
  │•${prefix}changelog
  │•${prefix}status
  │•${prefix}ocr
+ │•${prefix}ai
+ │•${prefix}detectai
  │•${prefix}anime
  │•${prefix}neko
  │•${prefix}loli
@@ -260,20 +266,54 @@ exports.changelog = () => {
 
 ===== *20 - 10 - 2024* =====
 - Binding minecraft server to bot
+
+===== *11 - 01 - 2025* =====
+- Fix remini
+- Fix ig downloader
+- Fix text2img
+- Fix fb2
+- Fix play
+- Fix ytmp3
+- Add detectai at list
+- Add jadianime at list
+- Add getimage at list
+- Add ai at list
+
+===== *25 - 01 - 2025* =====
+- Add brat at list
+- Add qc at list
+- Fix nhentai
+
 `
 }
 
 exports.update = (pushname) => {
 return `
-*New Update V. 4.9.60a*
+*New Update V. 4.14.67a*
 Hi ${pushname}.
-Kami telah memperbarui versi bot. Untuk *User* perbaikan berikut telah hadir: 
+Kami telah memperbarui versi bot. Untuk *User* perbaikan & fitur berikut telah hadir: 
+
+- \`brat\`
+> Fitur baru untuk membuat teks di background putih menjadi sticker. balas hasil stikernya deengan teks *_!toimg_* untuk mengubahnya menjadi gambar.
+
+- \`qc\`
+> fitur baru untuk membuat gambar seperti teks balasan balas pesan orang(pesan teks) atau gunakan query/text untuk membuatnya.
+
+- \`nhentai\`
+> Di beberapa format gambar bot tidak bisa memasukan gambar tersebut kedalam file PDF, dan terjadi error. owner telah memperbaikinya.
+
+- \`Pinterest\`
+> sebelumnya fitur pinterest tidak mengembalikan gambar karena data yang didapat berubah dan terjadi error, owner telah memperbaikinya.
 
 - \`Minecraft Server\`
-> kami telah memiliki minecraft server untuk bermain bersama, 
-> dan menghubungkannya ke dalam menu bot untuk memudahkan operator/owner mengontrol server.
+> kami telah mengaktifkan kembali server minecraft
 > untuk melihat daftar command ketik *_!menu_*
 > untuk request masuk server minecraft ketik *_!server_*
+
+
+*laporkan jika ada fitur error kepada owner dengan command !report <fitur yang error> atau pm owner*
+untuk melihat changelog ketik:
+*!changelog*
 
 tanya tanya silahkan pm owner dengan mengetik:
 *!owner*
@@ -347,7 +387,7 @@ exports.format = (prefix, command) => {
     case 'pinterest':
 	case 'quote':
 	case 'qc':
-  			return `mohon masukan query!!\nContoh: ${prefix + command} masukan query disini`
+  			return `mohon masukan query!!\nContoh: ${prefix + command} teks`
   		break;
 
 		  case 'ytdl':

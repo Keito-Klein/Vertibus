@@ -42,7 +42,10 @@ return `
  ❏ *Media Menu*
  │•${prefix}sticker
  │•${prefix}smeme
+ │•${prefix}brat
+ │•${prefix}qc
  │•${prefix}toimg
+ │•${prefix}toanime
  │•${prefix}text2img
  │•${prefix}remini
  │•${prefix}nhentai
@@ -68,10 +71,13 @@ return `
  │•${prefix}wallpaper
  │•${prefix}pixiv
  │•${prefix}pinterest
+ │•${prefix}getimage
  │•${prefix}language
  │•${prefix}changelog
  │•${prefix}status
  │•${prefix}ocr
+ │•${prefix}ai
+ │•${prefix}detectai
  │•${prefix}anime
  │•${prefix}neko
  │•${prefix}loli
@@ -251,20 +257,54 @@ exports.changelog = () => {
 
 ===== *20 - 10 - 2024* =====
 - Binding minecraft server to bot
+
+===== *11 - 01 - 2025* =====
+- Fix remini
+- Fix ig downloader
+- Fix text2img
+- Fix fb2
+- Fix play
+- Fix ytmp3
+- Add detectai at list
+- Add jadianime at list
+- Add getimage at list
+- Add ai at list
+
+===== *25 - 01 - 2025* =====
+- Add brat at list
+- Add qc at list
+- Fix nhentai
+
+
 `
 }
 
 exports.update = (pushname) => {
 return `
-*New Update V. 4.9.60a*
+*New Update V. 4.14.67a*
 Hi ${pushname}.
 We have updated the bot version. For *Users* the following improvements are available: 
 
+- \`brat\`
+> New feature to make text on a white background into a sticker. reply to the resulting sticker with the text *_!toimg_* to turn it into an image.
+
+- \`qc\`
+> new feature to create images such as text replies to people's messages (text messages) or use query/text to create them.
+
+- \`nhentai\`
+> In some image formats the bot cannot insert the image into a PDF file, and an error occurs. owner has repaired it
+
+- \`Pinterest\`
+> Previously the Pinterest feature did not return images because the data obtained changed and an error occurred, the owner has fixed it.
+
 - \`Minecraft Server\`
-> we already have a minecraft server to play together,
-> and its connection to the bot menu to make it easier for the operator/owner to control the server.
+> we already have reactivated  minecraft server
 > to see the list of commands type *_!menu_*
 > To request to enter the Minecraft server, type *_!server_*
+
+*report any feature errors to the owner with the command !report <feature error> or pm owner*
+to see the changelog type:
+*!changelog*
 
 for questions please pm the owner by typing:
 *!owner*
