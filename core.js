@@ -2215,7 +2215,7 @@ break
 case 'report':
   if (!q) return reply(lang.format(prefix.command))
     if (!text) return reply(lang.format(prefix.command))
-  client.sendText(global.owner + '@s.whatsapp.net', `*Report error*\nFrom: wa.me/${sender.split('@')[0]}\nError: ${q}`)
+  client.sendText(global.owner[0] + '@s.whatsapp.net', `*Report error*\nFrom: wa.me/${sender.split('@')[0]}\nError: ${q}`)
   reply(lang.success())
 break
 

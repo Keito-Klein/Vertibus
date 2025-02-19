@@ -283,6 +283,7 @@ exports.changelog = () => {
 - Add brat at list
 - Add qc at list
 - Fix nhentai
+- Fix pinterest
 
 `
 }
