@@ -32,7 +32,7 @@
     "chalk": "^4.1.2",
     "cheerio": "^1.0.0-rc.12",
     "crypto": "^1.0.1",
-    "fb-downloader-scrapper": "^2.0.0",
+    "fb-downloader-scrapper": "^3.0.0",
     "fbvideos": "^1.0.2",
     "figlet": "^1.5.2",
     "file-type": "^16.3.0",
