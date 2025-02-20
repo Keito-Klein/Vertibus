@@ -28,7 +28,7 @@ const neko_modules = require('nekos.life');
 const moment = require('moment-timezone');
 const fileType = require("file-type");
 const ffmpeg = require('fluent-ffmpeg');
-const fbdl = require('fb-downloader-scrapper');
+const { getFbVideoInfo } = require('fb-downloader-scrapper');
 const path = require('path');
 const { ocrSpace } = require('ocr-space-api-wrapper');
 const { nhentai } = require("./lib/nh");
@@ -1541,7 +1541,7 @@ case 'bart':
 if (!text) return reply("Use text!")
   try {
 proses("⏳")
-    buffer = await getBuffer(`https://termai-brat.hf.space/?q=${encodeURIComponent(text)}`);
+    buffer = await getBuffer(`https://api.botcahx.eu.org/api/maker/brat?text=${encodeURIComponent(text)}&apikey=${global.apikey}`);
     client.sendImageAsSticker(from, buffer, mek, false, { packname: global.packName, author: global.author })
     proses("✔")
   } catch (err) {
@@ -2117,7 +2117,7 @@ case 'play':
             if (!isUrl(text)) return reply("Please enter the URL!")
             try{
             proses("⌛")
-            source = await fbdl(text);
+            source = await getFbVideoInfo(text);
             fbQuality = source.hd ? source.hd : source.sd
             client.sendMessage(from, {video: {url: fbQuality}, caption: source.title ? source.title : ' '}, mek)
             // source = await axios.get(`https://api.tioprm.eu.org/download/fbdown?url=${encodeURIComponent(text)}`)
@@ -2157,7 +2157,7 @@ case 'play':
     if(!text) return reply(lang.format(prefix,command))
     if (!isUrl(text)) return reply("Please enter the URL!")
     proses("⏳")
-      fetcher = axios({
+      fetcher = await axios({
         url: `https://api.botcahx.eu.org/api/dowloader/igdowloader?url=${encodeURIComponent(text)}&apikey=${global.apikey}`,
         method: 'GET',
         responseType: 'json'
