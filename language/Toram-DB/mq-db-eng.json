@@ -1,0 +1,849 @@
+[
+    {
+        "title": "First Time Visit",
+        "boss": "-",
+        "chapter": 1,
+        "episode": 1,
+        "exp": 30
+    },
+    {
+        "title": "Straye Brother and Sister",
+        "boss": "Boss Colon",
+        "chapter": 1,
+        "episode": 2,
+        "exp": 80
+    },
+    {
+        "title": "A Golem on a Rampage",
+        "boss": "Excavated Golem",
+        "chapter": 1,
+        "episode": 3,
+        "exp": 730
+    },
+    {
+        "title": "The Goddess of Wisdom",
+        "boss": "-",
+        "chapter": 1,
+        "episode": 4,
+        "exp": 2050
+    },
+    {
+        "title": "The Dragon's Den",
+        "boss": "Eerie Crystal",
+        "chapter": 1,
+        "episode": 5,
+        "exp": 4700
+    },
+    {
+        "title": "The Ruined Temple",
+        "boss": "-",
+        "chapter": 1,
+        "episode": 6,
+        "exp": 9330
+    },
+    {
+        "title": "The First Magic Stone",
+        "boss": "Minotaur",
+        "chapter": 1,
+        "episode": 7,
+        "exp": 16700
+    },
+    {
+        "title": "Purification Incense",
+        "boss": "-",
+        "chapter": 1,
+        "episode": 8,
+        "exp": 27900
+    },
+    {
+        "title": "The Dragon and Black Crystal",
+        "boss": "Brutal Dragon Decel",
+        "chapter": 1,
+        "episode": 9,
+        "exp": 43000
+    },
+    {
+        "title": "The Merchant Girl",
+        "boss": "Mochelo",
+        "chapter": 2,
+        "episode": 10,
+        "exp": 64000
+    },
+    {
+        "title": "Where Are the Gems?",
+        "boss": "Flare Volg",
+        "chapter": 2,
+        "episode": 11,
+        "exp": 92000
+    },
+    {
+        "title": "Who is the Black Knight?!",
+        "boss": "Ooze",
+        "chapter": 2,
+        "episode": 12,
+        "exp": 118200
+    },
+    {
+        "title": "Trials in the Palace",
+        "boss": "-",
+        "chapter": 2,
+        "episode": 13,
+        "exp": 149000
+    },
+    {
+        "title": "The Moon Wizard",
+        "boss": "Mauez",
+        "chapter": 2,
+        "episode": 14,
+        "exp": 172000
+    },
+    {
+        "title": "The Follower and Hater",
+        "boss": "Ganglef",
+        "chapter": 2,
+        "episode": 15,
+        "exp": 227000
+    },
+    {
+        "title": "The Wizard's Cave",
+        "boss": "-",
+        "chapter": 2,
+        "episode": 16,
+        "exp": 240000
+    },
+    {
+        "title": "The Star Wizard",
+        "boss": "Boss Roga",
+        "chapter": 2,
+        "episode": 17,
+        "exp": 255000
+    },
+    {
+        "title": "The Invincible... Enemy??",
+        "boss": "-",
+        "chapter": 3,
+        "episode": 18,
+        "exp": 270000
+    },
+    {
+        "title": "The Ancient Empress",
+        "boss": "Ancient Empress",
+        "chapter": 3,
+        "episode": 19,
+        "exp": 284000
+    },
+    {
+        "title": "The Culprit",
+        "boss": "Masked Warrior",
+        "chapter": 3,
+        "episode": 20,
+        "exp": 319000
+    },
+    {
+        "title": "Fate of the Fortress",
+        "boss": "-",
+        "chapter": 3,
+        "episode": 21,
+        "exp": 335000
+    },
+    {
+        "title": "Memory in the Lost Town",
+        "boss": "Pillar Golem",
+        "chapter": 3,
+        "episode": 22,
+        "exp": 398000
+    },
+    {
+        "title": "The Stolen Sorcery Gem",
+        "boss": "-",
+        "chapter": 3,
+        "episode": 23,
+        "exp": 417000
+    },
+    {
+        "title": "Living with a Dragon",
+        "boss": "Grass Dragon Yelb",
+        "chapter": 3,
+        "episode": 24,
+        "exp": 462300
+    },
+    {
+        "title": "Monsters from Outerworld",
+        "boss": "Nurethoth",
+        "chapter": 3,
+        "episode": 25,
+        "exp": 540000
+    },
+    {
+        "title": "The Mage Diels",
+        "boss": "-",
+        "chapter": 4,
+        "episode": 26,
+        "exp": 562000
+    },
+    {
+        "title": "Journey for Reconstruction",
+        "boss": "Goldoon (MQ only)",
+        "chapter": 4,
+        "episode": 27,
+        "exp": 585000
+    },
+    {
+        "title": "The Sacred Gem in Akaku",
+        "boss": "Goouva",
+        "chapter": 4,
+        "episode": 28,
+        "exp": 710000
+    },
+    {
+        "title": "The King of Darkan",
+        "boss": "-",
+        "chapter": 4,
+        "episode": 29,
+        "exp": 740000
+    },
+    {
+        "title": "The Lurking Evil",
+        "boss": "Scrader",
+        "chapter": 4,
+        "episode": 30,
+        "exp": 803000
+    },
+    {
+        "title": "Find the False Black Knight!",
+        "boss": "Black Knight of Delusion",
+        "chapter": 4,
+        "episode": 31,
+        "exp": 913000
+    },
+    {
+        "title": "Technista's Movement",
+        "boss": "-",
+        "chapter": 4,
+        "episode": 32,
+        "exp": 1000000
+    },
+    {
+        "title": "The Falling Feather of Death",
+        "boss": "Evil Crystal Beast",
+        "chapter": 4,
+        "episode": 33,
+        "exp": 1100000
+    },
+    {
+        "title": "In The Unknown Darkness",
+        "boss": "-",
+        "chapter": 5,
+        "episode": 34,
+        "exp": 1150000
+    },
+    {
+        "title": "The Charm",
+        "boss": "Cerberus",
+        "chapter": 5,
+        "episode": 35,
+        "exp": 1310000
+    },
+    {
+        "title": "Parching Dark Mirror",
+        "boss": "Zolban",
+        "chapter": 5,
+        "episode": 36,
+        "exp": 1370000
+    },
+    {
+        "title": "Fierce Battle in the Garden",
+        "boss": "Aranea",
+        "chapter": 5,
+        "episode": 37,
+        "exp": 1550000
+    },
+    {
+        "title": "A Light in the Darkness",
+        "boss": "Bexiz",
+        "chapter": 5,
+        "episode": 38,
+        "exp": 1750000
+    },
+    {
+        "title": "The Ones Nesting in the Manor",
+        "boss": "Imitator",
+        "chapter": 5,
+        "episode": 39,
+        "exp": 1970000
+    },
+    {
+        "title": "The Dark Castle",
+        "boss": "Imitacia",
+        "chapter": 5,
+        "episode": 40,
+        "exp": 2210000
+    },
+    {
+        "title": "To The Living World",
+        "boss": "-",
+        "chapter": 5,
+        "episode": 41,
+        "exp": 2220000
+    },
+    {
+        "title": "Demi Machina",
+        "boss": "-",
+        "chapter": 6,
+        "episode": 42,
+        "exp": 2600000
+    },
+    {
+        "title": "The Town of Pax Faction",
+        "boss": "Iconos",
+        "chapter": 6,
+        "episode": 43,
+        "exp": 2700000
+    },
+    {
+        "title": "Mechanical Heart",
+        "boss": "Ifrid",
+        "chapter": 6,
+        "episode": 44,
+        "exp": 2800000
+    },
+    {
+        "title": "Black Knights of Lyark",
+        "boss": "-",
+        "chapter": 6,
+        "episode": 45,
+        "exp": 2820000
+    },
+    {
+        "title": "The Mysterious Artifact",
+        "boss": "Proto Leon",
+        "chapter": 6,
+        "episode": 46,
+        "exp": 3030000
+    },
+    {
+        "title": "Truth of the Artifact",
+        "boss": "-",
+        "chapter": 6,
+        "episode": 47,
+        "exp": 3099000
+    },
+    {
+        "title": "The Price of Treachery",
+        "boss": "York",
+        "chapter": 6,
+        "episode": 48,
+        "exp": 3320000
+    },
+    {
+        "title": "The Blasphemous Factory",
+        "boss": "Tyrant Machina",
+        "chapter": 6,
+        "episode": 49,
+        "exp": 3640000
+    },
+    {
+        "title": "Mystery of the Black Knights",
+        "boss": "Mozto Machina",
+        "chapter": 6,
+        "episode": 50,
+        "exp": 4020000
+    },
+    {
+        "title": "Monster's Forest",
+        "boss": "Lalvada",
+        "chapter": 7,
+        "episode": 51,
+        "exp": 4730000
+    },
+    {
+        "title": "The Underground Town",
+        "boss": "-",
+        "chapter": 7,
+        "episode": 52,
+        "exp": 4820000
+    },
+    {
+        "title": "The Elves in Lyark",
+        "boss": "Zahhak Machina",
+        "chapter": 7,
+        "episode": 53,
+        "exp": 5070000
+    },
+    {
+        "title": "The Mad Laboratory",
+        "boss": "Guignol",
+        "chapter": 7,
+        "episode": 54,
+        "exp": 5500000
+    },
+    {
+        "title": "Tragedy in the Jail",
+        "boss": "Gwaimol",
+        "chapter": 7,
+        "episode": 55,
+        "exp": 6000000
+    },
+    {
+        "title": "Calamity in Droma Square",
+        "boss": "Ultimate Machina",
+        "chapter": 7,
+        "episode": 56,
+        "exp": 6400000
+    },
+    {
+        "title": "Head for Ultimea Palace",
+        "boss": "Ornlarf",
+        "chapter": 7,
+        "episode": 57,
+        "exp": 6900000
+    },
+    {
+        "title": "The Chaotic Truth",
+        "boss": "Venena Coenubia",
+        "chapter": 7,
+        "episode": 58,
+        "exp": 7400000
+    },
+    {
+        "title": "The Mine Where Monsters Lurk",
+        "boss": "Shampy",
+        "chapter": 8,
+        "episode": 59,
+        "exp": 8400000
+    },
+    {
+        "title": "The Mysterious Shadow",
+        "boss": "-",
+        "chapter": 8,
+        "episode": 60,
+        "exp": 8500000
+    },
+    {
+        "title": "The New Diel Country",
+        "boss": "Crystal Titan",
+        "chapter": 8,
+        "episode": 61,
+        "exp": 8600000
+    },
+    {
+        "title": "The Ruins of the Gods",
+        "boss": "Mom Fluck",
+        "chapter": 8,
+        "episode": 62,
+        "exp": 8800000
+    },
+    {
+        "title": "The Former God of Justice",
+        "boss": "Zelbuse",
+        "chapter": 8,
+        "episode": 63,
+        "exp": 9100000
+    },
+    {
+        "title": "The Remaining Thrones in the Shrine",
+        "boss": "Mardula",
+        "chapter": 8,
+        "episode": 64,
+        "exp": 9700000
+    },
+    {
+        "title": "Gods' Whereabouts",
+        "boss": "-",
+        "chapter": 8,
+        "episode": 65,
+        "exp": 10400000
+    },
+    {
+        "title": "The Wait at Specia's Shrine",
+        "boss": "Seele Zauga",
+        "chapter": 8,
+        "episode": 66,
+        "exp": 11100000
+    },
+    {
+        "title": "The Warden of Ice & Snow",
+        "boss": "King Piton",
+        "chapter": 8,
+        "episode": 67,
+        "exp": 11800000
+    },
+    {
+        "title": "At Mountains End",
+        "boss": "Finstern the Dark Dragon",
+        "chapter": 8,
+        "episode": 68,
+        "exp": 12500000
+    },
+    {
+        "title": "Deadly Road to Eldenbaum",
+        "boss": "Tuscog",
+        "chapter": 9,
+        "episode": 69,
+        "exp": 15800000
+    },
+    {
+        "title": "Unforseen Trap",
+        "boss": "Eroded Pilz",
+        "chapter": 9,
+        "episode": 70,
+        "exp": 17100000
+    },
+    {
+        "title": "Traces of Technological Progress",
+        "boss": "Pyxtica",
+        "chapter": 9,
+        "episode": 71,
+        "exp": 18200000
+    },
+    {
+        "title": "An Unexpected Acquaintance",
+        "boss": "Kuzto",
+        "chapter": 9,
+        "episode": 72,
+        "exp": 19200000
+    },
+    {
+        "title": "Front Line Base Operation",
+        "boss": "Sapphire Roga",
+        "chapter": 9,
+        "episode": 73,
+        "exp": 20300000
+    },
+    {
+        "title": "Strategy to Redeem the Treetop Harbor",
+        "boss": "Gravicep",
+        "chapter": 9,
+        "episode": 74,
+        "exp": 21500000
+    },
+    {
+        "title": "The Teleporter Left Behind",
+        "boss": "Repthon",
+        "chapter": 9,
+        "episode": 75,
+        "exp": 22700000
+    },
+    {
+        "title": "The Man Who Seeks Death",
+        "boss": "Vulture",
+        "chapter": 9,
+        "episode": 76,
+        "exp": 23900000
+    },
+    {
+        "title": "The Battle to Recapture Eldenbaum",
+        "boss": "Venena Meta Coenubia",
+        "chapter": 9,
+        "episode": 77,
+        "exp": 25000000
+    },
+    {
+        "title": "A New Beginning",
+        "boss": "-",
+        "chapter": 9,
+        "episode": 78,
+        "exp": 13000000
+    },
+    {
+        "title": "Off to the Fateful Land",
+        "boss": "-",
+        "chapter": 10,
+        "episode": 79,
+        "exp": 26000000
+    },
+    {
+        "title": "The Inhabitants Under the Cliff",
+        "boss": "Pisteus",
+        "chapter": 10,
+        "episode": 80,
+        "exp": 27400000
+    },
+    {
+        "title": "The Nightmare Returns",
+        "boss": "-",
+        "chapter": 10,
+        "episode": 81,
+        "exp": 28800000
+    },
+    {
+        "title": "The Whereabouts of the Missing Monks",
+        "boss": "Arachnidemon",
+        "chapter": 10,
+        "episode": 82,
+        "exp": 30200000
+    },
+    {
+        "title": "The Goddess of Courage and the Squatters",
+        "boss": "-",
+        "chapter": 10,
+        "episode": 83,
+        "exp": 31600000
+    },
+    {
+        "title": "Navigator of the Ark",
+        "boss": "Black Shadow",
+        "chapter": 10,
+        "episode": 84,
+        "exp": 33100000
+    },
+    {
+        "title": "Witch in the Woods",
+        "boss": "Hexter",
+        "chapter": 10,
+        "episode": 85,
+        "exp": 34600000
+    },
+    {
+        "title": "The Duel in Nov Diela",
+        "boss": "Irestida",
+        "chapter": 10,
+        "episode": 86,
+        "exp": 36200000
+    },
+    {
+        "title": "Flying the Ark",
+        "boss": "Reliza",
+        "chapter": 11,
+        "episode": 87,
+        "exp": 37800000
+    },
+    {
+        "title": "Land of the Unknown",
+        "boss": "Gemma",
+        "chapter": 11,
+        "episode": 88,
+        "exp": 49000000
+    },
+    {
+        "title": "The Strolling Forest",
+        "boss": "Ferzen the Rock Dragon",
+        "chapter": 11,
+        "episode": 89,
+        "exp": 51000000
+    },
+    {
+        "title": "Eumanos the Forest Dwellers",
+        "boss": "Junior Dragon Zyvio",
+        "chapter": 11,
+        "episode": 90,
+        "exp": 53400000
+    },
+    {
+        "title": "A Sproutling is Born",
+        "boss": "War Dragon Turba",
+        "chapter": 11,
+        "episode": 91,
+        "exp": 55700000
+    },
+    {
+        "title": "The Blessing-Bearer",
+        "boss": "Vlam the Flame Dragon",
+        "chapter": 11,
+        "episode": 92,
+        "exp": 58100000
+    },
+    {
+        "title": "Intense Battle in Coenubla's Stronghold",
+        "boss": "Velum",
+        "chapter": 11,
+        "episode": 93,
+        "exp": 60500000
+    },
+    {
+        "title": "The Shadow of a Smoky Mountain",
+        "boss": "Oculagsinio",
+        "chapter": 11,
+        "episode": 94,
+        "exp": 63000000
+    },
+    {
+        "title": "The Weredragons & the Underground World",
+        "boss": "Gordel",
+        "chapter": 11,
+        "episode": 95,
+        "exp": 65500000
+    },
+    {
+        "title": "The Sky with a Ceiling",
+        "boss": "-",
+        "chapter": 12,
+        "episode": 96,
+        "exp": 73400000
+    },
+    {
+        "title": "Rivalry Between Dragons and Weredragons",
+        "boss": "Burning Dragon Igneus",
+        "chapter": 12,
+        "episode": 97,
+        "exp": 76300000
+    },
+    {
+        "title": "Weredragon Couple and a Baby",
+        "boss": "Trickster Dragon Mimyugon",
+        "chapter": 12,
+        "episode": 98,
+        "exp": 79300000
+    },
+    {
+        "title": "Vital Point",
+        "boss": "Filrocas",
+        "chapter": 12,
+        "episode": 99,
+        "exp": 82300000
+    },
+    {
+        "title": "Intense Battle in Propulsion System",
+        "boss": "Wicked Dragon Fazzino",
+        "chapter": 12,
+        "episode": 100,
+        "exp": 85300000
+    },
+    {
+        "title": "Discovering a New Technology",
+        "boss": "-",
+        "chapter": 12,
+        "episode": 101,
+        "exp": 44200000
+    },
+    {
+        "title": "Ark Repair",
+        "boss": "Walican",
+        "chapter": 12,
+        "episode": 102,
+        "exp": 92700000
+    },
+    {
+        "title": "Weredragon Dispute",
+        "boss": "Brass Dragon Reguita",
+        "chapter": 12,
+        "episode": 103,
+        "exp": 96000000
+    },
+    {
+        "title": "Cocoon in the Ice Wall",
+        "boss": "Dominaredor",
+        "chapter": 12,
+        "episode": 104,
+        "exp": 99300000
+    },
+    {
+        "title": "Underwater Inhabitants",
+        "boss": "Zapo",
+        "chapter": 13,
+        "episode": 105,
+        "exp": 112600000
+    },
+    {
+        "title": "Water Dome",
+        "boss": "Red Ash Dragon Rudish",
+        "chapter": 13,
+        "episode": 106,
+        "exp": 116500000
+    },
+    {
+        "title": "Underwater City",
+        "boss": "-",
+        "chapter": 13,
+        "episode": 107,
+        "exp": 60200000
+    },
+    {
+        "title": "The Thing in the Abandoned District",
+        "boss": "Don Profundo",
+        "chapter": 13,
+        "episode": 108,
+        "exp": 125800000
+    },
+    {
+        "title": "Shadow from the Abyss",
+        "boss": "Vatudo",
+        "chapter": 13,
+        "episode": 109,
+        "exp": 129900000
+    },
+    {
+        "title": "The Ruthless Council",
+        "boss": "-",
+        "chapter": 13,
+        "episode": 110,
+        "exp": 67000000
+    },
+    {
+        "title": "Mysterious Entity in the Little Shrine",
+        "boss": "Ragging Dragon Bovinari",
+        "chapter": 13,
+        "episode": 111,
+        "exp": 139900000
+    },
+    {
+        "title": "The Great Battle Underwater",
+        "boss": "Humida & Torexesa",
+        "chapter": 13,
+        "episode": 112,
+        "exp": 144200000
+    },
+    {
+        "title": "Crisis in the Sky",
+        "boss": "Mulgoon",
+        "chapter": 14,
+        "episode": 113,
+        "exp": 159100000
+    },
+    {
+        "title": "The Surviving Siblings",
+        "boss": "Deformis",
+        "chapter": 14,
+        "episode": 114,
+        "exp": 164000000
+    },
+    {
+        "title": "Chaotic Situation",
+        "boss": "-",
+        "chapter": 14,
+        "episode": 115,
+        "exp": 168900000
+    },
+    {
+        "title": "The Bitter Truth",
+        "boss": "Menti",
+        "chapter": 14,
+        "episode": 116,
+        "exp": 173800000
+    },
+    {
+        "title": "The Uncouth Rana Prince",
+        "boss": "Biskyva",
+        "chapter": 14,
+        "episode": 117,
+        "exp": 178800000
+    },
+    {
+        "title": "Mutant Coenubia Village",
+        "boss": "Piscruva",
+        "chapter": 14,
+        "episode": 118,
+        "exp": 183900000
+    },
+    {
+        "title": "Fierce Battle with Mutant Lixis",
+        "boss": "Supreme Evil Crystal Beast",
+        "chapter": 14,
+        "episode": 119,
+        "exp": 189000000
+    },
+    {
+        "title": "Ark Crisis",
+        "boss": "Bakuzan",
+        "chapter": 15,
+        "episode": 120,
+        "exp": 210500000
+    },
+    {
+        "title": "Coastal Clash",
+        "boss": "Rondine",
+        "chapter": 15,
+        "episode": 121,
+        "exp": 216300000
+    }
+]

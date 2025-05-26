@@ -1,39 +1,19 @@
-/* --Your Setting-- */
-global.owner = ["6283831853737", "62895329820760"];// your number and your bot number
-global.botName = "Vertibus";
-global.ownerName = "MiKako";
-global.donet = "https://saweria.co/mikako";
 global.sessionName = "client";
-global.packName = 'Jawir';
-global.author = 'Vertibus';
-global.guild = ['6289675651966-1611471388@g.us', '120363023056066862@g.us']
-global.reminder = true
-global.raid = false
-global.mongoDB = false //set true to use mongodb
-global.mongoString = 'Enter Your Connection String!!' //enter connection string if u use mongoDB
+global.owner = ["6283831853737", "62895329820760"];
+global.botName = "Vertibus🔹";
+global.packName = "^_^"
+global.author = "Vertibus🔹"
+global.donate = "https://saweria.co/mikako";
+global.facebook = "https://www.facebook.com/taufik.qillah.73"
+global.instagram = "https://www.instagram.com/fritz_icarius/"
+global.mongoDB = false;
+global.mongoString = "Enter Your Connection String!!";
 
-/* --Minecraft-- */
-global.rcon = false
-global.rconHost = "localhost" //Enter your host minecraft server
-global.rconPort = 25565 //Enter your port minecraft server. recomended using additional port on minecraft server
-global.rconPassword = ""
-global.authenticated = false //Keep it false, it will be changed if rcon connected
-global.mcgc = "-" //set your minecraft group chat
-
-/* --SosMed-- */
-global.facebook = 'https://facebook.com/taufik.qillah.73'
-global.instagram = 'https://instagram.com/fritz_icarius'
-
-/* --ApiKey-- */
-global.ocr = "K87061951288957";
-global.imgbb = "bfe53fe15a978cf1938d96123f065206";
+//APIKEY
+global.apikey = "-";
+global.imgbb = "33270f0a84f041ee046f429d7e6f3c6f";
+global.genai = "AIzaSyAuhj-BqLOaJ47tEQ2IwM7k0o8vrM8H2CU";
 global.detectai = {
     api_user: "482609558",
     api_secret: "JfMGexH2KAismEVkwhSNHsNdbohrweh5"
 };
-global.apikey = "-"; //Apikey botcahX
-
-
-/* --Info-- */
-global.hit = 0
-global.maintenance = false

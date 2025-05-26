@@ -1,0 +1,73 @@
+{
+	"five": {
+		"craft": "Pedang Pendek (OHS)",
+		"mats": "logam(mats)",
+		"location": "-",
+		"mob": "-",
+		"point": "5"
+	},
+	"ten": {
+		"craft": "Baju Pengelana (ARM)",
+		"mats": "Sayap Burung 35x",
+		"location": "Kuil Runtuh: A1",
+		"mob": "Beak",
+		"point": "10"
+	},
+	"fifty": {
+		"craft": "Hard Knuckle (KNK)",
+		"mats": "- Pelat Abu-Abu 20x\n- Minyak Jernih Murni 5x",
+		"location": "Makam Ratu Kuno",
+		"mob": "- Bone Dragonewt\n- Black Jelly",
+		"point": "50"
+	},
+	"ninety": {
+		"craft": "Pedang Indigo (OHS)",
+		"mats": "- Sirip Pedang Panas 20x\n- Pedang Cacat 5x",
+		"location": "- Graben Membara : atas\n- Istana Gelap : A2",
+		"mob": "- Baby Salamander\n- Ksatria Terkontrol",
+		"point": "90"
+	},
+	"one_hundred_twenty": {
+		"craft": "Baju Diomedea (ARM)",
+		"mats": "- Kain Lembu 25x\n- Batu Ultimea 10x",
+		"location": "- Lab. Brahe : A2\n- Saluran Ultimea : Tenggara",
+		"mob": "- Lyark Spesialis\n- Grape Jelly",
+		"point": "120"
+	},
+	"one_hundred_fourty": {
+		"craft": "Tombak Baskara (HB)",
+		"mats": "- Prasasti Bersinar 5x\n- Halo Terputus 20x",
+		"location": "Kuil Dewa Berkah",
+		"mob": "- Kubus Kodrat\n- Malaikat Gelembung",
+		"point": "140"
+	},
+	"one_hundred_seventy": {
+		"craft": "Bakung Lelabah Merah (KTN)",
+		"mats": "- Kulit Ular Aneh 20x\n- Kristal Merah Kehitaman 5x",
+		"location": "Reruntuhan Kota Rokoko",
+		"mob": "Coofer",
+		"point": "170"
+	},
+	"two_hundred": {
+		"craft": "Pedang Arachnida (OHS)",
+		"mats": "- Air Ajaib Berseri 2x\n- Kristal Roh Jahat 1x",
+		"location": "Lembah Arche : Area Terdalam",
+		"mob": "Arachnidemon",
+		"point": "200"
+	},
+	"two_hundred_fifty": {
+		"craft": "Kostum Pengelabu (ARM)",
+		"mats": "- Kulit Naga Penyamar 4x\n- Mata Naga Penyamar 1x",
+		"location": "Zona Kemudi",
+		"mob": "Naga Penyamar Mimyugon",
+		"point": "250"
+	},
+	"two_hundred_sixty": {
+		"craft": "Jubah Pendeta Air (ARM)",
+		"mats": "- Kitab Silat Prajurit Kodok 1x\n- Pecahan Zirah Prajurit Kodok 4x",
+		"location": "Kepulauan puerta : Portal",
+		"mob": "Zapo",
+		"point": "260"
+	}
+
+}

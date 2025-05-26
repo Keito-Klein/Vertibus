@@ -1,0 +1,73 @@
+{
+	"five": {
+		"craft": "Shortsword (OHS)",
+		"mats": "Metal(mats)",
+		"location": "-",
+		"mob": "-",
+		"point": "5"
+	},
+	"ten": {
+		"craft": "Adventurer's Garb (ARM)",
+		"mats": "Bird Wing 35x",
+		"location": "Ruined Temple: A1",
+		"mob": "Beak",
+		"point": "10"
+	},
+	"fifty": {
+		"craft": "Hard Knuckle (KNK)",
+		"mats": "- Dark Gray Metal Plate 20x\n- High-Purity Oil 5x",
+		"location": "Ancient Empress Tomb",
+		"mob": "- Bone Dragonewt\n- Black Jelly",
+		"point": "50"
+	},
+	"ninety": {
+		"craft": "Indigo Sword (OHS)",
+		"mats": "- Heated Sword Fin 20x\n- Deformed Blade 5x",
+		"location": "- Blazing Graben : Upper\n- Dark Castle : A2",
+		"mob": "- Baby Salamander\n- Controlled Knight",
+		"point": "90"
+	},
+	"one_hundred_twenty": {
+		"craft": "Diomedea Suit (ARM)",
+		"mats": "- Ox Fabric 25x\n- Ultimea Stone 10x",
+		"location": "- Lab. Brahe : A2\n- Ultimea Sewer : Southeast",
+		"mob": "- Lyark Specialist\n- Grape Jelly",
+		"point": "120"
+	},
+	"one_hundred_fourty": {
+		"craft": "Lightning Bolt Spear (HB)",
+		"mats": "- Shining Stone Monument 5x\n- Cracked Halo 20x",
+		"location": "Shrine of the Gods : A2",
+		"mob": "- Destiny Cube\n- Bubble Angel",
+		"point": "140"
+	},
+	"one_hundred_seventy": {
+		"craft": "Red Spider Lily (KTN)",
+		"mats": "- Weird Snake Skin 20x\n- Dark Red Crystal 5x",
+		"location": "Rokoko City Ruins",
+		"mob": "Coofer",
+		"point": "170"
+	},
+	"two_hundred": {
+		"craft": "Arachnid Sword (OHS)",
+		"mats": "- Radiant Miracle Water 2x\n- Evil Spirit Crystal 1x",
+		"location": "Arche Valley : Depths",
+		"mob": "Arachnidemon",
+		"point": "200"
+	},
+	"two_hundred_fifty": {
+		"craft": "Trickster Costume (ARM)",
+		"mats": "- Trikster Dragon Skin 4x\n- Trikster Dragon Eye 1x",
+		"location": "OPeration Zone : Cockpit Area",
+		"mob": "Trikster Dragon Mimyugon",
+		"point": "250"
+	},
+	"two_hundred_sixty": {
+		"craft": "Water Priest Robe (ARM)",
+		"mats": "- Frog Warrior Kung Fu Book 1x\n- Frog Warrior Arm Bit 4x",
+		"location": "Puerta Islands : Adit",
+		"mob": "Zapo",
+		"point": "260"
+	}
+
+}

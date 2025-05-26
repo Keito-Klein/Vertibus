@@ -1,0 +1,6 @@
+{
+    "watch": ["."],
+    "ignore": ["node_modules/*", "client/*", "package-lock.json"],
+    "ext": "js"
+  }
+  
