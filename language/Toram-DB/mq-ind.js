@@ -78,5 +78,19 @@ _Map :_ Kabla Jabali
 _Item :_ Batu jabali (5pcs)
 _Mobs :_ Gemare
 _Map :_ Kabla Jabali
+
+*Chapter 14*
+*eps 119: Pertarungan Hebat Dengan Lixi Mutan*
+_Item :_ Kulit Tebal Berlendir (20pcs)
+_Mobs :_ Romyzon
+_Map :_ Lahan Basah Latum
+
+_Item :_ Kayu Melilit (10pcs)
+_Mobs :_ Lileaf
+_Map :_ Lahan Tandus Perdida
+
+_Item :_ Kayu Menabra (10pcs)
+_Mobs :_ Delphi
+_Map :_ Dataran Menabra
     `
 }

@@ -1,5 +1,4 @@
 const fs = require("fs");
-const Premium = JSON.parse(fs.readFileSync("./db/premium.json"));
 const Restrict = JSON.parse(fs.readFileSync("./db/restrict.json"));
 const Usage = JSON.parse(fs.readFileSync("./db/usage.json"));
 const User = JSON.parse(fs.readFileSync("./db/register.json"));

@@ -70,7 +70,7 @@ _Map :_ Fugitive Lake Swamp : A3
 
 
 *Chapter 12*
-*eps 102 : Ark Maintenance*
+*eps 102 : Ark Repair*
 _Item :_ Growing Ore (5pcs)
 _Mobs :_ pertaceras
 _Map :_ Kabla Jabali
@@ -78,5 +78,19 @@ _Map :_ Kabla Jabali
 _Item :_ Jabali Stone (5pcs)
 _Mobs :_ Gemare
 _Map :_ Kabla Jabali
+
+*Chapter 14*
+*eps 119: Fierce Battle with Mutant Lixis*
+_Item :_ Slimy Thick Skin (20pcs)
+_Mobs :_ Romyzon
+_Map :_ Latum Wetlands
+
+_Item :_ Tangled Roots (10pcs)
+_Mobs :_ Lileaf
+_Map :_ Perdida Wastelands
+
+_Item :_ Menabra Wood (10pcs)
+_Mobs :_ Delphi
+_Map :_ Menabra Plains
 	`
 }

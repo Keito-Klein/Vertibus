@@ -485,8 +485,8 @@ Global Price:
         [lv, percentage] = calculateMQ(lvl, exp, startMQ, endMQ)
         teksTemplate = `
 - *Toram MQ Calculator* -
-Start: ${MQdb[startMQ - 1].title}
-End: ${MQdb[endMQ - 1].title}
+Start: CH ${MQdb[startMQ - 1].chapter}: ${MQdb[startMQ - 1].title}
+End: CH ${MQdb[endMQ - 1].chapter}: ${MQdb[endMQ - 1].title}
 
 After doing MQ from *${startEps}* to *${endEps}* you will reach to level ${lv} with ${percentage}%
 `
