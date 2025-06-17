@@ -422,842 +422,814 @@ Global Price:
         if (!text) return reply("please input the price!");
         if (isNaN(text)) return reply("Price should be number!");
         teks = "Do you have 30-Day Tickets/VIP?\nOpen button bellow ⬇";
-        msg = generateWAMessageFromContent(
+        await client.sendButtonMsg(
           from,
           {
-            viewOnceMessage: {
-              message: {
-                messageContextInfo: {
-                  deviceListMetadata: {},
-                  deviceListMetadataVersion: 2,
-                },
-                interactiveMessage: proto.Message.InteractiveMessage.create({
-                  body: proto.Message.InteractiveMessage.Body.create({
-                    text: teks,
-                  }),
-                  footer: proto.Message.InteractiveMessage.Footer.create({
-                    text: global.botName,
-                  }),
-                  nativeFlowMessage:
-                    proto.Message.InteractiveMessage.NativeFlowMessage.create({
-                      buttons: [
-                        {
-                          name: "quick_reply",
-                          buttonParamsJson: `{"display_text":"Yes ✔","id":"${prefix}cb-vip ${text}"}`,
-                        },
-                        {
-                          name: "quick_reply",
-                          buttonParamsJson: `{"display_text":"No ❌","id":"${prefix}cb-novip ${text}"}`,
-                        },
-                      ],
-                    }),
-                  contextInfo: {
-                    mentionedJid: [m.sender],
-                    forwardingScore: 745,
-                    isForwarded: true,
-                  },
-                }),
-              },
+            text: teks,
+            footer: global.botName,
+            mentions: [m.sender],
+            contextInfo: {
+              forwardingScore: 10,
+              isForwarded: true,
             },
+            buttons: [
+              {
+                buttonId: `${prefix}cb-vip ${text}`,
+                buttonText: { displayText: "Yes ✅" },
+                type: 1,
+              },
+              {
+                buttonId: `${prefix}cb-novip ${text}`,
+                buttonText: { displayText: "No ❌" },
+                type: 1,
+              },
+            ],
           },
-          {}
+          { quoted: m }
         );
-
-        await client.relayMessage(msg.key.remoteJid, msg.message, {
-          messageId: msg.key.id,
-        });
         break;
 
-        case "calculate":{
-        lvl = parseInt(text.split("|")[0]);
-        exp = parseInt(text.split("|")[1].split(" ")[0]);
-        startEps = text.split(" ")[1];
-        endEps = text.split(" ")[2];
-        startMQ = parseInt(startEps.replace("eps", ""))
-        endMQ = parseInt(endEps.replace("eps", ""))
-        if (isNaN(exp)) return reply(lang.format(prefix, command));
-        if (startMQ > endMQ) {
-          return reply("can't calculate because the end chapter is too low than the beginning MQ!");
-        }
-        MQdb = JSON.parse(fs.readFileSync("./language/Toram-DB/mq-db-eng.json"))
-        //kondisi !mq 260|38 eps58 eps125
-        let lv, percentage;
-        [lv, percentage] = calculateMQ(lvl, exp, startMQ, endMQ)
-        teksTemplate = `
+      case "calculate":
+        {
+          lvl = parseInt(text.split("|")[0]);
+          exp = parseInt(text.split("|")[1].split(" ")[0]);
+          startEps = text.split(" ")[1];
+          endEps = text.split(" ")[2];
+          startMQ = parseInt(startEps.replace("eps", ""));
+          endMQ = parseInt(endEps.replace("eps", ""));
+          if (isNaN(exp)) return reply(lang.format(prefix, command));
+          if (startMQ > endMQ) {
+            return reply(
+              "can't calculate because the end chapter is too low than the beginning MQ!"
+            );
+          }
+          mqData = JSON.parse(
+            fs.readFileSync("./language/Toram-DB/mq-db-eng.json")
+          );
+          //kondisi !mq 260|38 eps58 eps125
+          let lv, percentage;
+          [lv, percentage] = calculateMQ(lvl, exp, startMQ, endMQ);
+          teksTemplate = `
 - *Toram MQ Calculator* -
-Start: CH ${MQdb[startMQ - 1].chapter}: ${MQdb[startMQ - 1].title}
-End: CH ${MQdb[endMQ - 1].chapter}: ${MQdb[endMQ - 1].title}
+Start: CH ${mqData[startMQ - 1].chapter}: ${mqData[startMQ - 1].title}
+End: CH ${mqData[endMQ - 1].chapter}: ${mqData[endMQ - 1].title}
 
 After doing MQ from *${startEps}* to *${endEps}* you will reach to level ${lv} with ${percentage}%
-`
-        reply(teksTemplate);
-      }
-        break
-
-      case "mq":{
-        if (!text) return reply(lang.format(prefix, command));
-        lvl = text.split("|")[0];
-        if (isNaN(lvl)) return reply(lang.format(prefix, command));
-        exp = text.split("|")[1];
-        if (!exp) {
-          exp = 0;
+`;
+          reply(teksTemplate);
         }
-        MQstart = q.split(" ")[1]
-        MQend = q.split(" ")[2]
-        let MQmsg;
-        let MQcmd = command
-        if (!MQstart) {
-          MQmsg = "Select where MQ to *Start*"
-        }
-        if (MQstart && !MQend) {
-          MQmsg = "Select where MQ to *End*"
-          MQcmd = "calculate"
-        }
-        //Hitung kalkulasi exp yang didapat dari start sampai selesai MQ
+        break;
 
-        const sections = [
-          {
-            title: `Chapter 1: The Begining of Chaos`,
-            highlight_label: `Chapter 1`,
-            rows: [
-              {
-                title: "EPS1: First Time Visit",
-                description: "Boss: -",
-                id: `${prefix}${MQcmd} ${lvl}|${exp} eps1`,
-              },
-              {
-                title: "EPS2: Straye Brother and Sister",
-                description: "Boss: Boss Colon",
-                id: `${prefix}${MQcmd} ${lvl}|${exp} eps2`,
-              },
-              {
-                title: "EPS3: A Golem on a Rampage",
-                description: "Boss: Excavated Golem",
-                id: `${prefix}${MQcmd} ${lvl}|${exp} eps3`,
-              },
-              {
-                title: "EPS4: The Goddess of Wisdom",
-                description: "Boss: -",
-                id: `${prefix}${MQcmd} ${lvl}|${exp} eps4`,
-              },
-              {
-                title: "EPS5: The Dragon's Den",
-                description: "Boss: Eerie Crystal",
-                id: `${prefix}${MQcmd} ${lvl}|${exp} eps5`,
-              },
-              {
-                title: "EPS6: The Ruined Temple",
-                description: "Boss: -",
-                id: `${prefix}${MQcmd} ${lvl}|${exp} eps6`,
-              },
-              {
-                title: "EPS7: The First Magic Stone",
-                description: "Boss: Minotaur",
-                id: `${prefix}${MQcmd} ${lvl}|${exp} eps7`,
-              },
-              {
-                title: "EPS8: Purification Incense",
-                description: "Boss: -",
-                id: `${prefix}${MQcmd} ${lvl}|${exp} eps8`,
-              },
-              {
-                title: "EPS9: The Dragon and Black Crystal",
-                description: "Boss: Brutal Dragon Decel",
-                id: `${prefix}${MQcmd} ${lvl}|${exp} eps9`,
-              },
-            ],
-          },
-          {
-            title: `Chapter 2: Look for Holly Gems!`,
-            highlight_label: `Chapter 2`,
-            rows: [
-              {
-                title: "EPS10: The Merchant Girl",
-                description: "Boss: Mochelo",
-                id: `${prefix}${MQcmd} ${lvl}|${exp} eps10`,
-              },
-              {
-                title: "EPS11: Where Are the Gems?",
-                description: "Boss: Flare Volg",
-                id: `${prefix}${MQcmd} ${lvl}|${exp} eps11`,
-              },
-              {
-                title: "EPS12: Who is the Black Knight?!",
-                description: "Boss: Ooze",
-                id: `${prefix}${MQcmd} ${lvl}|${exp} eps12`,
-              },
-              {
-                title: "EPS13: Trials in the Palace",
-                description: "Boss: -",
-                id: `${prefix}${MQcmd} ${lvl}|${exp} eps13`,
-              },
-              {
-                title: "EPS14: The Moon Wizard",
-                description: "Boss: Mauez",
-                id: `${prefix}${MQcmd} ${lvl}|${exp} eps14`,
-              },
-              {
-                title: "EPS15: The Follower and Hater",
-                description: "Boss: Ganglef & Demons Gate",
-                id: `${prefix}${MQcmd} ${lvl}|${exp} eps15`,
-              },
-              {
-                title: "EPS16: The Wizard's Cave",
-                description: "Boss: -",
-                id: `${prefix}${MQcmd} ${lvl}|${exp} eps16`,
-              },
-              {
-                title: "EPS17: The Star Wizard",
-                description: "Boss: Boss Roga",
-                id: `${prefix}${MQcmd} ${lvl}|${exp} eps17`,
-              },
-            ],
-          },
-          {
-            title: `Chapter 3: Battle With the Ancient God`,
-            highlight_label: `Chapter 3`,
-            rows: [
-              {
-                title: "EPS18: The Invincible... Enemy??",
-                description: "Boss: -",
-                id: `${prefix}${MQcmd} ${lvl}|${exp} eps18`,
-              },
-              {
-                title: "EPS19: The Ancient Empress",
-                description: "Boss: Ancient Empress",
-                id: `${prefix}${MQcmd} ${lvl}|${exp} eps19`,
-              },
-              {
-                title: "EPS20: The Culprit",
-                description: "Boss: Masked Warrior",
-                id: `${prefix}${MQcmd} ${lvl}|${exp} eps20`,
-              },
-              {
-                title: "EPS21: Fate of the Fortress",
-                description: "Boss: -",
-                id: `${prefix}${MQcmd} ${lvl}|${exp} eps21`,
-              },
-              {
-                title: "EPS22: Memory in the Lost Town",
-                description: "Boss: Pillar Golem",
-                id: `${prefix}${MQcmd} ${lvl}|${exp} eps22`,
-              },
-              {
-                title: "EPS23: The Stolen Sorcery Gem",
-                description: "Boss: -",
-                id: `${prefix}${MQcmd} ${lvl}|${exp} eps23`,
-              },
-              {
-                title: "EPS24: Living with a Dragon",
-                description: "Boss: Grass Dragon Yelb",
-                id: `${prefix}${MQcmd} ${lvl}|${exp} eps24`,
-              },
-              {
-                title: "EPS25: Monsters from Outerworld",
-                description: "Boss: Nurethoth",
-                id: `${prefix}${MQcmd} ${lvl}|${exp} eps25`,
-              },
-            ],
-          },
-          {
-            title: `Chapter 4: The Creeping Shadows`,
-            highlight_label: `Chapter 4`,
-            rows: [
-              {
-                title: "EPS26: The Mage Diels",
-                description: "Boss: -",
-                id: `${prefix}${MQcmd} ${lvl}|${exp} eps26`,
-              },
-              {
-                title: "EPS27: Journey for Reconstruction",
-                description: "Boss: Goldoon (MQ only)",
-                id: `${prefix}${MQcmd} ${lvl}|${exp} eps27`,
-              },
-              {
-                title: "EPS28: The Sacred Gem in Akaku",
-                description: "Boss: Goouva",
-                id: `${prefix}${MQcmd} ${lvl}|${exp} eps28`,
-              },
-              {
-                title: "EPS29: The King of Darkan",
-                description: "Boss: -",
-                id: `${prefix}${MQcmd} ${lvl}|${exp} eps29`,
-              },
-              {
-                title: "EPS30: The Lurking Evil",
-                description: "Boss: Scrader",
-                id: `${prefix}${MQcmd} ${lvl}|${exp} eps30`,
-              },
-              {
-                title: "EPS31: Find the False Black Knight!",
-                description: "Boss: Black Knight of Delusion",
-                id: `${prefix}${MQcmd} ${lvl}|${exp} eps31`,
-              },
-              {
-                title: "EPS32: Technista's Movement",
-                description: "Boss: -",
-                id: `${prefix}${MQcmd} ${lvl}|${exp} eps32`,
-              },
-              {
-                title: "EPS33: The Falling Feather of Death",
-                description: "Boss: Evil Crystal Beast",
-                id: `${prefix}${MQcmd} ${lvl}|${exp} eps33`,
-              },
-            ],
-          },
-          {
-            title: `Chapter 5: The Storm in the Darkness`,
-            highlight_label: `Chapter 5`,
-            rows: [
-              {
-                title: "EPS34: In The Unknown Darkness",
-                description: "Boss: -",
-                id: `${prefix}${MQcmd} ${lvl}|${exp} eps34`,
-              },
-              {
-                title: "EPS35: The Charm",
-                description: "Boss: Cerberus",
-                id: `${prefix}${MQcmd} ${lvl}|${exp} eps35`,
-              },
-              {
-                title: "EPS36: Parching Dark Mirror",
-                description: "Boss: Zolban",
-                id: `${prefix}${MQcmd} ${lvl}|${exp} eps36`,
-              },
-              {
-                title: "EPS37: Fierce Battle in the Garden",
-                description: "Boss: Aranea",
-                id: `${prefix}${MQcmd} ${lvl}|${exp} eps37`,
-              },
-              {
-                title: "EPS38: A Light in the Darkness",
-                description: "Boss: Bexiz",
-                id: `${prefix}${MQcmd} ${lvl}|${exp} eps38`,
-              },
-              {
-                title: "EPS39: The Ones Nesting in the Manor",
-                description: "Boss: Imitator",
-                id: `${prefix}${MQcmd} ${lvl}|${exp} eps39`,
-              },
-              {
-                title: "EPS40: The Dark Castle",
-                description: "Boss: Imitacia",
-                id: `${prefix}${MQcmd} ${lvl}|${exp} eps40`,
-              },
-              {
-                title: "EPS41: To The Living World",
-                description: "Boss: -",
-                id: `${prefix}${MQcmd} ${lvl}|${exp} eps41`,
-              },
-            ],
-          },
-          {
-            title: `Chapter 6: The Two Technistas`,
-            highlight_label: `Chapter 6`,
-            rows: [
-              {
-                title: "EPS42: Demi Machina",
-                description: "Boss: -",
-                id: `${prefix}${MQcmd} ${lvl}|${exp} eps42`,
-              },
-              {
-                title: "EPS43: The Town of Pax Faction",
-                description: "Boss: Iconos",
-                id: `${prefix}${MQcmd} ${lvl}|${exp} eps43`,
-              },
-              {
-                title: "EPS44: Mechanical Heart",
-                description: "Boss: Ifrid",
-                id: `${prefix}${MQcmd} ${lvl}|${exp} eps44`,
-              },
-              {
-                title: "EPS45: Black Knights of Lyark",
-                description: "Boss: -",
-                id: `${prefix}${MQcmd} ${lvl}|${exp} eps45`,
-              },
-              {
-                title: "EPS46: The Mysterious Artifact",
-                description: "Boss: Proto Leon",
-                id: `${prefix}${MQcmd} ${lvl}|${exp} eps46`,
-              },
-              {
-                title: "EPS47: Truth of the Artifact",
-                description: "Boss: -",
-                id: `${prefix}${MQcmd} ${lvl}|${exp} eps47`,
-              },
-              {
-                title: "EPS48: The Price of Treachery",
-                description: "Boss: York",
-                id: `${prefix}${MQcmd} ${lvl}|${exp} eps48`,
-              },
-              {
-                title: "EPS49: The Blasphemous Factory",
-                description: "Boss: Tyrant Machina",
-                id: `${prefix}${MQcmd} ${lvl}|${exp} eps49`,
-              },
-              {
-                title: "EPS50: Mystery of the Black Knights",
-                description: "Boss: Mozto Machina",
-                id: `${prefix}${MQcmd} ${lvl}|${exp} eps50`,
-              },
-            ],
-          },
-          {
-            title: `Chapter 7: Upheaval in Ultimea`,
-            highlight_label: `Chapter 7`,
-            rows: [
-              {
-                title: "EPS51: Monster's Forest",
-                description: "Boss: Lalvada",
-                id: `${prefix}${MQcmd} ${lvl}|${exp} eps51`,
-              },
-              {
-                title: "EPS52: The Underground Town",
-                description: "Boss: -",
-                id: `${prefix}${MQcmd} ${lvl}|${exp} eps52`,
-              },
-              {
-                title: "EPS53: The Elves in Lyark",
-                description: "Boss: Zahhak Machina",
-                id: `${prefix}${MQcmd} ${lvl}|${exp} eps53`,
-              },
-              {
-                title: "EPS54: The Mad Laboratory",
-                description: "Boss: Guignol",
-                id: `${prefix}${MQcmd} ${lvl}|${exp} eps54`,
-              },
-              {
-                title: "EPS55: Tragedy in the Jail",
-                description: "Boss: Gwaimol",
-                id: `${prefix}${MQcmd} ${lvl}|${exp} eps55`,
-              },
-              {
-                title: "EPS56: Calamity in Droma Square",
-                description: "Boss: Ultimate Machina",
-                id: `${prefix}${MQcmd} ${lvl}|${exp} eps56`,
-              },
-              {
-                title: "EPS57: Head for Ultimea Palace",
-                description: "Boss: Ornlarf",
-                id: `${prefix}${MQcmd} ${lvl}|${exp} eps57`,
-              },
-              {
-                title: "EPS58: The Chaotic Truth",
-                description: "Boss: Venena Coenubia",
-                id: `${prefix}${MQcmd} ${lvl}|${exp} eps58`,
-              },
-            ],
-          },
-          {
-            title: `Chapter 8: Road to Eldenbaum`,
-            highlight_label: `Chapter 8`,
-            rows: [
-              {
-                title: "EPS59: The Mine Where Monsters Lurk",
-                description: "Boss: Shampy",
-                id: `${prefix}${MQcmd} ${lvl}|${exp} eps59`,
-              },
-              {
-                title: "EPS60: The Mysterious Shadow",
-                description: "Boss: -",
-                id: `${prefix}${MQcmd} ${lvl}|${exp} eps60`,
-              },
-              {
-                title: "EPS61: The New Diel Country",
-                description: "Boss: Crystal Titan",
-                id: `${prefix}${MQcmd} ${lvl}|${exp} eps61`,
-              },
-              {
-                title: "EPS62: The Ruins of the Gods",
-                description: "Boss: Mom Fluck",
-                id: `${prefix}${MQcmd} ${lvl}|${exp} eps62`,
-              },
-              {
-                title: "EPS63: The Former God of Justice",
-                description: "Boss: Zelbuse",
-                id: `${prefix}${MQcmd} ${lvl}|${exp} eps63`,
-              },
-              {
-                title: "EPS64: The Remaining Thrones in the Shrine",
-                description: "Boss: Mardula",
-                id: `${prefix}${MQcmd} ${lvl}|${exp} eps64`,
-              },
-              {
-                title: "EPS65: Gods' Whereabouts",
-                description: "Boss: -",
-                id: `${prefix}${MQcmd} ${lvl}|${exp} eps65`,
-              },
-              {
-                title: "EPS66: The Wait at Specia's Shrine",
-                description: "Boss: Seele Zauga",
-                id: `${prefix}${MQcmd} ${lvl}|${exp} eps66`,
-              },
-              {
-                title: "EPS67: The Warden of Ice & Snow",
-                description: "Boss: King Piton",
-                id: `${prefix}${MQcmd} ${lvl}|${exp} eps67`,
-              },
-              {
-                title: "EPS68: At Mountains End",
-                description: "Boss: Finstern the Dark Dragon",
-                id: `${prefix}${MQcmd} ${lvl}|${exp} eps68`,
-              },
-            ],
-          },
-          {
-            title: "Chapter 9: Recapturing Eldenbaum",
-            highlight_label: "Chapter 9",
-            rows: [
-              {
-                title: "EPS69: Deadly Road to Eldenbaum",
-                description: "Boss: Tuscog",
-                id: `${prefix}${MQcmd} ${lvl}|${exp}eps69`,
-              },
-              {
-                title: "EPS70: Unforseen Trap",
-                description: "Boss: Eroded Pilz",
-                id: `${prefix}${MQcmd} ${lvl}|${exp} eps70`,
-              },
-              {
-                title: "EPS71: Traces of Technological Progress",
-                description: "Boss: Pyxtica",
-                id: `${prefix}${MQcmd} ${lvl}|${exp} eps71`,
-              },
-              {
-                title: "EPS72: An Unexpected Acquaintance",
-                description: "Boss: Kuzto",
-                id: `${prefix}${MQcmd} ${lvl}|${exp} eps72`,
-              },
-              {
-                title: "EPS73: Front Line Base Operation",
-                description: "Boss: Sapphire Roga",
-                id: `${prefix}${MQcmd} ${lvl}|${exp} eps73`,
-              },
-              {
-                title: "EPS74: Strategy to Redeem the Treetop Harbor",
-                description: "Boss: Gravicep",
-                id: `${prefix}${MQcmd} ${lvl}|${exp} eps74`,
-              },
-              {
-                title: "EPS75: The Teleporter Left Behind",
-                description: "Boss: Repthon",
-                id: `${prefix}${MQcmd} ${lvl}|${exp} eps75`,
-              },
-              {
-                title: "EPS76: The Man Who Seeks Death",
-                description: "Boss: Vulture",
-                id: `${prefix}${MQcmd} ${lvl}|${exp} eps76`,
-              },
-              {
-                title: "EPS77: The Battle to Recapture Eldenbaum",
-                description: "Boss: Venena Meta Coenubia",
-                id: `${prefix}${MQcmd} ${lvl}|${exp} eps77`,
-              },
-              {
-                title: "EPS78: A New Beginning",
-                description: "Boss: -",
-                id: `${prefix}${MQcmd} ${lvl}|${exp} eps78`,
-              },
-            ],
-          },
-          {
-            title: "Chapter 10: The Lost God's Ship",
-            highlight_label: "Chapter 10",
-            rows: [
-              {
-                title: "EPS79: Off to the Fateful Land",
-                description: "Boss: -",
-                id: `${prefix}${MQcmd} ${lvl}|${exp} eps79`,
-              },
-              {
-                title: "EPS80: The Inhabitants Under the Cliff",
-                description: "Boss: Pisteus",
-                id: `${prefix}${MQcmd} ${lvl}|${exp} eps80`,
-              },
-              {
-                title: "EPS81: The Nightmare Returns",
-                description: "Boss: -",
-                id: `${prefix}${MQcmd} ${lvl}|${exp} eps81`,
-              },
-              {
-                title: "EPS82: The Whereabouts of the Missing Monks",
-                description: "Boss: Arachnidemon",
-                id: `${prefix}${MQcmd} ${lvl}|${exp} eps82`,
-              },
-              {
-                title: "EPS83: The Goddess of Courage and the Squatters",
-                description: "Boss: -",
-                id: `${prefix}${MQcmd} ${lvl}|${exp} eps83`,
-              },
-              {
-                title: "EPS84: Navigator of the Ark",
-                description: "Boss: Black Shadow",
-                id: `${prefix}${MQcmd} ${lvl}|${exp} eps84`,
-              },
-              {
-                title: "EPS85: Witch in the Woods",
-                description: "Boss: Hexter",
-                id: `${prefix}${MQcmd} ${lvl}|${exp} eps85`,
-              },
-              {
-                title: "EPS86: The Duel in Nov Diela",
-                description: "Boss: Irestida",
-                id: `${prefix}${MQcmd} ${lvl}|${exp} eps86`,
-              },
-            ],
-          },
-          {
-            title: "Chapter 11: Off to Toram",
-            highlight_label: "Chapter 11",
-            rows: [
-              {
-                title: "EPS87: Flying the Ark",
-                description: "Boss: Reliza",
-                id: `${prefix}${MQcmd} ${lvl}|${exp} eps87`,
-              },
-              {
-                title: "EPS88: Land of the Unknown",
-                description: "Boss: Gemma",
-                id: `${prefix}${MQcmd} ${lvl}|${exp} eps88`,
-              },
-              {
-                title: "EPS89: The Strolling Forest",
-                description: "Boss: Ferzen the Rock Dragon",
-                id: `${prefix}${MQcmd} ${lvl}|${exp} eps89`,
-              },
-              {
-                title: "EPS90: Eumanos the Forest Dwellers",
-                description: "Boss: Junior Dragon Zyvio",
-                id: `${prefix}${MQcmd} ${lvl}|${exp} eps90`,
-              },
-              {
-                title: "EPS91: A Sproutling is Born",
-                description: "Boss: War Dragon Turba",
-                id: `${prefix}${MQcmd} ${lvl}|${exp} eps91`,
-              },
-              {
-                title: "EPS92: The Blessing-Bearer",
-                description: "Boss: Vlam the Flame Dragon",
-                id: `${prefix}${MQcmd} ${lvl}|${exp} eps92`,
-              },
-              {
-                title: "EPS93: Intense Battle in Coenubla's Stronghold",
-                description: "Boss: Velum",
-                id: `${prefix}${MQcmd} ${lvl}|${exp} eps93`,
-              },
-              {
-                title: "EPS94: The Shadow of a Smoky Mountain",
-                description: "Boss: Oculagsinio",
-                id: `${prefix}${MQcmd} ${lvl}|${exp} eps94`,
-              },
-              {
-                title: "EPS95: The Weredragons & the Underground World",
-                description: "Boss: Gordel",
-                id: `${prefix}${MQcmd} ${lvl}|${exp} eps95`,
-              },
-            ],
-          },
-          {
-            title: "Chapter 12: The Weredragons' Vital Point",
-            highlight_label: "Chapter 12",
-            rows: [
-              {
-                title: "EPS96: The Sky with a Ceiling",
-                description: "Boss: -",
-                id: `${prefix}${MQcmd} ${lvl}|${exp} eps96`,
-              },
-              {
-                title: "EPS97: Rivalry Between Dragons and Weredragons",
-                description: "Boss: Burning Dragon Igneus",
-                id: `${prefix}${MQcmd} ${lvl}|${exp} eps97`,
-              },
-              {
-                title: "EPS98: Weredragon Couple and a Baby",
-                description: "Boss: Trickster Dragon Mimyugon",
-                id: `${prefix}${MQcmd} ${lvl}|${exp} eps98`,
-              },
-              {
-                title: "EPS99: Weredragons Vital Point",
-                description: "Boss: Filrocas",
-                id: `${prefix}${MQcmd} ${lvl}|${exp} eps99`,
-              },
-              {
-                title: "EPS100: Intense Battle in Propulsion System",
-                description: "Boss: Wicked Dragon Fazzino",
-                id: `${prefix}${MQcmd} ${lvl}|${exp} eps100`,
-              },
-              {
-                title: "EPS101: Discovering a New Technology",
-                description: "Boss: -",
-                id: `${prefix}${MQcmd} ${lvl}|${exp} eps101`,
-              },
-              {
-                title: "EPS102: Ark Repair",
-                description: "Boss: Walican",
-                id: `${prefix}${MQcmd} ${lvl}|${exp} eps102`,
-              },
-              {
-                title: "EPS103: Weredragon Dispute",
-                description: "Boss: Brass Dragon Reguita",
-                id: `${prefix}${MQcmd} ${lvl}|${exp} eps103`,
-              },
-              {
-                title: "EPS104: Cocoon in the Ice Wall",
-                description: "Boss: Dominaredor",
-                id: `${prefix}${MQcmd} ${lvl}|${exp} eps104`,
-              },
-            ],
-          },
-          {
-            title: "Chapter 13: The Water Tribe and Coenubia",
-            highlight_label: "Chapter 13",
-            rows: [
-              {
-                title: "EPS105: Underwater Inhabitants",
-                description: "Boss: Zapo",
-                id: `${prefix}${MQcmd} ${lvl}|${exp} eps105`,
-              },
-              {
-                title: "EPS106: Water Dome",
-                description: "Boss: Red Ash Dragon Rudish",
-                id: `${prefix}${MQcmd} ${lvl}|${exp} eps106`,
-              },
-              {
-                title: "EPS107: Underwater City",
-                description: "Boss: -",
-                id: `${prefix}${MQcmd} ${lvl}|${exp} eps107`,
-              },
-              {
-                title: "EPS108: The Thing in the Abandoned District",
-                description: "Boss: Don Profundo",
-                id: `${prefix}${MQcmd} ${lvl}|${exp} eps108`,
-              },
-              {
-                title: "EPS109: Shadow from the Abyss",
-                description: "Boss: Vatudo",
-                id: `${prefix}${MQcmd} ${lvl}|${exp} eps109`,
-              },
-              {
-                title: "EPS110: The Ruthless Council",
-                description: "Boss: -",
-                id: `${prefix}${MQcmd} ${lvl}|${exp} eps110`,
-              },
-              {
-                title: "EPS111: Mysterious Entity in the Little Shrine",
-                description: "Boss: Ragging Dragon Bovinari",
-                id: `${prefix}${MQcmd} ${lvl}|${exp} eps111`,
-              },
-              {
-                title: "EPS112: The Great Battle Underwater",
-                description: "Boss: Humida & Torexesa",
-                id: `${prefix}${MQcmd} ${lvl}|${exp} eps112`,
-              },
-            ],
-          },
-          {
-            title: "Chapter 14: Mainland Toram",
-            highlight_label: "Chapter 14",
-            rows: [
-              {
-                title: "EPS113: Crisis in the Sky",
-                description: "Boss: Mulgoon",
-                id: `${prefix}${MQcmd} ${lvl}|${exp} eps113`,
-              },
-              {
-                title: "EPS114: The Surviving Siblings",
-                description: "Boss: Deformis",
-                id: `${prefix}${MQcmd} ${lvl}|${exp} eps114`,
-              },
-              {
-                title: "EPS115: Chaotic Situation",
-                description: "Boss: -",
-                id: `${prefix}${MQcmd} ${lvl}|${exp} eps115`,
-              },
-              {
-                title: "EPS116: The Bitter Truth",
-                description: "Boss: Menti",
-                id: `${prefix}${MQcmd} ${lvl}|${exp} eps116`,
-              },
-              {
-                title: "EPS117: The Uncouth Rana Prince",
-                description: "Boss: Biskyva",
-                id: `${prefix}${MQcmd} ${lvl}|${exp} eps117`,
-              },
-              {
-                title: "EPS118: Mutant Coenubia Village",
-                description: "Boss: Piscruva",
-                id: `${prefix}${MQcmd} ${lvl}|${exp} eps118`,
-              },
-              {
-                title: "EPS119: Fierce Battle with Mutant Lixis",
-                description: "Boss: Supreme Evil Crystal Beast",
-                id: `${prefix}${MQcmd} ${lvl}|${exp} eps119`,
-              },
-            ],
-          },
-          {
-            title: "Chapter 15: Coenubia's Awakening",
-            highlight_label: "Chapter 15",
-            rows: [
-              {
-                title: "EPS120: Ark Crisis",
-                description: "Boss: Bakuzan",
-                id: `${prefix}${MQcmd} ${lvl}|${exp} eps120`,
-              },
-              {
-                title: "EPS121: Coastal Clash",
-                description: "Boss: Rondine",
-                id: `${prefix}${MQcmd} ${lvl}|${exp} eps121`,
-              },
-            ],
-          },
-        ];
+      case "mq":
+        {
+          if (!text) return reply(lang.format(prefix, command));
+          lvl = text.split("|")[0];
+          if (isNaN(lvl)) return reply(lang.format(prefix, command));
+          exp = text.split("|")[1];
+          if (!exp) {
+            exp = 0;
+          }
+          MQstart = q.split(" ")[1];
+          MQend = q.split(" ")[2];
+          let MQmsg;
+          let MQcmd = command;
+          if (!MQstart) {
+            MQmsg = "Select where MQ to *Start*";
+          }
+          if (MQstart && !MQend) {
+            MQmsg = "Select where MQ to *End*";
+            MQcmd = "calculate";
+          }
+          //Hitung kalkulasi exp yang didapat dari start sampai selesai MQ
 
-        const listMessage = {
-          title: "List MQ",
-          sections,
-        };
-
-        const messageContent = {
-          viewOnceMessage: {
-            message: {
-              messageContextInfo: {
-                deviceListMetadata: {},
-                deviceListMetadataVersion: 2,
-              },
-              interactiveMessage: proto.Message.InteractiveMessage.create({
-                body: proto.Message.InteractiveMessage.Body.create({
-                  text: MQmsg,
-                }),
-                footer: proto.Message.InteractiveMessage.Footer.create({
-                  text: `_*- ${global.botName} -*_`,
-                }),
-                nativeFlowMessage:
-                  proto.Message.InteractiveMessage.NativeFlowMessage.create({
-                    buttons: [
-                      {
-                        name: "single_select",
-                        buttonParamsJson: JSON.stringify(listMessage),
-                      },
-                      {
-                        name: "cta_url",
-                        buttonParamsJson: `{\"display_text\":\"Contact Developer\",\"url\":\"https://wa.me/6283831853737\",\"merchant_url\":\"https://wa.me/6283831853737\"}`,
-                      },
-                    ],
-                  }),
-                contextInfo: {
-                    mentionedJid: [m.sender],
-                    forwardingScore: 745,
-                    isForwarded: true,
-                  },
-              }),
+          const sections = [
+            {
+              title: `Chapter 1: The Begining of Chaos`,
+              highlight_label: `Chapter 1`,
+              rows: [
+                {
+                  title: "EPS1: First Time Visit",
+                  description: "Boss: -",
+                  id: `${prefix}${MQcmd} ${lvl}|${exp} eps1`,
+                },
+                {
+                  title: "EPS2: Straye Brother and Sister",
+                  description: "Boss: Boss Colon",
+                  id: `${prefix}${MQcmd} ${lvl}|${exp} eps2`,
+                },
+                {
+                  title: "EPS3: A Golem on a Rampage",
+                  description: "Boss: Excavated Golem",
+                  id: `${prefix}${MQcmd} ${lvl}|${exp} eps3`,
+                },
+                {
+                  title: "EPS4: The Goddess of Wisdom",
+                  description: "Boss: -",
+                  id: `${prefix}${MQcmd} ${lvl}|${exp} eps4`,
+                },
+                {
+                  title: "EPS5: The Dragon's Den",
+                  description: "Boss: Eerie Crystal",
+                  id: `${prefix}${MQcmd} ${lvl}|${exp} eps5`,
+                },
+                {
+                  title: "EPS6: The Ruined Temple",
+                  description: "Boss: -",
+                  id: `${prefix}${MQcmd} ${lvl}|${exp} eps6`,
+                },
+                {
+                  title: "EPS7: The First Magic Stone",
+                  description: "Boss: Minotaur",
+                  id: `${prefix}${MQcmd} ${lvl}|${exp} eps7`,
+                },
+                {
+                  title: "EPS8: Purification Incense",
+                  description: "Boss: -",
+                  id: `${prefix}${MQcmd} ${lvl}|${exp} eps8`,
+                },
+                {
+                  title: "EPS9: The Dragon and Black Crystal",
+                  description: "Boss: Brutal Dragon Decel",
+                  id: `${prefix}${MQcmd} ${lvl}|${exp} eps9`,
+                },
+              ],
             },
-          },
-        };
+            {
+              title: `Chapter 2: Look for Holly Gems!`,
+              highlight_label: `Chapter 2`,
+              rows: [
+                {
+                  title: "EPS10: The Merchant Girl",
+                  description: "Boss: Mochelo",
+                  id: `${prefix}${MQcmd} ${lvl}|${exp} eps10`,
+                },
+                {
+                  title: "EPS11: Where Are the Gems?",
+                  description: "Boss: Flare Volg",
+                  id: `${prefix}${MQcmd} ${lvl}|${exp} eps11`,
+                },
+                {
+                  title: "EPS12: Who is the Black Knight?!",
+                  description: "Boss: Ooze",
+                  id: `${prefix}${MQcmd} ${lvl}|${exp} eps12`,
+                },
+                {
+                  title: "EPS13: Trials in the Palace",
+                  description: "Boss: -",
+                  id: `${prefix}${MQcmd} ${lvl}|${exp} eps13`,
+                },
+                {
+                  title: "EPS14: The Moon Wizard",
+                  description: "Boss: Mauez",
+                  id: `${prefix}${MQcmd} ${lvl}|${exp} eps14`,
+                },
+                {
+                  title: "EPS15: The Follower and Hater",
+                  description: "Boss: Ganglef & Demons Gate",
+                  id: `${prefix}${MQcmd} ${lvl}|${exp} eps15`,
+                },
+                {
+                  title: "EPS16: The Wizard's Cave",
+                  description: "Boss: -",
+                  id: `${prefix}${MQcmd} ${lvl}|${exp} eps16`,
+                },
+                {
+                  title: "EPS17: The Star Wizard",
+                  description: "Boss: Boss Roga",
+                  id: `${prefix}${MQcmd} ${lvl}|${exp} eps17`,
+                },
+              ],
+            },
+            {
+              title: `Chapter 3: Battle With the Ancient God`,
+              highlight_label: `Chapter 3`,
+              rows: [
+                {
+                  title: "EPS18: The Invincible... Enemy??",
+                  description: "Boss: -",
+                  id: `${prefix}${MQcmd} ${lvl}|${exp} eps18`,
+                },
+                {
+                  title: "EPS19: The Ancient Empress",
+                  description: "Boss: Ancient Empress",
+                  id: `${prefix}${MQcmd} ${lvl}|${exp} eps19`,
+                },
+                {
+                  title: "EPS20: The Culprit",
+                  description: "Boss: Masked Warrior",
+                  id: `${prefix}${MQcmd} ${lvl}|${exp} eps20`,
+                },
+                {
+                  title: "EPS21: Fate of the Fortress",
+                  description: "Boss: -",
+                  id: `${prefix}${MQcmd} ${lvl}|${exp} eps21`,
+                },
+                {
+                  title: "EPS22: Memory in the Lost Town",
+                  description: "Boss: Pillar Golem",
+                  id: `${prefix}${MQcmd} ${lvl}|${exp} eps22`,
+                },
+                {
+                  title: "EPS23: The Stolen Sorcery Gem",
+                  description: "Boss: -",
+                  id: `${prefix}${MQcmd} ${lvl}|${exp} eps23`,
+                },
+                {
+                  title: "EPS24: Living with a Dragon",
+                  description: "Boss: Grass Dragon Yelb",
+                  id: `${prefix}${MQcmd} ${lvl}|${exp} eps24`,
+                },
+                {
+                  title: "EPS25: Monsters from Outerworld",
+                  description: "Boss: Nurethoth",
+                  id: `${prefix}${MQcmd} ${lvl}|${exp} eps25`,
+                },
+              ],
+            },
+            {
+              title: `Chapter 4: The Creeping Shadows`,
+              highlight_label: `Chapter 4`,
+              rows: [
+                {
+                  title: "EPS26: The Mage Diels",
+                  description: "Boss: -",
+                  id: `${prefix}${MQcmd} ${lvl}|${exp} eps26`,
+                },
+                {
+                  title: "EPS27: Journey for Reconstruction",
+                  description: "Boss: Goldoon (MQ only)",
+                  id: `${prefix}${MQcmd} ${lvl}|${exp} eps27`,
+                },
+                {
+                  title: "EPS28: The Sacred Gem in Akaku",
+                  description: "Boss: Goouva",
+                  id: `${prefix}${MQcmd} ${lvl}|${exp} eps28`,
+                },
+                {
+                  title: "EPS29: The King of Darkan",
+                  description: "Boss: -",
+                  id: `${prefix}${MQcmd} ${lvl}|${exp} eps29`,
+                },
+                {
+                  title: "EPS30: The Lurking Evil",
+                  description: "Boss: Scrader",
+                  id: `${prefix}${MQcmd} ${lvl}|${exp} eps30`,
+                },
+                {
+                  title: "EPS31: Find the False Black Knight!",
+                  description: "Boss: Black Knight of Delusion",
+                  id: `${prefix}${MQcmd} ${lvl}|${exp} eps31`,
+                },
+                {
+                  title: "EPS32: Technista's Movement",
+                  description: "Boss: -",
+                  id: `${prefix}${MQcmd} ${lvl}|${exp} eps32`,
+                },
+                {
+                  title: "EPS33: The Falling Feather of Death",
+                  description: "Boss: Evil Crystal Beast",
+                  id: `${prefix}${MQcmd} ${lvl}|${exp} eps33`,
+                },
+              ],
+            },
+            {
+              title: `Chapter 5: The Storm in the Darkness`,
+              highlight_label: `Chapter 5`,
+              rows: [
+                {
+                  title: "EPS34: In The Unknown Darkness",
+                  description: "Boss: -",
+                  id: `${prefix}${MQcmd} ${lvl}|${exp} eps34`,
+                },
+                {
+                  title: "EPS35: The Charm",
+                  description: "Boss: Cerberus",
+                  id: `${prefix}${MQcmd} ${lvl}|${exp} eps35`,
+                },
+                {
+                  title: "EPS36: Parching Dark Mirror",
+                  description: "Boss: Zolban",
+                  id: `${prefix}${MQcmd} ${lvl}|${exp} eps36`,
+                },
+                {
+                  title: "EPS37: Fierce Battle in the Garden",
+                  description: "Boss: Aranea",
+                  id: `${prefix}${MQcmd} ${lvl}|${exp} eps37`,
+                },
+                {
+                  title: "EPS38: A Light in the Darkness",
+                  description: "Boss: Bexiz",
+                  id: `${prefix}${MQcmd} ${lvl}|${exp} eps38`,
+                },
+                {
+                  title: "EPS39: The Ones Nesting in the Manor",
+                  description: "Boss: Imitator",
+                  id: `${prefix}${MQcmd} ${lvl}|${exp} eps39`,
+                },
+                {
+                  title: "EPS40: The Dark Castle",
+                  description: "Boss: Imitacia",
+                  id: `${prefix}${MQcmd} ${lvl}|${exp} eps40`,
+                },
+                {
+                  title: "EPS41: To The Living World",
+                  description: "Boss: -",
+                  id: `${prefix}${MQcmd} ${lvl}|${exp} eps41`,
+                },
+              ],
+            },
+            {
+              title: `Chapter 6: The Two Technistas`,
+              highlight_label: `Chapter 6`,
+              rows: [
+                {
+                  title: "EPS42: Demi Machina",
+                  description: "Boss: -",
+                  id: `${prefix}${MQcmd} ${lvl}|${exp} eps42`,
+                },
+                {
+                  title: "EPS43: The Town of Pax Faction",
+                  description: "Boss: Iconos",
+                  id: `${prefix}${MQcmd} ${lvl}|${exp} eps43`,
+                },
+                {
+                  title: "EPS44: Mechanical Heart",
+                  description: "Boss: Ifrid",
+                  id: `${prefix}${MQcmd} ${lvl}|${exp} eps44`,
+                },
+                {
+                  title: "EPS45: Black Knights of Lyark",
+                  description: "Boss: -",
+                  id: `${prefix}${MQcmd} ${lvl}|${exp} eps45`,
+                },
+                {
+                  title: "EPS46: The Mysterious Artifact",
+                  description: "Boss: Proto Leon",
+                  id: `${prefix}${MQcmd} ${lvl}|${exp} eps46`,
+                },
+                {
+                  title: "EPS47: Truth of the Artifact",
+                  description: "Boss: -",
+                  id: `${prefix}${MQcmd} ${lvl}|${exp} eps47`,
+                },
+                {
+                  title: "EPS48: The Price of Treachery",
+                  description: "Boss: York",
+                  id: `${prefix}${MQcmd} ${lvl}|${exp} eps48`,
+                },
+                {
+                  title: "EPS49: The Blasphemous Factory",
+                  description: "Boss: Tyrant Machina",
+                  id: `${prefix}${MQcmd} ${lvl}|${exp} eps49`,
+                },
+                {
+                  title: "EPS50: Mystery of the Black Knights",
+                  description: "Boss: Mozto Machina",
+                  id: `${prefix}${MQcmd} ${lvl}|${exp} eps50`,
+                },
+              ],
+            },
+            {
+              title: `Chapter 7: Upheaval in Ultimea`,
+              highlight_label: `Chapter 7`,
+              rows: [
+                {
+                  title: "EPS51: Monster's Forest",
+                  description: "Boss: Lalvada",
+                  id: `${prefix}${MQcmd} ${lvl}|${exp} eps51`,
+                },
+                {
+                  title: "EPS52: The Underground Town",
+                  description: "Boss: -",
+                  id: `${prefix}${MQcmd} ${lvl}|${exp} eps52`,
+                },
+                {
+                  title: "EPS53: The Elves in Lyark",
+                  description: "Boss: Zahhak Machina",
+                  id: `${prefix}${MQcmd} ${lvl}|${exp} eps53`,
+                },
+                {
+                  title: "EPS54: The Mad Laboratory",
+                  description: "Boss: Guignol",
+                  id: `${prefix}${MQcmd} ${lvl}|${exp} eps54`,
+                },
+                {
+                  title: "EPS55: Tragedy in the Jail",
+                  description: "Boss: Gwaimol",
+                  id: `${prefix}${MQcmd} ${lvl}|${exp} eps55`,
+                },
+                {
+                  title: "EPS56: Calamity in Droma Square",
+                  description: "Boss: Ultimate Machina",
+                  id: `${prefix}${MQcmd} ${lvl}|${exp} eps56`,
+                },
+                {
+                  title: "EPS57: Head for Ultimea Palace",
+                  description: "Boss: Ornlarf",
+                  id: `${prefix}${MQcmd} ${lvl}|${exp} eps57`,
+                },
+                {
+                  title: "EPS58: The Chaotic Truth",
+                  description: "Boss: Venena Coenubia",
+                  id: `${prefix}${MQcmd} ${lvl}|${exp} eps58`,
+                },
+              ],
+            },
+            {
+              title: `Chapter 8: Road to Eldenbaum`,
+              highlight_label: `Chapter 8`,
+              rows: [
+                {
+                  title: "EPS59: The Mine Where Monsters Lurk",
+                  description: "Boss: Shampy",
+                  id: `${prefix}${MQcmd} ${lvl}|${exp} eps59`,
+                },
+                {
+                  title: "EPS60: The Mysterious Shadow",
+                  description: "Boss: -",
+                  id: `${prefix}${MQcmd} ${lvl}|${exp} eps60`,
+                },
+                {
+                  title: "EPS61: The New Diel Country",
+                  description: "Boss: Crystal Titan",
+                  id: `${prefix}${MQcmd} ${lvl}|${exp} eps61`,
+                },
+                {
+                  title: "EPS62: The Ruins of the Gods",
+                  description: "Boss: Mom Fluck",
+                  id: `${prefix}${MQcmd} ${lvl}|${exp} eps62`,
+                },
+                {
+                  title: "EPS63: The Former God of Justice",
+                  description: "Boss: Zelbuse",
+                  id: `${prefix}${MQcmd} ${lvl}|${exp} eps63`,
+                },
+                {
+                  title: "EPS64: The Remaining Thrones in the Shrine",
+                  description: "Boss: Mardula",
+                  id: `${prefix}${MQcmd} ${lvl}|${exp} eps64`,
+                },
+                {
+                  title: "EPS65: Gods' Whereabouts",
+                  description: "Boss: -",
+                  id: `${prefix}${MQcmd} ${lvl}|${exp} eps65`,
+                },
+                {
+                  title: "EPS66: The Wait at Specia's Shrine",
+                  description: "Boss: Seele Zauga",
+                  id: `${prefix}${MQcmd} ${lvl}|${exp} eps66`,
+                },
+                {
+                  title: "EPS67: The Warden of Ice & Snow",
+                  description: "Boss: King Piton",
+                  id: `${prefix}${MQcmd} ${lvl}|${exp} eps67`,
+                },
+                {
+                  title: "EPS68: At Mountains End",
+                  description: "Boss: Finstern the Dark Dragon",
+                  id: `${prefix}${MQcmd} ${lvl}|${exp} eps68`,
+                },
+              ],
+            },
+            {
+              title: "Chapter 9: Recapturing Eldenbaum",
+              highlight_label: "Chapter 9",
+              rows: [
+                {
+                  title: "EPS69: Deadly Road to Eldenbaum",
+                  description: "Boss: Tuscog",
+                  id: `${prefix}${MQcmd} ${lvl}|${exp}eps69`,
+                },
+                {
+                  title: "EPS70: Unforseen Trap",
+                  description: "Boss: Eroded Pilz",
+                  id: `${prefix}${MQcmd} ${lvl}|${exp} eps70`,
+                },
+                {
+                  title: "EPS71: Traces of Technological Progress",
+                  description: "Boss: Pyxtica",
+                  id: `${prefix}${MQcmd} ${lvl}|${exp} eps71`,
+                },
+                {
+                  title: "EPS72: An Unexpected Acquaintance",
+                  description: "Boss: Kuzto",
+                  id: `${prefix}${MQcmd} ${lvl}|${exp} eps72`,
+                },
+                {
+                  title: "EPS73: Front Line Base Operation",
+                  description: "Boss: Sapphire Roga",
+                  id: `${prefix}${MQcmd} ${lvl}|${exp} eps73`,
+                },
+                {
+                  title: "EPS74: Strategy to Redeem the Treetop Harbor",
+                  description: "Boss: Gravicep",
+                  id: `${prefix}${MQcmd} ${lvl}|${exp} eps74`,
+                },
+                {
+                  title: "EPS75: The Teleporter Left Behind",
+                  description: "Boss: Repthon",
+                  id: `${prefix}${MQcmd} ${lvl}|${exp} eps75`,
+                },
+                {
+                  title: "EPS76: The Man Who Seeks Death",
+                  description: "Boss: Vulture",
+                  id: `${prefix}${MQcmd} ${lvl}|${exp} eps76`,
+                },
+                {
+                  title: "EPS77: The Battle to Recapture Eldenbaum",
+                  description: "Boss: Venena Meta Coenubia",
+                  id: `${prefix}${MQcmd} ${lvl}|${exp} eps77`,
+                },
+                {
+                  title: "EPS78: A New Beginning",
+                  description: "Boss: -",
+                  id: `${prefix}${MQcmd} ${lvl}|${exp} eps78`,
+                },
+              ],
+            },
+            {
+              title: "Chapter 10: The Lost God's Ship",
+              highlight_label: "Chapter 10",
+              rows: [
+                {
+                  title: "EPS79: Off to the Fateful Land",
+                  description: "Boss: -",
+                  id: `${prefix}${MQcmd} ${lvl}|${exp} eps79`,
+                },
+                {
+                  title: "EPS80: The Inhabitants Under the Cliff",
+                  description: "Boss: Pisteus",
+                  id: `${prefix}${MQcmd} ${lvl}|${exp} eps80`,
+                },
+                {
+                  title: "EPS81: The Nightmare Returns",
+                  description: "Boss: -",
+                  id: `${prefix}${MQcmd} ${lvl}|${exp} eps81`,
+                },
+                {
+                  title: "EPS82: The Whereabouts of the Missing Monks",
+                  description: "Boss: Arachnidemon",
+                  id: `${prefix}${MQcmd} ${lvl}|${exp} eps82`,
+                },
+                {
+                  title: "EPS83: The Goddess of Courage and the Squatters",
+                  description: "Boss: -",
+                  id: `${prefix}${MQcmd} ${lvl}|${exp} eps83`,
+                },
+                {
+                  title: "EPS84: Navigator of the Ark",
+                  description: "Boss: Black Shadow",
+                  id: `${prefix}${MQcmd} ${lvl}|${exp} eps84`,
+                },
+                {
+                  title: "EPS85: Witch in the Woods",
+                  description: "Boss: Hexter",
+                  id: `${prefix}${MQcmd} ${lvl}|${exp} eps85`,
+                },
+                {
+                  title: "EPS86: The Duel in Nov Diela",
+                  description: "Boss: Irestida",
+                  id: `${prefix}${MQcmd} ${lvl}|${exp} eps86`,
+                },
+              ],
+            },
+            {
+              title: "Chapter 11: Off to Toram",
+              highlight_label: "Chapter 11",
+              rows: [
+                {
+                  title: "EPS87: Flying the Ark",
+                  description: "Boss: Reliza",
+                  id: `${prefix}${MQcmd} ${lvl}|${exp} eps87`,
+                },
+                {
+                  title: "EPS88: Land of the Unknown",
+                  description: "Boss: Gemma",
+                  id: `${prefix}${MQcmd} ${lvl}|${exp} eps88`,
+                },
+                {
+                  title: "EPS89: The Strolling Forest",
+                  description: "Boss: Ferzen the Rock Dragon",
+                  id: `${prefix}${MQcmd} ${lvl}|${exp} eps89`,
+                },
+                {
+                  title: "EPS90: Eumanos the Forest Dwellers",
+                  description: "Boss: Junior Dragon Zyvio",
+                  id: `${prefix}${MQcmd} ${lvl}|${exp} eps90`,
+                },
+                {
+                  title: "EPS91: A Sproutling is Born",
+                  description: "Boss: War Dragon Turba",
+                  id: `${prefix}${MQcmd} ${lvl}|${exp} eps91`,
+                },
+                {
+                  title: "EPS92: The Blessing-Bearer",
+                  description: "Boss: Vlam the Flame Dragon",
+                  id: `${prefix}${MQcmd} ${lvl}|${exp} eps92`,
+                },
+                {
+                  title: "EPS93: Intense Battle in Coenubla's Stronghold",
+                  description: "Boss: Velum",
+                  id: `${prefix}${MQcmd} ${lvl}|${exp} eps93`,
+                },
+                {
+                  title: "EPS94: The Shadow of a Smoky Mountain",
+                  description: "Boss: Oculagsinio",
+                  id: `${prefix}${MQcmd} ${lvl}|${exp} eps94`,
+                },
+                {
+                  title: "EPS95: The Weredragons & the Underground World",
+                  description: "Boss: Gordel",
+                  id: `${prefix}${MQcmd} ${lvl}|${exp} eps95`,
+                },
+              ],
+            },
+            {
+              title: "Chapter 12: The Weredragons' Vital Point",
+              highlight_label: "Chapter 12",
+              rows: [
+                {
+                  title: "EPS96: The Sky with a Ceiling",
+                  description: "Boss: -",
+                  id: `${prefix}${MQcmd} ${lvl}|${exp} eps96`,
+                },
+                {
+                  title: "EPS97: Rivalry Between Dragons and Weredragons",
+                  description: "Boss: Burning Dragon Igneus",
+                  id: `${prefix}${MQcmd} ${lvl}|${exp} eps97`,
+                },
+                {
+                  title: "EPS98: Weredragon Couple and a Baby",
+                  description: "Boss: Trickster Dragon Mimyugon",
+                  id: `${prefix}${MQcmd} ${lvl}|${exp} eps98`,
+                },
+                {
+                  title: "EPS99: Weredragons Vital Point",
+                  description: "Boss: Filrocas",
+                  id: `${prefix}${MQcmd} ${lvl}|${exp} eps99`,
+                },
+                {
+                  title: "EPS100: Intense Battle in Propulsion System",
+                  description: "Boss: Wicked Dragon Fazzino",
+                  id: `${prefix}${MQcmd} ${lvl}|${exp} eps100`,
+                },
+                {
+                  title: "EPS101: Discovering a New Technology",
+                  description: "Boss: -",
+                  id: `${prefix}${MQcmd} ${lvl}|${exp} eps101`,
+                },
+                {
+                  title: "EPS102: Ark Repair",
+                  description: "Boss: Walican",
+                  id: `${prefix}${MQcmd} ${lvl}|${exp} eps102`,
+                },
+                {
+                  title: "EPS103: Weredragon Dispute",
+                  description: "Boss: Brass Dragon Reguita",
+                  id: `${prefix}${MQcmd} ${lvl}|${exp} eps103`,
+                },
+                {
+                  title: "EPS104: Cocoon in the Ice Wall",
+                  description: "Boss: Dominaredor",
+                  id: `${prefix}${MQcmd} ${lvl}|${exp} eps104`,
+                },
+              ],
+            },
+            {
+              title: "Chapter 13: The Water Tribe and Coenubia",
+              highlight_label: "Chapter 13",
+              rows: [
+                {
+                  title: "EPS105: Underwater Inhabitants",
+                  description: "Boss: Zapo",
+                  id: `${prefix}${MQcmd} ${lvl}|${exp} eps105`,
+                },
+                {
+                  title: "EPS106: Water Dome",
+                  description: "Boss: Red Ash Dragon Rudish",
+                  id: `${prefix}${MQcmd} ${lvl}|${exp} eps106`,
+                },
+                {
+                  title: "EPS107: Underwater City",
+                  description: "Boss: -",
+                  id: `${prefix}${MQcmd} ${lvl}|${exp} eps107`,
+                },
+                {
+                  title: "EPS108: The Thing in the Abandoned District",
+                  description: "Boss: Don Profundo",
+                  id: `${prefix}${MQcmd} ${lvl}|${exp} eps108`,
+                },
+                {
+                  title: "EPS109: Shadow from the Abyss",
+                  description: "Boss: Vatudo",
+                  id: `${prefix}${MQcmd} ${lvl}|${exp} eps109`,
+                },
+                {
+                  title: "EPS110: The Ruthless Council",
+                  description: "Boss: -",
+                  id: `${prefix}${MQcmd} ${lvl}|${exp} eps110`,
+                },
+                {
+                  title: "EPS111: Mysterious Entity in the Little Shrine",
+                  description: "Boss: Ragging Dragon Bovinari",
+                  id: `${prefix}${MQcmd} ${lvl}|${exp} eps111`,
+                },
+                {
+                  title: "EPS112: The Great Battle Underwater",
+                  description: "Boss: Humida & Torexesa",
+                  id: `${prefix}${MQcmd} ${lvl}|${exp} eps112`,
+                },
+              ],
+            },
+            {
+              title: "Chapter 14: Mainland Toram",
+              highlight_label: "Chapter 14",
+              rows: [
+                {
+                  title: "EPS113: Crisis in the Sky",
+                  description: "Boss: Mulgoon",
+                  id: `${prefix}${MQcmd} ${lvl}|${exp} eps113`,
+                },
+                {
+                  title: "EPS114: The Surviving Siblings",
+                  description: "Boss: Deformis",
+                  id: `${prefix}${MQcmd} ${lvl}|${exp} eps114`,
+                },
+                {
+                  title: "EPS115: Chaotic Situation",
+                  description: "Boss: -",
+                  id: `${prefix}${MQcmd} ${lvl}|${exp} eps115`,
+                },
+                {
+                  title: "EPS116: The Bitter Truth",
+                  description: "Boss: Menti",
+                  id: `${prefix}${MQcmd} ${lvl}|${exp} eps116`,
+                },
+                {
+                  title: "EPS117: The Uncouth Rana Prince",
+                  description: "Boss: Biskyva",
+                  id: `${prefix}${MQcmd} ${lvl}|${exp} eps117`,
+                },
+                {
+                  title: "EPS118: Mutant Coenubia Village",
+                  description: "Boss: Piscruva",
+                  id: `${prefix}${MQcmd} ${lvl}|${exp} eps118`,
+                },
+                {
+                  title: "EPS119: Fierce Battle with Mutant Lixis",
+                  description: "Boss: Supreme Evil Crystal Beast",
+                  id: `${prefix}${MQcmd} ${lvl}|${exp} eps119`,
+                },
+              ],
+            },
+            {
+              title: "Chapter 15: Coenubia's Awakening",
+              highlight_label: "Chapter 15",
+              rows: [
+                {
+                  title: "EPS120: Ark Crisis",
+                  description: "Boss: Bakuzan",
+                  id: `${prefix}${MQcmd} ${lvl}|${exp} eps120`,
+                },
+                {
+                  title: "EPS121: Coastal Clash",
+                  description: "Boss: Rondine",
+                  id: `${prefix}${MQcmd} ${lvl}|${exp} eps121`,
+                },
+              ],
+            },
+          ];
 
-        msg = generateWAMessageFromContent(from, messageContent, { userJid: m.chat, quoted: m });
-        await client.relayMessage(msg.key.remoteJid, msg.message, { messageId: msg.key.id });
-      }
+          const listMessage = {
+            title: "List MQ",
+            sections,
+          };
+
+          const templateButton = {
+            text: MQmsg,
+            footer: `_*- ${global.botName} -*_`,
+            mentions: [m.sender],
+            contextInfo: {
+              forwardingScore: 300,
+              isForwarded: true,
+            },
+            buttons: [
+              {
+                buttonId: "list_button",
+                buttonText: {
+                  displayText: "List MQ",
+                },
+                nativeFlowInfo: {
+                  name: "single_select",
+                  paramsJson: JSON.stringify(listMessage),
+                },
+                type: 2,
+              },
+            ],
+          };
+
+          await client.sendButtonMsg(from, templateButton, {quoted: m});
+        }
         break;
 
       case "lv":
@@ -1367,6 +1339,32 @@ After doing MQ from *${startEps}* to *${endEps}* you will reach to level ${lv} w
           m.reply(lang.error(err));
         }
         break;
+        
+        case "mt":
+         url = "https://id.toram.jp/?type_code=update#contentArea"
+          axios.get(url)
+            .then((response) => {
+              if (response.status === 200) {
+                const html = response.data;
+                const $ = cheerio.load(html);
+                mtNow = $(".news_border > a").attr("href");
+                axios.get("https://id.toram.jp/" + mtNow)
+                .then((response) => {
+                  if (response.status === 200) {
+                    const html = response.data;
+                    const $ = cheerio.load(html);
+                    container = $("#news > div").text().trim();
+                    textSample = container.split("Kembali ke atas")[0]
+                    textTemplate = textSample.split("Tweet")[1].trim();
+                    reply(textTemplate)
+                  } else {
+                    m.reply("Official Website can't be accessed!");
+                  }
+                })
+              }
+            })
+            .catch(() => m.reply("Official Website can't be accessed!"));
+        break
 
       case "food":
         client.sendText(
@@ -1519,8 +1517,6 @@ lv = Exp Needed
       case "process":
         break;
 
-
-
       /* ================ Media Menu ================ */
 
       case "pixiv":
@@ -1621,7 +1617,6 @@ lv = Exp Needed
             )
           ).data;
           let milf = milfs[Math.floor(Math.random() * milfs.length)];
-          console.log(milf);
           let res = await getBuffer(milf);
           client.sendImage(from, res, "", mek);
           progress("✔");
@@ -1982,8 +1977,6 @@ lv = Exp Needed
         neww = performance.now();
         oldd = performance.now();
         bio = await client.fetchStatus(botNumber);
-        checkUser = await check.checkUser();
-        checkUsage = await check.checkUsage();
         respon = `
   - *${global.botName}* -
   
@@ -1996,10 +1989,10 @@ lv = Exp Needed
     .format("YYYY-MM-DD HH:mm:ss")}.
   *Owner:* ${global.ownerName}.
   *Contact:* wa.me/${global.owner[0]}
-  *Private Usage:* ${checkUsage.usage_private}.
-  *Group Usage:* ${checkUsage.usage_group}.
-  *Total usage:* ${checkUsage.usage_private + checkUsage.usage_group}.
-  *Total user:* ${checkUser.users.length}.
+  *Private Usage:* ${global.db.private_usage}.
+  *Group Usage:* ${global.db.private_usage}.
+  *Total usage:* ${global.db.private_usage + global.db.private_usage}.
+  *Total user:* ${global.db.user.length}.
   
   Kecepatan Respon ${latensi.toFixed(4)} _Second_ \n ${
           oldd - neww
@@ -2057,6 +2050,18 @@ lv = Exp Needed
       /* ================ Other Menu ================ */
 
       /* ================ Owner Menu ================ */
+      case "reset":
+        {
+          if (!isOwner) return reply(lang.owner());
+          progress("⏳");
+          allDB = global.db.user;
+          for (let i = 0; i < allDB.length; i++) {
+            allDB[i].latest = false;
+          }
+          progress("✔");
+        }
+        break;
+
       case "clear":
         if (!isOwner) return reply(lang.owner());
         fs.readdir("./tmp", (err, files) => {
@@ -2099,15 +2104,24 @@ lv = Exp Needed
     if (command !== "deleteuser") {
       //Push Database to MongoDB
       senderType = m.isGroup ? groupMetadata.id : sender;
-      user = await check.checkUser(senderType);
-      if (user.user === null || !user.user.latest) {
-        await create.addUser(senderType);
+      user = global.db.user.findIndex((user) => user.id === senderType);
+      if (user === -1) {
+        obj = {
+          id: senderType,
+          latest: true,
+          date: new Date(),
+        };
+        global.db.user.push(obj);
         reply(lang.update(pushname));
+      } else if (!global.db.user[user].latest) {
+        global.db.user[user].latest = true;
       }
-      if (user.user !== null && !user.user.date) {
-        await create.addUser(senderType);
+      if (senderType.includes("s.whatsapp.net")) {
+        global.db.private_usage++;
       }
-      await create.addUsage(m.isGroup ? "group" : "private");
+      if (senderType.includes("g.us")) {
+        global.db.group_usage++;
+      }
     }
   }
 

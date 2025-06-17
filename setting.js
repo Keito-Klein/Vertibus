@@ -1,6 +1,7 @@
 global.sessionName = "client";
 global.owner = ["6283831853737", "62895329820760"];
 global.botName = "Vertibus🔹";
+global.chatLength = 1000;
 global.packName = "^_^"
 global.author = "Vertibus🔹"
 global.donate = "https://saweria.co/mikako";
@@ -11,7 +12,7 @@ global.mongoString = "Enter Your Connection String!!";
 
 //APIKEY
 global.apikey = "-";
-global.imgbb = "33270f0a84f041ee046f429d7e6f3c6f";
+global.imgbb = "48e5feaa71d8e0e7714521318a1f2320";
 global.genai = "AIzaSyAuhj-BqLOaJ47tEQ2IwM7k0o8vrM8H2CU";
 global.detectai = {
     api_user: "482609558",

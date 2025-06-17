@@ -7,7 +7,8 @@ const {
   fetchLatestBaileysVersion,
   downloadContentFromMessage,
   makeCacheableSignalKeyStore,
-  makeInMemoryStore,
+  generateWAMessageFromContent,
+  Browsers,
   jidDecode,
   proto,
   useMultiFileAuthState,
@@ -24,6 +25,8 @@ const { Boom } = require("@hapi/boom");
 const smsg = require("./lib/message-variables");
 const { getBuffer, getSizeMedia } = require("./lib/general-function");
 const { color } = require("./lib/color");
+const { server, PORT} = require("./lib/server");
+const dataBase = require("./db/storeDB");
 const {
   toImage,
   writeExifVid,
@@ -31,6 +34,10 @@ const {
   writeExifImg,
   imageToWebp,
 } = require("./lib/converter");
+
+server.listen(PORT, () => {
+  console.log('App listened on port', PORT);
+})
 
 //Pairing mode settings
 let phoneNumber = "62895329820760";
@@ -42,9 +49,11 @@ const rl = readline.createInterface({
 });
 const question = (text) => new Promise((resolve) => rl.question(text, resolve));
 
-const store = makeInMemoryStore({
+const storeDB = new dataBase('./store.json');
+const database = new dataBase('./database.json');
+/*const store = makeInMemoryStore({
   logger: pino().child({ level: "silent", stream: "store" }),
-});
+});*/
 
 
 async function start() {
@@ -66,14 +75,67 @@ async function start() {
     )
   );
   const msgRetryCounterCache = new NodeCache();
+  const groupCache = new NodeCache({ stdTTL: 5 * 60, useClones: false });
+
+  	try {
+    const loadData = await database.read()
+		const storeLoadData = await storeDB.read()
+		if (!loadData || Object.keys(loadData).length === 0) {
+			global.db = {
+        private_usage: 0,
+        group_usage: 0,
+				store: {},
+				groups: {},
+				database: {},
+        user: [],
+				...(loadData || {}),
+			}
+			await database.write(global.db)
+		} else {
+			global.db = loadData
+		}
+		if (!storeLoadData || Object.keys(storeLoadData).length === 0) {
+			global.store = {
+				contacts: {},
+				presences: {},
+				messages: {},
+				groupMetadata: {},
+				...(storeLoadData || {}),
+			}
+			await storeDB.write(global.store)
+		} else {
+			global.store = storeLoadData
+		}
+		
+		setInterval(async () => {
+      if (global.db) await database.write(global.db)
+			if (global.store) await storeDB.write(global.store)
+		}, 30 * 1000)
+	} catch (e) {
+		console.log(e)
+		process.exit(1)
+	}
+  store.loadMessage = function (remoteJid, id) {
+		const messages = store.messages?.[remoteJid]?.array;
+		if (!messages) return null;
+		return messages.find(msg => msg?.key?.id === id) || null;
+	}
 
   //Opening Connection
   client = makeWASocket({
     version,
     logger: pino({ level: "silent" }),
+    syncFullHistory: true,
     printQRInTerminal: !pairingCode,
     mobile: useMobile, // mobile api (prone to bans)
-    browser: ["Windows", "Firefox", "20.0.04"],
+    browser: Browsers.ubuntu('Firefox'),
+    connectTimeoutMs: 60000,
+    maxMsgRetryCount: 15,
+    msgRetryCounterCache, // Resolve waiting messages
+    retryRequestDelayMs: 10, 
+    defaultQueryTimeoutMs: 0, // for this issues https://github.com/WhiskeySockets/Baileys/issues/276
+    markOnlineOnConnect: true, // set false for offline
+    generateHighQualityLinkPreview: true, // make high preview link
     auth: {
       creds: state.creds,
       keys: makeCacheableSignalKeyStore(
@@ -81,8 +143,18 @@ async function start() {
         pino({ level: "fatal" }).child({ level: "fatal" })
       ),
     },
-    markOnlineOnConnect: true, // set false for offline
-    generateHighQualityLinkPreview: true, // make high preview link
+    cachedGroupMetadata: async (jid) => groupCache.get(jid),
+		shouldSyncHistoryMessage: msg => {
+			console.log(`\x1b[32mMemuat Chat [${msg.progress || 0}%]\x1b[39m`);
+			return !!msg.syncType;		},
+		transactionOpts: {
+			maxCommitRetries: 10,
+			delayBetweenTriesMs: 10,
+		},
+		appStateMacVerification: {
+			patch: true,
+			snapshot: true,
+		},
     getMessage: async (key) => {
       if (store) {
         let jid = jidNormalizedUser(key.remoteJid);
@@ -91,12 +163,8 @@ async function start() {
         return msg.message || "";
       }
     },
-    msgRetryCounterCache, // Resolve waiting messages
-    defaultQueryTimeoutMs: undefined, // for this issues https://github.com/WhiskeySockets/Baileys/issues/276
   });
 
-  //bind events
-  store.bind(client.ev);
 
   //set bot status
   client.public = true;
@@ -114,6 +182,20 @@ async function start() {
     console.log(`🎁  Pairing Code : ${code}`);
   }
 
+  client.ev.on('presence.update', ({ id, presences: update }) => {
+		store.presences[id] = store.presences?.[id] || {};
+		Object.assign(store.presences[id], update);
+	});
+
+  client.ev.on('groups.update', (update) => {
+		for (const n of update) {
+			if (store.groupMetadata[n.id]) {
+				groupCache.set(n.id, n);
+				Object.assign(store.groupMetadata[n.id], n);
+			}
+		}
+	});
+
   //Incoming Message
   client.ev.on("messages.upsert", async (chatUpdate) => {
     try {
@@ -128,6 +210,21 @@ async function start() {
       if (!client.public && !mek.key.fromMe && chatUpdate.type === "notify")
         return;
       if (mek.key.id.startsWith("BAE5") && mek.key.id.length === 16) return;
+		const remoteJid = mek.key.remoteJid; 
+		store.messages[remoteJid] ??= {};
+		store.messages[remoteJid].array ??= [];
+		store.messages[remoteJid].keyId ??= new Set();
+		if (!(store.messages[remoteJid].keyId instanceof Set)) {
+			store.messages[remoteJid].keyId = new Set(store.messages[remoteJid].array.map(m => m.key.id));
+		}
+		if (store.messages[remoteJid].keyId.has(mek.key.id)) return;
+		store.messages[remoteJid].array.push(mek);
+		store.messages[remoteJid].keyId.add(mek.key.id);
+		if (store.messages[remoteJid].array.length > (global.chatLength || 250)) {
+			const removed = store.messages[remoteJid].array.shift();
+			store.messages[remoteJid].keyId.delete(removed.key.id);
+		}
+		if (!store.groupMetadata || Object.keys(store.groupMetadata).length === 0) store.groupMetadata ??= await naze.groupFetchAllParticipating().catch(e => ({}));
       m = smsg(client, mek, store);
       require("./core")(client, m, chatUpdate);
     } catch (err) {
@@ -170,13 +267,12 @@ async function start() {
   });
 
   // Update contact
-  client.ev.on("contacts.update", (update) => {
-    let obj = {};
-    for (let contact of update) {
-      obj[contact.id] = obj[contact.id] || {};
-      Object.assign(obj[contact.id], contact);
-    }
-  });
+  client.ev.on('contacts.update', (update) => {
+		for (let contact of update) {
+			let id = client.decodeJid(contact.id)
+			if (store && store.contacts) store.contacts[id] = { id, name: contact.notify }
+		}
+	});
 
   // Geting name of contact
   client.getName = (jid, withoutContact = false) => {
@@ -496,7 +592,64 @@ async function start() {
 
   //Send text message
   client.sendText = (jid, text, quoted = "", options) =>
-    client.sendMessage(jid, { text: text, ...options }, { quoted });
+  client.sendMessage(jid, { text: text, ...options }, { quoted });
+
+  //Send Button Message
+  	client.sendButtonMsg = async (jid, content = {}, options = {}) => {
+		const { text, caption, footer = '', headerType = 1, ai, contextInfo = {}, buttons = [], mentions = [], ...media } = content;
+		const msg = await generateWAMessageFromContent(jid, {
+			viewOnceMessage: {
+				message: {
+					messageContextInfo: {
+						deviceListMetadata: {},
+						deviceListMetadataVersion: 2,
+					},
+					buttonsMessage: {
+						...(media && typeof media === 'object' && Object.keys(media).length > 0 ? await generateWAMessageContent(media, {
+							upload: client.waUploadToServer
+						}) : {}),
+						contentText: text || caption || '',
+						footerText: footer,
+						buttons,
+						headerType: media && Object.keys(media).length > 0 ? Math.max(...Object.keys(media).map((a) => ({ document: 3, image: 4, video: 5, location: 6 })[a] || headerType)) : headerType,
+						contextInfo: {
+							...contextInfo,
+							...options.contextInfo,
+							mentionedJid: options.mentions || mentions,
+							...(options.quoted ? {
+								stanzaId: options.quoted.key.id,
+								remoteJid: options.quoted.key.remoteJid,
+								participant: options.quoted.key.participant || options.quoted.key.remoteJid,
+								fromMe: options.quoted.key.fromMe,
+								quotedMessage: options.quoted.message
+							} : {})
+						}
+					}
+				}
+			}
+		}, {});
+		const hasil = await client.relayMessage(msg.key.remoteJid, msg.message, {
+			messageId: msg.key.id,
+			additionalNodes: [{
+				tag: 'biz',
+				attrs: {},
+				content: [{
+					tag: 'interactive',
+					attrs: {
+						type: 'native_flow',
+						v: '1'
+					},
+					content: [{
+						tag: 'native_flow',
+						attrs: {
+							name: 'quick_reply'
+						}
+					}]
+				}]
+			}, ...(ai ? [{ attrs: { biz_bot: '1' }, tag: 'bot' }] : [])]
+		})
+		return hasil
+	}
 
   //Message Moderation
   client.cMod = (
@@ -541,3 +694,33 @@ async function start() {
 }
 
 start()
+
+// Process Exit
+const cleanup = async (signal) => {
+	console.log(`Received ${signal}. Menyimpan database...`)
+	if (global.db) await database.write(global.db)
+	if (global.store) await storeDB.write(global.store)
+	server.close(() => {
+		console.log('Server closed. Exiting...')
+		process.exit(0)
+	})
+}
+
+process.on('SIGINT', () => cleanup('SIGINT'))
+process.on('SIGTERM', () => cleanup('SIGTERM'))
+process.on('exit', () => cleanup('exit'))
+
+server.on('error', (error) => {
+	if (error.code === 'EADDRINUSE') {
+		console.log(`Address localhost:${PORT} in use. Please retry when the port is available!`);
+		server.close();
+	} else console.error('Server error:', error);
+});
+
+let file = require.resolve(__filename)
+fs.watchFile(file, () => {
+  fs.unwatchFile(file)
+  console.log(chalk.redBright(`Update ${__filename}`))
+  delete require.cache[file]
+  require(file)
+});

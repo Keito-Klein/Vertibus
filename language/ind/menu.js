@@ -9,6 +9,7 @@ exports.menu = (prefix) => {
  │•${prefix}food
  │•${prefix}maze
  │•${prefix}bag
+ │•${prefix}mq
  │•${prefix}ailment
  ╰•${prefix}mqmats
 
@@ -84,16 +85,9 @@ exports.update = (pushname) => {
 *New Update V. 5.1.0a*
 Hi ${pushname}.
 
-Dikarenakan bot sering banget terbanned bot dipindahkan kesini. jika anda user premium, untuk memasukan kembali ke grup
-ketik \`!join\` untuk melihat caranya. jika masih tidak bisa masuk hubungi owner untuk selengkapnya
-bot lama bisa dikick dari gc
-
-Fitur berikut hadir untuk premium user:
-- *aiedit* -
-> Fitur yang digunakan untuk mengedit foto menggunakan Ai. kirim foto dengan caption perintah/prompt AI
-
-untuk membeli premium/menyewa bot ke GC/membeli script, ketik:
-*!pricing*
+Bot tentang guide Toram online telah dibuat kembali dedngan fitur terbaru yaitu \`MQ Calculator\` untuk menghitung exp yang di dapata dari MQ.
+cara penggunaannya: 
+!mq <level>|<exp%>
 
 *bot masih dalam pengembangan*
 harap maklumi jika masih banyak error🙏
@@ -101,6 +95,5 @@ harap maklumi jika masih banyak error🙏
 *laporkan jika ada fitur error kepada owner*
 tanya tanya silahkan pm owner dengan mengetik:
 *!owner*
-Atau join GC owner: https://chat.whatsapp.com/GhGhNeX8p3MKwc8KsmaWph
 `
 }

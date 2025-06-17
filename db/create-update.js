@@ -2,7 +2,7 @@ const fs = require("fs");
 const toMs = require("ms");
 const User = JSON.parse(fs.readFileSync("./db/register.json"));
 const Usage = JSON.parse(fs.readFileSync("./db/usage.json"));
-const Restrict = JSON.parse(fs.readFileSync("./db/usage.json"));
+const Restrict = JSON.parse(fs.readFileSync("./db/restrict.json"));
 
 //Create_Update Class to handle user and restrict data.
 class Create_Update {
@@ -12,6 +12,7 @@ class Create_Update {
 
     addUser(id) {
         let userIndex = User.findIndex((user) => user.id === id);
+        
         if (userIndex === -1) {
           const ovj = {
             id,

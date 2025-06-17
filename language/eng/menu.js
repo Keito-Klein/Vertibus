@@ -9,6 +9,7 @@ exports.menu = (prefix) => {
  │•${prefix}food
  │•${prefix}maze
  │•${prefix}bag
+ │•${prefix}mq
  │•${prefix}ailment
  ╰•${prefix}mqmats
 
@@ -85,16 +86,9 @@ exports.update = (pushname) => {
 *New Update V. 5.0.0a*
 Hi ${pushname}.
 
-Because bots are often banned, bots are moved here. If you are a premium user, to re-enter the group
-type \`!join\` to see how. If you still can't enter, contact the owner for more information
-Old bots can be kicked from GC
-
-The following features are available for premium users:
-- *aiedit* -
-> A feature used to edit photos using Ai. Send photos with AI command/prompt captions
-
-To buy premium/rent a bot to GC/buy a script, type:
-*!pricing*
+Bot about Toram online guide has been remade with the latest feature, namely \`MQ Calculator\` to calculate the exp obtained from MQ.
+how to use it: 
+!mq <level>|<exp%>
 
 *bot is still under development*
 Please understand if there are still many errors🙏
@@ -102,6 +96,5 @@ Please understand if there are still many errors🙏
 *Report if there is an error feature to the owner*
 For questions, please PM the owner by typing:
 *!owner*
-Or join GC owner: https://chat.whatsapp.com/GhGhNeX8p3MKwc8KsmaWph
 `
 }
