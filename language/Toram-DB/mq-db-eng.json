@@ -845,5 +845,12 @@
         "chapter": 15,
         "episode": 121,
         "exp": 216300000
+    },
+    {
+        "title": "Unda's Rescue Operartion",
+        "boss": "Gula the Gourmet",
+        "chapter": 15,
+        "episode": 122,
+        "exp": 222200000
     }
 ]

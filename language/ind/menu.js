@@ -82,12 +82,15 @@ exports.pricing = () => {
 
 exports.update = (pushname) => {
     return `
-*New Update V. 5.1.0a*
+*New Update V. 5.2.0a*
 Hi ${pushname}.
 
-Bot tentang guide Toram online telah dibuat kembali dedngan fitur terbaru yaitu \`MQ Calculator\` untuk menghitung exp yang di dapata dari MQ.
-cara penggunaannya: 
-!mq <level>|<exp%>
+Quest baru telah ditambahkan di dalam MQ Calculator.
+Berikut adalah quest yang telah ditambahkan:
+- *EPS122: Unda's Rescue Operation*
+- Boss: Gula the Gourmet
+- Chapter: 15
+- Exp: 222200000
 
 *bot masih dalam pengembangan*
 harap maklumi jika masih banyak error🙏

@@ -83,12 +83,15 @@ exports.donate = () => {
 
 exports.update = (pushname) => {
     return `
-*New Update V. 5.0.0a*
+*New Update V. 5.2.0a*
 Hi ${pushname}.
 
-Bot about Toram online guide has been remade with the latest feature, namely \`MQ Calculator\` to calculate the exp obtained from MQ.
-how to use it: 
-!mq <level>|<exp%>
+New quest has been added to the MQ Calculator.
+Here are the quests that have been added:
+- *EPS122: Unda's Rescue Operation*
+- Boss: Gula the Gourmet
+- Chapter: 15
+- Exp: 222200000
 
 *bot is still under development*
 Please understand if there are still many errors🙏

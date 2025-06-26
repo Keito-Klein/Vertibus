@@ -1196,6 +1196,11 @@ After doing MQ from *${startEps}* to *${endEps}* you will reach to level ${lv} w
                   description: "Boss: Rondine",
                   id: `${prefix}${MQcmd} ${lvl}|${exp} eps121`,
                 },
+                {
+                  title: "EPS122: Unda's Rescue Operation",
+                  description: "Boss: Gula the Gourmet",
+                  id: `${prefix}${MQcmd} ${lvl}|${exp} eps122`,
+                }
               ],
             },
           ];
@@ -2115,6 +2120,7 @@ lv = Exp Needed
         reply(lang.update(pushname));
       } else if (!global.db.user[user].latest) {
         global.db.user[user].latest = true;
+        reply(lang.update(pushname));
       }
       if (senderType.includes("s.whatsapp.net")) {
         global.db.private_usage++;
