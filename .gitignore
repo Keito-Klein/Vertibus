@@ -4,3 +4,7 @@ package-lock.json
 db/date.json
 db/register.json
 db/usage.json
+db/store.json
+db/store.json.bak
+db/database.json
+db/database.json.bak
