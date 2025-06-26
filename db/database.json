@@ -1,49 +1,8 @@
 {
-  "private_usage": 23,
-  "group_usage": 180,
+  "private_usage": 0,
+  "group_usage": 0,
   "store": {},
   "groups": {},
   "database": {},
-  "user": [
-    {
-      "id": "6283831853737@s.whatsapp.net",
-      "latest": true,
-      "date": "2025-06-08T14:45:22.708Z"
-    },
-    {
-      "id": "120363028999277280@g.us",
-      "latest": true,
-      "date": "2025-06-08T14:56:50.905Z"
-    },
-    {
-      "id": "120363321807611707@g.us",
-      "latest": true,
-      "date": "2025-06-08T15:22:21.583Z"
-    },
-    {
-      "id": "120363023056066862@g.us",
-      "latest": true,
-      "date": "2025-06-08T16:30:34.248Z"
-    },
-    {
-      "id": "120363178911550415@g.us",
-      "latest": true,
-      "date": "2025-06-08T23:51:58.163Z"
-    },
-    {
-      "id": "120363391644284048@g.us",
-      "latest": true,
-      "date": "2025-06-09T11:12:48.284Z"
-    },
-    {
-      "id": "6281391587225@s.whatsapp.net",
-      "latest": true,
-      "date": "2025-06-14T13:06:37.563Z"
-    },
-    {
-      "id": "6289518301550@s.whatsapp.net",
-      "latest": true,
-      "date": "2025-06-14T17:20:45.469Z"
-    }
-  ]
+  "user": []
 }
