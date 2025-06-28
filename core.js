@@ -153,14 +153,14 @@ module.exports = core = async (client, m, chatUpdate) => {
     m.mtype === "extendedTextMessage" && content.includes("videoMessage");
 
   //Save every Message to JSON
-  let infoMSG = JSON.parse(fs.readFileSync("./db/message.json"));
+  /*let infoMSG = JSON.parse(fs.readFileSync("./db/message.json"));
   infoMSG.push(JSON.parse(JSON.stringify(mek)));
   fs.writeFileSync("./db/message.json", JSON.stringify(infoMSG, null, 2));
   const amount_message = infoMSG.length;
   if (amount_message === 5000) {
     infoMSG.splice(0, 4300);
     fs.writeFileSync("./db/message.json", JSON.stringify(infoMSG, null, 2));
-  }
+  }*/
   //Proccess
   const progress = (reaction) => {
     const reactions = {
@@ -206,11 +206,14 @@ module.exports = core = async (client, m, chatUpdate) => {
       m.quoted &&
       qms.text.includes(`${global.botName} has new message`)
     ) {
-      messageMatch = qms.text.match(/Message ID: ([A-Z0-9]+)/);
-      messageID = messageMatch ? messageMatch[1] : null;
+      messageMatchID = qms.text.match(/Message ID: ([A-Z0-9]+)/);
+      messageID = messageMatchID ? messageMatchID[1] : null;
       if (messageID === null) return;
-      for (let mess of infoMSG) {
-        if (mess.key.id === messageID) {
+      messageMatchSender = qms.text.match(/\d+@s\.whatsapp\.net/);
+      messageSender = messageMatchSender ? messageMatchSender[0] : null;
+      if (messageSender === null) return;
+      for (let mess of global.store.messages[messageSender].array) {
+        if (mess.match(messageID)) {
           quotedMessage = mess.message.extendedTextMessage;
           imgMessage = mess.message.imageMessage;
           vidMessage = mess.message.videoMessage;
