@@ -37,7 +37,7 @@ Spina 2.000
 Spina 4.000
 
 🎒 *60 => 61*
-- 1x Cakar Beruang (Violaccon - Padang Darkanon)
+- 2x Cakar Beruang (Violaccon - Padang Darkanon)
 - 20x Sheeting Fabric (Cassy - Makam Ratu Kuno)
 
 🎒 *61 => 62*

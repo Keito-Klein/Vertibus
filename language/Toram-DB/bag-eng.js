@@ -37,7 +37,7 @@ Spina 2.000
 Spina 4.000
 
 🎒 *60 => 61*
-- 1x Sharp Bear Claw (Violacoon - Darkanon Plain)
+- 2x Sharp Bear Claw (Violacoon - Darkanon Plain)
 - 20x Sheeting Fabric (Cassy - Ancient Empress Tomb: A2)
 
 🎒 *61 => 62*
