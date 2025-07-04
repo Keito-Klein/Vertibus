@@ -18,6 +18,12 @@ exports.format = (prefix, command) => {
       case "leveling":
         return `How to use:\n${prefix}${command} <level>|<Bonus EXP>\nExample:\n${prefix}${command} 270|10`;
 
+    case "mob":
+    case "mobs":
+    case "monster":
+    case "boss":
+      return `How to use:\n${prefix}${command} <monster name>\nExample:\n${prefix}${command} Goblin`;
+
     case "take":
     case "swm":
     case "wm":

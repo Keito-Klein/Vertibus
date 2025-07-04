@@ -83,15 +83,11 @@ exports.donate = () => {
 
 exports.update = (pushname) => {
     return `
-*New Update V. 5.2.0a*
+*New Update V. 5.3.0a*
 Hi ${pushname}.
 
-New quest has been added to the MQ Calculator.
-Here are the quests that have been added:
-- *EPS122: Unda's Rescue Operation*
-- Boss: Gula the Gourmet
-- Chapter: 15
-- Exp: 222200000
+\`!boss\`/\`!mobs\` feature has been added, this feature is used to view details of the monsters in the game.
+such as level, location, drops, and others.
 
 *bot is still under development*
 Please understand if there are still many errors🙏
