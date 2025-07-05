@@ -167,7 +167,7 @@ Spina 200.000
 - 20x Taring Manusia Serigala (Wolfie - Jalan Eryldan)
 
 🎒 *90 => 91*
-- 4x Serpihan Kayu Kuzto (Kuzto - Distrik Labilans: Alun-alun)
+- 5x Serpihan Kayu Kuzto (Kuzto - Distrik Labilans: Alun-alun)
 - 20x Bulu Cerpelai (Sentreast - Distrik Fabriska)
 - 30x Sabuk Pinggang Misterius (Moculus - Distrik Fractum)
 
