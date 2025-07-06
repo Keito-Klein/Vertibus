@@ -89,6 +89,8 @@ Hi ${pushname}.
 \`!boss\`/\`!mobs\` feature has been added, this feature is used to view details of the monsters in the game.
 such as level, location, drops, and others.
 
+> personal language for each user has been added, the default language is Indonesian. to change it to English use the command \`!language eng\`
+
 *bot is still under development*
 Please understand if there are still many errors🙏
 

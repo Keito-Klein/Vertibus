@@ -82,11 +82,13 @@ exports.pricing = () => {
 
 exports.update = (pushname) => {
     return `
-*New Update V. 5.3.0a*
+*New Update V. 5.3.1a*
 Hi ${pushname}.
 
 fitur \`!boss\`/\`!mobs\` telah ditambahkan fitur tersebut digunakan untuk melihat detail monster yang ada di game.
 seperti level, lokasi, drops, dan lain lain.
+
+> personal bahasa setiap user telah ditambahkan, default bahasa adalah bahasa Indonesia. untuk mengubahnya menjadi inggris gunakan perintah \`!language eng\`
 
 *bot masih dalam pengembangan*
 harap maklumi jika masih banyak error🙏

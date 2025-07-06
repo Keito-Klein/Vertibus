@@ -21,9 +21,6 @@ const {
 } = require("./lib/general-function");
 const { pinterest } = require("./lib/downloader");
 
-//Setting your language
-lang = ind;
-
 /* Database */
 let Create_Update;
 let Read;
@@ -161,6 +158,21 @@ module.exports = core = async (client, m, chatUpdate) => {
     infoMSG.splice(0, 4300);
     fs.writeFileSync("./db/message.json", JSON.stringify(infoMSG, null, 2));
   }*/
+
+      //Language
+  senderType = m.isGroup ? groupMetadata.id : sender;
+  user = global.db.user.findIndex((user) => user.id === senderType);
+  if( global.db.user[user]?.language === "ind" ) {
+    lang = ind;
+    language = "ind";
+  } else if (global.db.user[user]?.language === "eng") {
+    lang = eng;
+    language = "eng";
+  } else {
+    lang = ind; //default language
+    language = "ind"; //default language
+  }
+
   //Proccess
   const progress = (reaction) => {
     const reactions = {
@@ -1350,7 +1362,13 @@ After doing MQ from *${startEps}* to *${endEps}* you will reach to level ${lv} w
          if (!text) return m.reply(lang.format(prefix, command));
          try {
           progress("⏳");
-          const url = `https://coryn.club/monster.php?name=${encodeURIComponent(text)}`;
+          if (language == "eng") {
+            url = `https://coryn.club/monster.php?name=${encodeURIComponent(text)}`;
+          } else if (language == "ind") {
+            url = `http://indo.coryn.club/monster.php?name=${encodeURIComponent(text)}`;
+          } else {
+            url = `https://coryn.club/monster.php?name=${encodeURIComponent(text)}`;
+          }
           axios.get(url)
             .then((response) => {
               if (response.status === 200) {
@@ -1359,7 +1377,7 @@ After doing MQ from *${startEps}* to *${endEps}* you will reach to level ${lv} w
                 const mobs = [];
                 $(".card-container > div").each(function() {
                   mobs.push({
-                    name: $(this).find(".card-title-inverse").text().trim(),
+                    name: $(this).find(".card-title-inverse").text().trim().replace("_id", ""),
                     level: $(this).find(".monster-no-pic > div > .item-prop > div:nth-child(1) > p:nth-child(2) ").text().trim(),
                     location: $(this).find(".item-prop > div:nth-child(2) > a").text().trim(),
                     difficulty: $(this).find(".monster-no-pic > div > .item-prop > div:nth-child(2) > p:nth-child(2)").text().trim(), 
@@ -1377,7 +1395,7 @@ After doing MQ from *${startEps}* to *${endEps}* you will reach to level ${lv} w
                 for (let i = 0; i < mobs.length; i++) {
                   const mob = mobs[i];
                   let dropsText = mob.drops.length > 0 ? mob.drops.join("\n- ") : "No drops";
-                  displayText += `\n*Name:* ${mob.name}\n*Level:* ${mob.level}\n*Location:* ${mob.location}\n*Difficulty:* ${mob.difficulty}\n*Element:* ${mob.element}\n*HP:* ${mob.hp}\n*EXP:* ${mob.exp}\n*Tameable:* ${mob.tamable}\n*Drops:* ${dropsText}\n`;
+                  displayText += `\n*Name:* ${mob.name}\n*Level:* ${mob.level}\n*Location:* ${mob.location}\n*Difficulty:* ${mob.difficulty}\n*Element:* ${mob.element}\n*HP:* ${mob.hp}\n*EXP:* ${mob.exp}\n*Tameable:* ${mob.tamable}\n*Drops:*\n- ${dropsText}\n`;
                 }
                 m.reply(displayText);
                 progress("✔");
@@ -1395,14 +1413,14 @@ After doing MQ from *${startEps}* to *${endEps}* you will reach to level ${lv} w
         break;
         
         case "mt":
-         url = "https://id.toram.jp/?type_code=update#contentArea"
+         url = `https://${language == "eng" ? "en" : "id"}.toram.jp/?type_code=update#contentAre`
           axios.get(url)
             .then((response) => {
               if (response.status === 200) {
                 const html = response.data;
                 const $ = cheerio.load(html);
                 mtNow = $(".news_border > a").attr("href");
-                axios.get("https://id.toram.jp/" + mtNow)
+                axios.get(`https://${language == "eng" ? "en" : "id"}.toram.jp/` + mtNow)
                 .then((response) => {
                   if (response.status === 200) {
                     const html = response.data;
@@ -1747,7 +1765,7 @@ lv = Exp Needed
           groupMetadata.memberAddMode ? "Yes" : "No"
         }.\n*Antilinkgc:* ${checking.antilinkgc ? "Yes" : "No"}.\n*Bot open:* ${
           checking.open ? "Yes" : "No"
-        }.\n*Disappearing Message:* ${
+        }.\n*Language: *\n*Disappearing Message:* ${
           groupMetadata.ephemeralDuration !== undefined
             ? groupMetadata.ephemeralDuration / (24 * 60 * 60) + " Days"
             : "OFF"
@@ -1991,6 +2009,20 @@ lv = Exp Needed
         );
         break;
 
+      case "language":
+      case "lang":
+      case "bahasa":
+        if (!text) return reply(`Your current language is ${global.db.user[user].language}\n\nto change language, use:\n${prefix}language ${global.db.user[user].language == "ind" ? "eng" : global.db.user[user].language == "eng" ? "ind" : "unknow"}\n\nAvailable languages:\n- ind\n- eng\n\nind - indonesia\neng - english`);
+        if (["id", "ind", "indonesia", "ind - indonesia"].includes(text.toLowerCase())) {
+          global.db.user[user].language = "ind";
+        } else if (["en", "eng", "english", "eng - english"].includes(text.toLowerCase())) {
+          global.db.user[user].language = "eng";
+        } else {
+          return reply("Language not found!\n\nAvailable languages:\n- ind\n- eng\n\nind - indonesia\neng - english");
+        }
+        reply(`Language changed to ${text}`);
+        break;
+
       case "ping":
       case "botstatus":
       case "statusbot":
@@ -2156,12 +2188,11 @@ lv = Exp Needed
     }
 
     if (command !== "deleteuser") {
-      //Push Database to MongoDB
-      senderType = m.isGroup ? groupMetadata.id : sender;
-      user = global.db.user.findIndex((user) => user.id === senderType);
+      //Push Database to DB
       if (user === -1) {
         obj = {
           id: senderType,
+          language: "ind",
           latest: true,
           date: new Date(),
         };
