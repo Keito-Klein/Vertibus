@@ -37,18 +37,16 @@
 
 ## Getting Started
 This project require :
-- [NodeJS](https://nodejs.org/en/download/) [v16 or greater](https://nodejs.org/dist/)
+- [NodeJS](https://nodejs.org/en/download/) [v20 or greater](https://nodejs.org/dist/)
 - [FFmpeg](https://www.gyan.dev/ffmpeg/builds/) 
 
 ## Setting Up
 - Make your OcrSpace ApiKey [Here](https://ocr.space/ocrapi)
 - Make your Imgbb ApiKey [Here](https://api.imgbb.com)
-- Change your ApiKey at setting.js line 20 & 21.
-- Change name file session at setting.js line 6. this is optional
+- Change your ApiKey at setting.js line 14 & 19.
+- Change name file session at setting.js line 1. this is optional
 - Change owner number at setting.js line 2
-- Change your language at core.js line 53, there's only 2 language at now. just Indonesia (ind) & English (eng)
-- Change your database mode ***local/mongoDB*** at setting.js line 12 
-- Change your mongoDB connection string at setting.js line 13
+- there's only 2 language at now. just Indonesia (ind) & English (eng)
 
 ## Install
 **Install on RDP/Windows ✅**
@@ -67,7 +65,7 @@ $ node index.js
 ```
 **Install on Termux ✅**
 > [!WARNING]
-> sharp package may causing crash when running `npm install`.
+> in some cases sharp package may causing crash when running `npm install`.
 
 to prevent this from happening. delete the sharp package on the `package.json` file
 
