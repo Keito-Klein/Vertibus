@@ -16,7 +16,7 @@ class Read {
                 group: id,
                 antilink: false,
                 antilinkgc: false,
-                open: false,
+                open: true,
             }
         } else {
             result = {
