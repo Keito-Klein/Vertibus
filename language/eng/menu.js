@@ -32,7 +32,8 @@ exports.menu = (prefix) => {
  │•${prefix}kick
  │•${prefix}promote
  │•${prefix}demote
- │•~${prefix}antilink~
+ │•${prefix}welcome
+ │•${prefix}antilink
  ╰•${prefix}antilinkgc
  
  ❏ *Bot Menu*
@@ -83,13 +84,10 @@ exports.donate = () => {
 
 exports.update = (pushname) => {
     return `
-*New Update V. 5.3.0a*
+*New Update V. 5.4.4a*
 Hi ${pushname}.
 
-\`!boss\`/\`!mobs\` feature has been added, this feature is used to view details of the monsters in the game.
-such as level, location, drops, and others.
-
-> personal language for each user has been added, the default language is Indonesian. to change it to English use the command \`!language eng\`
+\`!welcome\` feature has been added this feature is used to enable/disable welcome message in group.
 
 *bot is still under development*
 Please understand if there are still many errors🙏

@@ -32,7 +32,8 @@ exports.menu = (prefix) => {
  │•${prefix}kick
  │•${prefix}promote
  │•${prefix}demote
- │•~${prefix}antilink~
+ │•${prefix}welcome
+ │•${prefix}antilink
  ╰•${prefix}antilinkgc
  
  ❏ *Bot Menu*
@@ -82,13 +83,10 @@ exports.pricing = () => {
 
 exports.update = (pushname) => {
     return `
-*New Update V. 5.3.1a*
+*New Update V. 5.4.4a*
 Hi ${pushname}.
 
-fitur \`!boss\`/\`!mobs\` telah ditambahkan fitur tersebut digunakan untuk melihat detail monster yang ada di game.
-seperti level, lokasi, drops, dan lain lain.
-
-> personal bahasa setiap user telah ditambahkan, default bahasa adalah bahasa Indonesia. untuk mengubahnya menjadi inggris gunakan perintah \`!language eng\`
+fitur \`!welcome\` telah ditambahkan fitur tersebut digunakan untuk mengaktifkan/menonaktifkan pesan selamat datang di grup.
 
 *bot masih dalam pengembangan*
 harap maklumi jika masih banyak error🙏

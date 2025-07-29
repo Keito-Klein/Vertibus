@@ -274,6 +274,40 @@ async function start() {
 		}
 	});
 
+  client.ev.on("group-participants.update", async (event) => {
+    group = event.id.endsWith("@g.us")
+    if (!group) return;
+    const metadata = await client.groupMetadata(event.id);
+    if (!global.db.groups[event.id]?.welcome) return;
+    if (store && store.groupMetadata) {
+      store.groupMetadata[event.id] = metadata;
+    }
+    for (let participant of event.participants) {
+      const id = client.decodeJid(participant);
+      if (event.action === "add") {
+        text = `
+Hello👋 @${id.split("@")[0]}, welcome to Guild ${metadata.subject}!
+
+Please read the rules and guidelines before participating.
+It would be better if you introduce yourself first, so that everyone knows you!
+IGN: 
+Level: 
+Gender: 
+Main Character Class: `;
+        console.log(`Participant ${id} added to group ${metadata.subject}`);
+        client.sendText(event.id, text, {mentions: [id]})
+      } else if (event.action === "remove") {
+        text = `Goodbye @${id.split("@")[0]}, it was nice to have an adventure with you.`
+        console.log(`Participant ${id} removed from group ${metadata.subject}`);
+        client.sendText(event.id, text, {mentions: [id]})
+      } else if (event.action === "promote") {
+        console.log(`Participant ${id} promoted in group ${metadata.subject}`);
+      } else if (event.action === "demote") {
+        console.log(`Participant ${id} demoted in group ${metadata.subject}`);
+      }
+    }
+  })
+
   // Geting name of contact
   client.getName = (jid, withoutContact = false) => {
     id = client.decodeJid(jid);

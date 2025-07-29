@@ -252,12 +252,11 @@ module.exports = core = async (client, m, chatUpdate) => {
     m.isGroup &&
     !isCmd
   ) {
-    if (!isGroup && !isOwner) return;
+    if (!isGroup && isOwner) return;
     if (isGroupAdmins) return;
     if (itsMe) return;
 
-    checking = await check.checkRestrict(groupMetadata.id);
-    restricted = checking.antilink;
+    restricted = global.db.groups[groupMetadata.id]?.antilink || false;
 
     if (restricted) {
       await client.sendMessage(from, {
@@ -277,8 +276,7 @@ module.exports = core = async (client, m, chatUpdate) => {
     if (isGroupAdmins) return;
     if (itsMe) return;
 
-    checking = await check.checkRestrict(groupMetadata.id);
-    restricted = checking.antilinkgc;
+    restricted = global.db.groups[groupMetadata.id]?.antilinkgc || false;
 
     if (restricted) {
       await client.sendMessage(from, {
@@ -294,9 +292,13 @@ module.exports = core = async (client, m, chatUpdate) => {
 
   // ON/OFF BOT
   if (isCmd && m.isGroup) {
-    checking = await check.checkRestrict(groupMetadata.id);
-    opened = checking.open;
-
+    if (!global.db.groups[groupMetadata.id]) {
+      global.db.groups[groupMetadata.id] = {
+        open : true,
+     }
+    }
+    global.db.groups[groupMetadata.id].open ??= true;
+    opened = global.db.groups[groupMetadata.id].open;
     if (!opened && !isGroupAdmins) return;
   }
 
@@ -1748,7 +1750,6 @@ lv = Exp Needed
           time = `${day} ${month} ${year} ${hour}:${minute}:${second}`;
           return time;
         };
-        checking = await check.checkRestrict(groupMetadata.id);
         infoGroup = `*- Group Metadata Info -*\n\n*Group ID:* ${
           groupMetadata.id
         }\n*Group Name:* ${groupName}\n*Name Since:* ${timeUnix(
@@ -1763,9 +1764,13 @@ lv = Exp Needed
           groupMetadata.joinApprovalMode ? "Yes" : "No"
         }.\n*Member Add Mode:* ${
           groupMetadata.memberAddMode ? "Yes" : "No"
-        }.\n*Antilinkgc:* ${checking.antilinkgc ? "Yes" : "No"}.\n*Bot open:* ${
-          checking.open ? "Yes" : "No"
-        }.\n*Language: *\n*Disappearing Message:* ${
+        }.\n*Antilink:* ${
+          global.db.groups[groupMetadata.id]?.antilink ? "Yes" : "No"
+        }\n*Antilinkgc:* ${
+          global.db.groups[groupMetadata.id]?.antilinkgc ? "Yes" : "No"
+        }.\n*Bot open:* ${
+          global.db.groups[groupMetadata.id]?.open ? "Yes" : "No"
+        }.\n*Language: ${language == "eng" ? "English" : "Indonesia"}*\n*Disappearing Message:* ${
           groupMetadata.ephemeralDuration !== undefined
             ? groupMetadata.ephemeralDuration / (24 * 60 * 60) + " Days"
             : "OFF"
@@ -1904,32 +1909,53 @@ lv = Exp Needed
 
         break;
 
+        case "welcome":
+        if (!text) return reply("ON/OFF?");
+        if (!m.isGroup) return reply(lang.onGroup());
+        if (!isGroupAdmins) return reply(lang.onAdmin());
+         if (text.toLowerCase() === "on") {
+          if (global.db.groups[groupMetadata.id]?.welcome) return reply("Welcome already on!");
+          if(!global.db.groups[groupMetadata.id]) {
+            global.db.groups[groupMetadata.id] = { welcome: true };
+          } else {
+            global.db.groups[groupMetadata.id].welcome = true;
+          }
+          reply("Welcome message is now ON!");
+         }
+          if (text.toLowerCase() === "off") {
+            if (!global.db.groups[groupMetadata.id]?.welcome) return reply("Welcome already off!");
+            if(!global.db.groups[groupMetadata.id]) {
+              global.db.groups[groupMetadata.id] = { welcome: false };
+            } else {
+              global.db.groups[groupMetadata.id].welcome = false;
+            }
+            reply("Welcome message is now OFF!");
+          }
+        break;
+
       case "antilink":
         if (!text) return reply("ON/OFF?");
         if (!m.isGroup) return reply(lang.onGroup());
         if (!isGroupAdmins) return reply(lang.onAdmin());
         if (!botAdmin) return reply(lang.botAdmin());
-        progress("⏳");
-        checking = await check.checkRestrict(groupMetadata.id);
         if (text.toLowerCase() === "on") {
-          create.addRestrict(
-            groupMetadata.id,
-            true,
-            checking.antilinkgc,
-            checking.open,
-            m
-          );
+          if (global.db.groups[groupMetadata.id]?.antilink) return reply("Antilink already on!");
+          if (!global.db.groups[groupMetadata.id]) {
+            global.db.groups[groupMetadata.id] = { antilink: true };
+          } else {
+            global.db.groups[groupMetadata.id].antilink = true;
+          }
+          reply("Antilink is now ON!");
         }
         if (text.toLowerCase() === "off") {
-          create.addRestrict(
-            groupMetadata.id,
-            false,
-            checking.antilinkgc,
-            checking.open,
-            m
-          );
+          if (!global.db.groups[groupMetadata.id]?.antilink) return reply("Antilink already off!");
+          if (!global.db.groups[groupMetadata.id]) {
+            global.db.groups[groupMetadata.id] = { antilink: false };
+          } else {
+            global.db.groups[groupMetadata.id].antilink = false;
+          }
+          reply("Antilink is now OFF!");
         }
-        progress("✔");
         break;
 
       case "antilinkgc":
@@ -1937,27 +1963,24 @@ lv = Exp Needed
         if (!m.isGroup) return reply(lang.onGroup());
         if (!isGroupAdmins) return reply(lang.onAdmin());
         if (!botAdmin) return reply(lang.botAdmin());
-        progress("⏳");
-        checking = await check.checkRestrict(groupMetadata.id);
         if (text.toLowerCase() === "on") {
-          create.addRestrict(
-            groupMetadata.id,
-            checking.antilink,
-            true,
-            checking.open,
-            m
-          );
+          if (global.db.groups[groupMetadata.id]?.antilinkgc) return reply("Antilinkgc already on!");
+          if (!global.db.groups[groupMetadata.id]) {
+            global.db.groups[groupMetadata.id] = { antilinkgc: true };
+          } else {
+            global.db.groups[groupMetadata.id].antilinkgc = true;
+          }
+          reply("Antilinkgc is now ON!");
         }
         if (text.toLowerCase() === "off") {
-          create.addRestrict(
-            groupMetadata.id,
-            checking.antilink,
-            false,
-            checking.open,
-            m
-          );
+          if (!global.db.groups[groupMetadata.id]?.antilinkgc) return reply("Antilinkgc already off!");
+          if (!global.db.groups[groupMetadata.id]) {
+            global.db.groups[groupMetadata.id] = { antilinkgc: false };
+          } else {
+            global.db.groups[groupMetadata.id].antilinkgc = false;
+          }
+          reply("Antilinkgc is now OFF!");
         }
-        progress("✔");
         break;
 
       case "bot":
@@ -1965,31 +1988,28 @@ lv = Exp Needed
           return reply(
             `bot active!\nsince ${runtime(
               process.uptime()
-            )} ago\n\n${prefix}bot open - for all member\n${prefix}bot close - for admin only`
+            )} ago\n\n${prefix}bot open - bot can used for all member\n${prefix}bot close - bot can used for admin only`
           );
         if (!m.isGroup) return reply(lang.onGroup());
         if (!isGroupAdmins) return reply(lang.onAdmin());
-        progress("⏳");
-        checking = await check.checkRestrict(groupMetadata.id);
+        if (global.db.groups[groupMetadata.id]?.open) return reply("Bot already open!");
         if (text.toLowerCase() === "open") {
-          create.addRestrict(
-            groupMetadata.id,
-            checking.antilink,
-            checking.antilinkgc,
-            true,
-            m
-          );
+          if (!global.db.groups[groupMetadata.id]) {
+            global.db.groups[groupMetadata.id] = { open: true };
+          } else {
+            global.db.groups[groupMetadata.id].open = true;
+          }
+          reply("Bot is now OPEN!");
         }
         if (text.toLowerCase() === "close") {
-          create.addRestrict(
-            groupMetadata.id,
-            checking.antilink,
-            checking.antilinkgc,
-            false,
-            m
-          );
+          if (!global.db.groups[groupMetadata.id]?.open) return reply("Bot already close!");
+          if (!global.db.groups[groupMetadata.id]) {
+            global.db.groups[groupMetadata.id] = { open: false };
+          } else {
+            global.db.groups[groupMetadata.id].open = false;
+          }
+          reply("Bot is now CLOSED!");
         }
-        progress("✔");
         break;
 
       /* ================ Group Menu ================ */
