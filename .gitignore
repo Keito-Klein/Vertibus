@@ -1,6 +1,9 @@
 node_modules/
 client/
 package-lock.json
+bun.lock
+
+session
 db/date.json
 db/register.json
 db/usage.json

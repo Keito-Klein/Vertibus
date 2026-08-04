@@ -1,5 +1,5 @@
 exports.mq = () => {
-	return `
+  return `
 	*List MQ material*
 
 *Chapter 1*
@@ -92,5 +92,5 @@ _Map :_ Perdida Wastelands
 _Item :_ Menabra Wood (10pcs)
 _Mobs :_ Delphi
 _Map :_ Menabra Plains
-	`
-}
+	`;
+};

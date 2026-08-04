@@ -1,5 +1,5 @@
 exports.bag = () => {
-    return`
+  return `
 *Bag expansion Toram Online*
 🎒 *50 => 51*
 - 1x Kulit Colon (Colon - Tanah Pembangunan)
@@ -215,5 +215,5 @@ Spina 300.000
 - 30x Kulit Pelik (Mata Jahat - Padang Morga:A1)
 
 _*- Vertibus -*_
-`
-}
+`;
+};

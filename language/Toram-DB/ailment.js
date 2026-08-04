@@ -1,5 +1,5 @@
 const ailment = (lang) => {
-    if(lang === "eng") {
+  if (lang === "eng") {
     return `
 *1. Flinch* ❗
 *to Enemy*
@@ -152,9 +152,9 @@ Absolutely dodge +100%, & Remove current aggro by 99%.
 Switch your current HP% and current MP%
 
 - ${global.botName} -
-`
-    } else {
-        return `
+`;
+  } else {
+    return `
 *1. Bergidik* ❗
 *to Enemy*
 Membuat musuh tidak dapat menggunakan skill selama 1 detik, memiliki jeda waktu (cooldown) 3 detik dengan durasi kesempatan break (break-chance) 2 detik. Jeda waktu (cooldown) bervariasi tergantung musuh, skill,dan kesulitan boss.
@@ -317,8 +317,8 @@ Menghindar Mutlak +100%, & menghapus aggro saat ini sebesar 99%
 Mengganti HP% dan MP% Anda saat ini
 
 - *${global.botName}* -
-`
-    }
-}
+`;
+  }
+};
 
 export default ailment;

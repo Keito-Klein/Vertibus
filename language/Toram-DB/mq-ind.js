@@ -1,5 +1,5 @@
 exports.mq = () => {
-    return `
+  return `
     *List MQ material*
 
 *BAB 1*
@@ -92,5 +92,5 @@ _Map :_ Lahan Tandus Perdida
 _Item :_ Kayu Menabra (10pcs)
 _Mobs :_ Delphi
 _Map :_ Dataran Menabra
-    `
-}
+    `;
+};

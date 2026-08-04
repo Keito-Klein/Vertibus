@@ -1,7 +1,7 @@
 require("./db.js");
 const toMs = require("ms");
 const User = require("../models/user.js");
-const Usage = require("../models/usage")
+const Usage = require("../models/usage");
 const Premium = require("../models/premium.js");
 const Restrict = require("../models/restrict.js");
 
@@ -30,7 +30,7 @@ class Create_Update {
       if (!user[userIndex].latest) {
         await User.updateOne({ id: id }, { latest: true });
       }
-      if(!user[userIndex].date) {
+      if (!user[userIndex].date) {
         await User.updateOne({ id: id }, { date: Date.now() });
       }
     }
@@ -56,20 +56,21 @@ class Create_Update {
     if (premiumdb === null) {
       const ovj = {
         id,
-        expired: Date.now() + toMs(expired)
+        expired: Date.now() + toMs(expired),
       };
       let data = new Premium(ovj);
       data.save().then(() => {
         console.log(`add new premium user to mongoDB: ${id}`);
       });
     } else {
-      const isPremium = premiumdb.expired !== undefined ? Date.now() <= premiumdb.expired ? true : false : false
-      
+      const isPremium =
+        premiumdb.expired !== undefined ? (Date.now() <= premiumdb.expired ? true : false) : false;
+
       if (!isPremium) {
         await Premium.updateOne({ id: id }, { expired: Date.now() + toMs(expired) });
         console.log(`Success update premium user to mongoDB: ${id}`);
       }
-      if(premiumdb.expired <= (Date.now() + toMs(expired))) {
+      if (premiumdb.expired <= Date.now() + toMs(expired)) {
         await Premium.updateOne({ id: id }, { expired: premiumdb.expired + toMs(expired) });
         console.log(`Success update premium user to mongoDB: ${id}`);
       }
@@ -80,9 +81,7 @@ class Create_Update {
   async addRestrict(group, antilinkStatus, antilinkgcStatus, openStatus, m) {
     const restrictdb = await Restrict.findOne({ group }).exec();
     const restrict = await Restrict.find();
-    let restrictIndex = restrict.findIndex(
-      (restrict) => restrict.group === group
-    );
+    let restrictIndex = restrict.findIndex((restrict) => restrict.group === group);
     if (restrictdb === null) {
       const ovj = {
         group,
@@ -96,10 +95,7 @@ class Create_Update {
       });
     } else {
       if (restrict[restrictIndex].antilinkgc !== antilinkgcStatus) {
-        await Restrict.updateOne(
-          { group: group },
-          { antilinkgc: antilinkgcStatus }
-        );
+        await Restrict.updateOne({ group: group }, { antilinkgc: antilinkgcStatus });
         m.reply("success ✔");
       }
       if (restrict[restrictIndex].antilink !== antilinkStatus) {

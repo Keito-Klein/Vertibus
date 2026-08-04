@@ -1,5 +1,5 @@
 exports.bag = () => {
-    return`
+  return `
 *Bag expansion Toram Online*
 🎒 *50 => 51*
 - 1x Colon Skin (Colon - Land Under Development)
@@ -215,5 +215,5 @@ Spina 300.000
 - 30x Bizzare Skin (Evil Eye - Morga Westeland: A1)
 
 _*- Vertibus -*_
-`
-}
+`;
+};

@@ -1,7 +1,7 @@
-const  fs = require("fs");
+const fs = require("fs");
 exports.bs = () => {
-    const db = JSON.parse(fs.readFileSync("../Toram-DB/bs-ind.json"));
-        return `
+  const db = JSON.parse(fs.readFileSync("../Toram-DB/bs-ind.json"));
+  return `
 *List Leveling BlackSmith*
 
 *0 - 5*
@@ -93,5 +93,5 @@ ${db.two_hundred_sixty.mats}
 ${db.two_hundred_sixty.location}
 *Mob:* 
 ${db.two_hundred_sixty.mob}
-`
-}
+`;
+};

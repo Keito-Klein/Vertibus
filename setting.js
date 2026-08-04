@@ -1,5 +1,5 @@
 global.sessionName = "client";
-global.owner = ["628xxxx", "628cccc"];
+global.owner = ["27639614303"];
 global.botName = "Vertibus🔹";
 global.chatLength = 20;
 global.timeZone = "id-ID";

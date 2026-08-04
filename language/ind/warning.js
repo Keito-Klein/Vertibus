@@ -4,21 +4,21 @@ exports.format = (prefix, command) => {
   switch (command) {
     case "brat":
       return `Cara penggunaan:\n${prefix}${command} Hallo`;
-    
+
     case "watk":
       return `Cara penggunaan:\n${prefix}${command} <Base weapon attack senjata>\nContoh:\n${prefix}${command} 369`;
 
     case "cdmg":
-      return 'use "/" as separator!\nex: total STR/total STR on eq/total cd percent/cd flat/LV of skill critical UP\nOr:\n/cdmg 250/5/20/40/10\nDon\'t use space!\n\nPenjelasan:\n- Total Str di personal status\n- Total STR di equipment/avatar\n- Total critical damage % di eq/avatar\n- Total critical damage di eq/avatar\n Level skill Crit. UP(Di skill tempur'
+      return 'use "/" as separator!\nex: total STR/total STR on eq/total cd percent/cd flat/LV of skill critical UP\nOr:\n/cdmg 250/5/20/40/10\nDon\'t use space!\n\nPenjelasan:\n- Total Str di personal status\n- Total STR di equipment/avatar\n- Total critical damage % di eq/avatar\n- Total critical damage di eq/avatar\n Level skill Crit. UP(Di skill tempur';
 
     case "mq":
       return `Cara penggunaan:\n${prefix}${command} <level>|<EXP Percentage>\nContoh:\n${prefix}${command} 270|10`;
 
-      case "lv":
-      case "lvl":
-      case "lvling":
-      case "leveling":
-        return `Cara penggunaan:\n${prefix}${command} <level>|<Bonus EXP>\nContoh:\n${prefix}${command} 270|10`;
+    case "lv":
+    case "lvl":
+    case "lvling":
+    case "leveling":
+      return `Cara penggunaan:\n${prefix}${command} <level>|<Bonus EXP>\nContoh:\n${prefix}${command} 270|10`;
 
     case "mob":
     case "mobs":
@@ -74,8 +74,8 @@ exports.botAdmin = () => {
 
 exports.nsfw = () => {
   return `Konten nsfw dimatikan selama puasa!\nTunggu buka puasa dan sebelum imsak untuk mennggunakannya`;
-}
+};
 
 exports.error = (err) => {
-    return `Terjadi kesalahan dalam memproses command!\nPesan error: ${err.message}`;
-}
+  return `Terjadi kesalahan dalam memproses command!\nPesan error: ${err.message}`;
+};

@@ -1,5 +1,5 @@
 exports.ailment = () => {
-    return `
+  return `
 *1. Bergidik* ❗
 *to Enemy*
 Membuat musuh tidak dapat menggunakan skill selama 1 detik, memiliki jeda waktu (cooldown) 3 detik dengan durasi kesempatan break (break-chance) 2 detik. Jeda waktu (cooldown) bervariasi tergantung musuh, skill,dan kesulitan boss.
@@ -162,5 +162,5 @@ Menghindar Mutlak +100%, & menghapus aggro saat ini sebesar 99%
 Mengganti HP% dan MP% Anda saat ini
 
 - ${global.botName} -
-`
-}
+`;
+};

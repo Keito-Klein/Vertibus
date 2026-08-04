@@ -2,21 +2,21 @@ exports.format = (prefix, command) => {
   switch (command) {
     case "brat":
       return `How to use:\n${prefix}${command} Hallo`;
-    
+
     case "watk":
       return `How to use:\n${prefix}${command} <Base weapon attack>\nExample:\n${prefix}${command} 369`;
 
     case "cdmg":
-      return 'use "/" as separator!\nex: total STR/total STR on eq/total cd percent/cd flat/LV of skill critical UP\nOr:\n/cdmg 250/5/20/40/10\nDon\'t use space!\n\nPenjelasan:\n- Total Str di personal status\n- Total STR di equipment/avatar\n- Total critical damage % di eq/avatar\n- Total critical damage di eq/avatar\n Level skill Crit. UP(Di skill tempur'
+      return 'use "/" as separator!\nex: total STR/total STR on eq/total cd percent/cd flat/LV of skill critical UP\nOr:\n/cdmg 250/5/20/40/10\nDon\'t use space!\n\nPenjelasan:\n- Total Str di personal status\n- Total STR di equipment/avatar\n- Total critical damage % di eq/avatar\n- Total critical damage di eq/avatar\n Level skill Crit. UP(Di skill tempur';
 
     case "mq":
       return `How to use:\n${prefix}${command} <level>|<EXP Percentage>\nExample:\n${prefix}${command} 270|10`;
 
-      case "lv":
-      case "lvl":
-      case "lvling":
-      case "leveling":
-        return `How to use:\n${prefix}${command} <level>|<Bonus EXP>\nExample:\n${prefix}${command} 270|10`;
+    case "lv":
+    case "lvl":
+    case "lvling":
+    case "leveling":
+      return `How to use:\n${prefix}${command} <level>|<Bonus EXP>\nExample:\n${prefix}${command} 270|10`;
 
     case "mob":
     case "mobs":

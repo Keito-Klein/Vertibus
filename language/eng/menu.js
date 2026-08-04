@@ -1,5 +1,5 @@
 exports.menu = (prefix) => {
-    return `
+  return `
 ❏ *${global.botName} Menu* ❏
 
  ❏ *Other Menu*
@@ -46,21 +46,21 @@ exports.menu = (prefix) => {
 💳 dana : 083831853737
 💳 GoPay : 083831853737
 💳 ShopeePay : 083831853737
-`
-}
+`;
+};
 
 exports.ownerContact = () => {
-    return `
+  return `
 *Ownner Contact:*
 
 *WhatsApp:* wa.me/${global.owner[0]}
 *Facebook:* ${global.facebook}
 *Instagram:* ${global.instagram}
-`
-}
+`;
+};
 
 exports.pricing = () => {
-    return `
+  return `
 *price list ${global.botName}*
 
 - rent : 3k/month
@@ -69,21 +69,21 @@ exports.pricing = () => {
 - donate
 
 > Payment: Qris, Dana, Gopay, Shopeepay
-`
-}
+`;
+};
 
 exports.donate = () => {
-    return `
+  return `
 💰 *Donate me on :*
 
 💳 Dana : 083831853737
 💳 GoPay : 083831853737
 💳 ShopeePay : 083831853737
-`
-}
+`;
+};
 
 exports.update = (pushname) => {
-    return `
+  return `
 *New Update V. 5.4.4a*
 Hi ${pushname}.
 
@@ -95,5 +95,5 @@ Please understand if there are still many errors🙏
 *Report if there is an error feature to the owner*
 For questions, please PM the owner by typing:
 *!owner*
-`
-}
+`;
+};

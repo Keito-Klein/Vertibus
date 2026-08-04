@@ -1,5 +1,5 @@
 exports.ailment = () => {
-    return `
+  return `
 *1. Flinch* ❗
 *to Enemy*
 Usually interrupts the enemy for 1 second, has a 3 seconds cooldown with 2 seconds break-chance duration. Cooldown varies from enemies,skills and boss difficulty.
@@ -151,5 +151,5 @@ Absolutely dodge +100%, & Remove current aggro by 99%.
 Switch your current HP% and current MP%
 
 - ${global.botName} -
-`
-}
+`;
+};

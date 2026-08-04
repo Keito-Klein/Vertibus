@@ -1,4 +1,4 @@
-const { generateWAMessageFromContent, proto } = require("baileys");
+const { generateWAMessageFromContent, proto, jidDecode, areJidsSameUser } = require("baileys");
 const fs = require("fs");
 const os = require("os");
 const chalk = require("chalk");
@@ -13,12 +13,7 @@ const { performance } = require("perf_hooks");
 const ind = require("./language/ind");
 const eng = require("./language/eng");
 const calculateMQ = require("./lib/MQcalculator");
-const {
-  getBuffer,
-  getRandom,
-  formatp,
-  runtime,
-} = require("./lib/general-function");
+const { getBuffer, getRandom, formatp, runtime } = require("./lib/general-function");
 const { pinterest } = require("./lib/downloader");
 
 /* Database */
@@ -51,42 +46,37 @@ const separate = (int) => {
 
 module.exports = core = async (client, m, chatUpdate) => {
   var body =
-    (m.mtype === "conversation")
+    m.mtype === "conversation"
       ? m.message.conversation
-      : (m.mtype == "imageMessage")
-      ? m.message.imageMessage.caption
-      : (m.mtype == "videoMessage")
-      ? m.message.videoMessage.caption
-      : (m.mtype == "extendedTextMessage")
-      ? m.message.extendedTextMessage.text
-      : (m.mtype == "buttonsResponseMessage")
-      ? m.message.buttonsResponseMessage.selectedButtonId
-      : (m.mtype == "listResponseMessage")
-      ? m.message.listResponseMessage.singleSelectReply.selectedRowId
-      : (m.mtype == "templateButtonReplyMessage")
-      ? m.message.templateButtonReplyMessage.selectedId 
-      : (m.mtype == 'interactiveResponseMessage') 
-      ? JSON.parse(m.msg.nativeFlowResponseMessage.paramsJson).id 
-      : (m.mtype == 'templateButtonReplyMessage') 
-      ? m.msg.selectedId
-      : (m.mtype === "messageContextInfo")
-      ? (m.message.buttonsResponseMessage?.selectedButtonId ||
-        m.message.listResponseMessage?.singleSelectReply.selectedRowId ||
-        m.text)
-      : "";
+      : m.mtype == "imageMessage"
+        ? m.message.imageMessage.caption
+        : m.mtype == "videoMessage"
+          ? m.message.videoMessage.caption
+          : m.mtype == "extendedTextMessage"
+            ? m.message.extendedTextMessage.text
+            : m.mtype == "buttonsResponseMessage"
+              ? m.message.buttonsResponseMessage.selectedButtonId
+              : m.mtype == "listResponseMessage"
+                ? m.message.listResponseMessage.singleSelectReply.selectedRowId
+                : m.mtype == "templateButtonReplyMessage"
+                  ? m.message.templateButtonReplyMessage.selectedId
+                  : m.mtype == "interactiveResponseMessage"
+                    ? JSON.parse(m.msg.nativeFlowResponseMessage.paramsJson).id
+                    : m.mtype == "templateButtonReplyMessage"
+                      ? m.msg.selectedId
+                      : m.mtype === "messageContextInfo"
+                        ? m.message.buttonsResponseMessage?.selectedButtonId ||
+                          m.message.listResponseMessage?.singleSelectReply.selectedRowId ||
+                          m.text
+                        : "";
   const prefix = /^[\\/!#.]/gi.test(body) ? body.match(/^[\\/!#.]/gi) : "/";
-  const command = body
-    .replace(prefix, "")
-    .trim()
-    .split(/ +/)
-    .shift()
-    .toLowerCase();
+  const command = body.replace(prefix, "").trim().split(/ +/).shift().toLowerCase();
   const isUrl = (url) => {
     return url.match(
       new RegExp(
         /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&/=]*)/,
-        "gi"
-      )
+        "gi",
+      ),
     );
   };
   const mik = m.quoted || m;
@@ -94,24 +84,24 @@ module.exports = core = async (client, m, chatUpdate) => {
     mik.mtype == "buttonsMessage"
       ? mik[Object.keys(mik)[1]]
       : mik.mtype == "templateMessage"
-      ? mik.hydratedTemplate[Object.keys(mik.hydratedTemplate)[1]]
-      : mik.mtype == "product"
-      ? mik[Object.keys(mik)[0]]
-      : m.quoted
-      ? m.quoted
-      : m;
+        ? mik.hydratedTemplate[Object.keys(mik.hydratedTemplate)[1]]
+        : mik.mtype == "product"
+          ? mik[Object.keys(mik)[0]]
+          : m.quoted
+            ? m.quoted
+            : m;
   const args = body.trim().split(/ +/).slice(1);
   const isCmd = body.startsWith(prefix);
   const pushname = m.pushName || "No Name";
   const botNumber = await client.decodeJid(client.user.id);
-  const itsMe = m.key.fromMe
+  const itsMe = m.key.fromMe;
   let text = (q = args.join(" "));
   const budy = typeof m.text == "string" ? m.text : "";
   const qms = quoted.msg || quoted;
   const mime = qms.mimetype || "";
   const mek = chatUpdate.messages[0];
   const content = JSON.stringify(m.message);
-  const sender = m.isGroup ? m.key.fromMe ? m.sender : m.key.participantPn : m.sender;
+  const sender = m.isGroup ? (m.key.fromMe ? m.sender : m.key.participantPn) : m.sender;
   const from = m.chat;
   const reply = m.reply;
 
@@ -122,9 +112,7 @@ module.exports = core = async (client, m, chatUpdate) => {
 
   //security
   const isGroup = m.isGroup;
-  const groupMetadata = m.isGroup
-    ? await client.groupMetadata(m.chat).catch((e) => {})
-    : "";
+  const groupMetadata = m.isGroup ? await client.groupMetadata(m.chat).catch((e) => {}) : "";
   const getGroupAdmins = (participants) => {
     admins = [];
     for (let i of participants) {
@@ -136,18 +124,15 @@ module.exports = core = async (client, m, chatUpdate) => {
   const groupId = m.isGroup ? groupMetadata.id : "";
   const groupMembers = m.isGroup ? groupMetadata.participants : "";
   const groupAdmins = m.isGroup ? getGroupAdmins(groupMembers) : "";
-  const isOwner = global.owner.includes(sender.split("@")[0]) || false;
+  const isOwner = global.owner.includes(jidDecode(sender)?.user) || false;
   const botAdmin = groupAdmins.includes(botNumber) || false;
   const isGroupAdmins = groupAdmins.includes(sender) || false;
 
   //Media init
   const isMedia = m.mtype === "imageMessage" || m.mtype === "videoMessage";
-  const isQuotedImage =
-    m.mtype === "extendedTextMessage" && content.includes("imageMessage");
-  const isQuotedSticker =
-    m.mtype === "extendedTextMessage" && content.includes("stickerMessage");
-  const isQuotedVideo =
-    m.mtype === "extendedTextMessage" && content.includes("videoMessage");
+  const isQuotedImage = m.mtype === "extendedTextMessage" && content.includes("imageMessage");
+  const isQuotedSticker = m.mtype === "extendedTextMessage" && content.includes("stickerMessage");
+  const isQuotedVideo = m.mtype === "extendedTextMessage" && content.includes("videoMessage");
 
   //Save every Message to JSON
   /*let infoMSG = JSON.parse(fs.readFileSync("./db/message.json"));
@@ -159,10 +144,10 @@ module.exports = core = async (client, m, chatUpdate) => {
     fs.writeFileSync("./db/message.json", JSON.stringify(infoMSG, null, 2));
   }*/
 
-      //Language
+  //Language
   senderType = m.isGroup ? groupMetadata.id : sender;
   user = global.db.user.findIndex((user) => user.id === senderType);
-  if( global.db.user[user]?.language === "ind" ) {
+  if (global.db.user[user]?.language === "ind") {
     lang = ind;
     language = "ind";
   } else if (global.db.user[user]?.language === "eng") {
@@ -188,15 +173,12 @@ module.exports = core = async (client, m, chatUpdate) => {
   await client.readMessages([m.key]);
 
   //mongoDB Error Handler
-  if (
-    global.mongoDB == true &&
-    global.mongoString === "Enter Your Connection String!!"
-  ) {
+  if (global.mongoDB == true && global.mongoString === "Enter Your Connection String!!") {
     return console.log(
       color(
         "Be sure your connection mongoDB string is corrrect!!\nCheck it on setting.js Line : 13",
-        "red"
-      )
+        "red",
+      ),
     );
   }
 
@@ -214,7 +196,7 @@ module.exports = core = async (client, m, chatUpdate) => {
 
     //forward message replied by owner
     if (
-      sender.includes(global.owner[0]) &&
+      areJidsSameUser(sender, global.owner[0] + "@s.whatsapp.net") &&
       m.quoted &&
       qms.text.includes(`${global.botName} has new message`)
     ) {
@@ -234,11 +216,7 @@ module.exports = core = async (client, m, chatUpdate) => {
         *Reply from owner*
         ${body}
         `;
-          client.sendMessage(
-            mess.key.remoteJid,
-            { text: teksTemplate },
-            { quoted: mess }
-          );
+          client.sendMessage(mess.key.remoteJid, { text: teksTemplate }, { quoted: mess });
         }
       }
     }
@@ -246,9 +224,7 @@ module.exports = core = async (client, m, chatUpdate) => {
 
   //antilink
   if (
-    budy.match(
-      /\b((https?:\/\/|www\.)[a-zA-Z0-9-]+(\.[a-zA-Z]{2,})+([\s\S]*?)?)\b/gm
-    ) &&
+    budy.match(/\b((https?:\/\/|www\.)[a-zA-Z0-9-]+(\.[a-zA-Z]{2,})+([\s\S]*?)?)\b/gm) &&
     m.isGroup &&
     !isCmd
   ) {
@@ -294,8 +270,8 @@ module.exports = core = async (client, m, chatUpdate) => {
   if (isCmd && m.isGroup) {
     if (!global.db.groups[groupMetadata.id]) {
       global.db.groups[groupMetadata.id] = {
-        open : true,
-     }
+        open: true,
+      };
     }
     global.db.groups[groupMetadata.id].open ??= true;
     opened = global.db.groups[groupMetadata.id].open;
@@ -311,8 +287,8 @@ module.exports = core = async (client, m, chatUpdate) => {
       color(argsLog, "turquoise"),
       chalk.magenta("From"),
       chalk.green(pushname),
-      chalk.yellow(`[ ${sender.replace("@s.whatsapp.net", "")} ]`),
-      chalk.black.bgYellow(`[ ${currentTime} ]`)
+      chalk.yellow(`[ ${jidDecode(sender)?.user || ""} ]`),
+      chalk.black.bgYellow(`[ ${currentTime} ]`),
     );
   } else if (isCmd && m.isGroup) {
     console.log(
@@ -320,10 +296,10 @@ module.exports = core = async (client, m, chatUpdate) => {
       color(argsLog, "turquoise"),
       chalk.magenta("From"),
       chalk.green(pushname),
-      chalk.yellow(`[ ${sender.replace("@s.whatsapp.net", "")} ]`),
+      chalk.yellow(`[ ${jidDecode(sender)?.user || ""} ]`),
       chalk.blueBright("IN"),
       chalk.green(groupName),
-      chalk.black.bgYellow(`[ ${currentTime} ]`)
+      chalk.black.bgYellow(`[ ${currentTime} ]`),
     );
   }
 
@@ -347,7 +323,7 @@ module.exports = core = async (client, m, chatUpdate) => {
         if (!q) return reply(lang.format(prefix, command));
         if (!q.includes("/"))
           return reply(
-            'use "/" as separator!\nex: total STR/total STR on eq/total cd percent/cd flat/LV of skill critical UP\nOr:\n/cdmg 250/5/20/40/10\nDon\'t use space!\n\nPenjelasan:\n- Total Str di personal status\n- Total STR di equipment/avatar\n- Total critical damage % di eq/avatar\n- Total critical damage di eq/avatar\n Level skill Crit. UP(Di skill tempur'
+            'use "/" as separator!\nex: total STR/total STR on eq/total cd percent/cd flat/LV of skill critical UP\nOr:\n/cdmg 250/5/20/40/10\nDon\'t use space!\n\nPenjelasan:\n- Total Str di personal status\n- Total STR di equipment/avatar\n- Total critical damage % di eq/avatar\n- Total critical damage di eq/avatar\n Level skill Crit. UP(Di skill tempur',
           );
         str = q.split("/")[0];
         strP = q.split("/")[1];
@@ -462,7 +438,7 @@ Global Price:
               },
             ],
           },
-          { quoted: m }
+          { quoted: m },
         );
         break;
 
@@ -477,12 +453,10 @@ Global Price:
           if (isNaN(exp)) return reply(lang.format(prefix, command));
           if (startMQ > endMQ) {
             return reply(
-              "can't calculate because the end chapter is too low than the beginning MQ!"
+              "can't calculate because the end chapter is too low than the beginning MQ!",
             );
           }
-          mqData = JSON.parse(
-            fs.readFileSync("./language/Toram-DB/mq-db-eng.json")
-          );
+          mqData = JSON.parse(fs.readFileSync("./language/Toram-DB/mq-db-eng.json"));
           //kondisi !mq 260|38 eps58 eps125
           let lv, percentage;
           [lv, percentage] = calculateMQ(lvl, exp, startMQ, endMQ);
@@ -1217,7 +1191,7 @@ After doing MQ from *${startEps}* to *${endEps}* you will reach to level ${lv} w
                   title: "EPS122: Unda's Rescue Operation",
                   description: "Boss: Gula the Gourmet",
                   id: `${prefix}${MQcmd} ${lvl}|${exp} eps122`,
-                }
+                },
               ],
             },
           ];
@@ -1250,7 +1224,7 @@ After doing MQ from *${startEps}* to *${endEps}* you will reach to level ${lv} w
             ],
           };
 
-          await client.sendButtonMsg(from, templateButton, {quoted: m});
+          await client.sendButtonMsg(from, templateButton, { quoted: m });
         }
         break;
 
@@ -1272,9 +1246,7 @@ After doing MQ from *${startEps}* to *${endEps}* you will reach to level ${lv} w
           progress("⏳");
 
           axios
-            .get(
-              `https://coryn.club/leveling.php?lv=${lvl}&gap=7&bonusEXP=${bexp}`
-            )
+            .get(`https://coryn.club/leveling.php?lv=${lvl}&gap=7&bonusEXP=${bexp}`)
             .then((response) => {
               if (response.status === 200) {
                 const html = response.data;
@@ -1282,46 +1254,16 @@ After doing MQ from *${startEps}* to *${endEps}* you will reach to level ${lv} w
                 const array = [];
                 $(".level-row").each(function (i, elem) {
                   level = $(this).find(".level-col-1 > b").text().trim();
-                  boss = $(this)
-                    .find(".level-col-2 > p:nth-child(1) > b > a")
-                    .text()
-                    .trim();
-                  location = $(this)
-                    .find(".level-col-2 > p:nth-child(2)")
-                    .text()
-                    .trim();
-                  fullBreak = $(this)
-                    .find(".level-col-3 > p:nth-child(1) > b")
-                    .text()
-                    .trim();
-                  allBreak = $(this)
-                    .find(".level-col-3 > p:nth-child(1)> small")
-                    .text()
-                    .trim();
-                  secondBreak = $(this)
-                    .find(".level-col-3 > p:nth-child(2)")
-                    .text()
-                    .trim();
-                  twoBreak = $(this)
-                    .find(".level-col-3 > p:nth-child(2) > small")
-                    .text()
-                    .trim();
-                  firstBreak = $(this)
-                    .find(".level-col-3 > p:nth-child(3)")
-                    .text()
-                    .trim();
-                  oneBreak = $(this)
-                    .find(".level-col-3 > p:nth-child(3) > small")
-                    .text()
-                    .trim();
-                  noBreak = $(this)
-                    .find(".level-col-3 > p:nth-child(4)")
-                    .text()
-                    .trim();
-                  zeroBreak = $(this)
-                    .find(".level-col-3 > p:nth-child(4)> small")
-                    .text()
-                    .trim();
+                  boss = $(this).find(".level-col-2 > p:nth-child(1) > b > a").text().trim();
+                  location = $(this).find(".level-col-2 > p:nth-child(2)").text().trim();
+                  fullBreak = $(this).find(".level-col-3 > p:nth-child(1) > b").text().trim();
+                  allBreak = $(this).find(".level-col-3 > p:nth-child(1)> small").text().trim();
+                  secondBreak = $(this).find(".level-col-3 > p:nth-child(2)").text().trim();
+                  twoBreak = $(this).find(".level-col-3 > p:nth-child(2) > small").text().trim();
+                  firstBreak = $(this).find(".level-col-3 > p:nth-child(3)").text().trim();
+                  oneBreak = $(this).find(".level-col-3 > p:nth-child(3) > small").text().trim();
+                  noBreak = $(this).find(".level-col-3 > p:nth-child(4)").text().trim();
+                  zeroBreak = $(this).find(".level-col-3 > p:nth-child(4)> small").text().trim();
 
                   if (fullBreak && oneBreak) {
                     array.push({
@@ -1357,88 +1299,125 @@ After doing MQ from *${startEps}* to *${endEps}* you will reach to level ${lv} w
         }
         break;
 
-        case "mob":
-        case "mobs":
-        case "monster":
-        case "boss":{
-         if (!text) return m.reply(lang.format(prefix, command));
-         try {
-          progress("⏳");
-          if (language == "eng") {
-            url = `https://coryn.club/monster.php?name=${encodeURIComponent(text)}`;
-          } else if (language == "ind") {
-            url = `http://indo.coryn.club/monster.php?name=${encodeURIComponent(text)}`;
-          } else {
-            url = `https://coryn.club/monster.php?name=${encodeURIComponent(text)}`;
-          }
-          axios.get(url)
-            .then((response) => {
-              if (response.status === 200) {
-                const html = response.data;
-                const $ = cheerio.load(html);
-                const mobs = [];
-                $(".card-container > div").each(function() {
-                  mobs.push({
-                    name: $(this).find(".card-title-inverse").text().trim().replace("_id", ""),
-                    level: $(this).find(".monster-no-pic > div > .item-prop > div:nth-child(1) > p:nth-child(2) ").text().trim(),
-                    location: $(this).find(".item-prop > div:nth-child(2) > a").text().trim(),
-                    difficulty: $(this).find(".monster-no-pic > div > .item-prop > div:nth-child(2) > p:nth-child(2)").text().trim(), 
-                    element: $(this).find(".monster-no-pic > div > .item-prop > div:nth-child(4) > p:nth-child(2)").text().trim(), 
-                    hp: $(this).find(".monster-no-pic > div > .item-prop > div:nth-child(3) > p:nth-child(2)").text().trim(), 
-                    exp: $(this).find(".monster-no-pic > div > .item-prop > div:nth-child(5) > p:nth-child(2)").text().trim(), 
-                    tamable: $(this).find(".monster-no-pic > div > .item-prop > div:nth-child(6) > p:nth-child(2)").text().trim(), 
-                    drops: $(this).find(".monster-drop-list > .monster-drop").map(function() {
-                      return $(this).text().trim();
-                    }).get()
-                  })
-                });
-                if (mobs.length < 1) return m.reply("Monster not found!");
-                let displayText = `*List monster with name ${text}:*\n`;
-                for (let i = 0; i < mobs.length; i++) {
-                  const mob = mobs[i];
-                  let dropsText = mob.drops.length > 0 ? mob.drops.join("\n- ") : "No drops";
-                  displayText += `\n*Name:* ${mob.name}\n*Level:* ${mob.level}\n*Location:* ${mob.location}\n*Difficulty:* ${mob.difficulty}\n*Element:* ${mob.element}\n*HP:* ${mob.hp}\n*EXP:* ${mob.exp}\n*Tameable:* ${mob.tamable}\n*Drops:*\n- ${dropsText}\n`;
+      case "mob":
+      case "mobs":
+      case "monster":
+      case "boss":
+        {
+          if (!text) return m.reply(lang.format(prefix, command));
+          try {
+            progress("⏳");
+            if (language == "eng") {
+              url = `https://coryn.club/monster.php?name=${encodeURIComponent(text)}`;
+            } else if (language == "ind") {
+              url = `http://indo.coryn.club/monster.php?name=${encodeURIComponent(text)}`;
+            } else {
+              url = `https://coryn.club/monster.php?name=${encodeURIComponent(text)}`;
+            }
+            axios
+              .get(url)
+              .then((response) => {
+                if (response.status === 200) {
+                  const html = response.data;
+                  const $ = cheerio.load(html);
+                  const mobs = [];
+                  $(".card-container > div").each(function () {
+                    mobs.push({
+                      name: $(this).find(".card-title-inverse").text().trim().replace("_id", ""),
+                      level: $(this)
+                        .find(
+                          ".monster-no-pic > div > .item-prop > div:nth-child(1) > p:nth-child(2) ",
+                        )
+                        .text()
+                        .trim(),
+                      location: $(this).find(".item-prop > div:nth-child(2) > a").text().trim(),
+                      difficulty: $(this)
+                        .find(
+                          ".monster-no-pic > div > .item-prop > div:nth-child(2) > p:nth-child(2)",
+                        )
+                        .text()
+                        .trim(),
+                      element: $(this)
+                        .find(
+                          ".monster-no-pic > div > .item-prop > div:nth-child(4) > p:nth-child(2)",
+                        )
+                        .text()
+                        .trim(),
+                      hp: $(this)
+                        .find(
+                          ".monster-no-pic > div > .item-prop > div:nth-child(3) > p:nth-child(2)",
+                        )
+                        .text()
+                        .trim(),
+                      exp: $(this)
+                        .find(
+                          ".monster-no-pic > div > .item-prop > div:nth-child(5) > p:nth-child(2)",
+                        )
+                        .text()
+                        .trim(),
+                      tamable: $(this)
+                        .find(
+                          ".monster-no-pic > div > .item-prop > div:nth-child(6) > p:nth-child(2)",
+                        )
+                        .text()
+                        .trim(),
+                      drops: $(this)
+                        .find(".monster-drop-list > .monster-drop")
+                        .map(function () {
+                          return $(this).text().trim();
+                        })
+                        .get(),
+                    });
+                  });
+                  if (mobs.length < 1) return m.reply("Monster not found!");
+                  let displayText = `*List monster with name ${text}:*\n`;
+                  for (let i = 0; i < mobs.length; i++) {
+                    const mob = mobs[i];
+                    let dropsText = mob.drops.length > 0 ? mob.drops.join("\n- ") : "No drops";
+                    displayText += `\n*Name:* ${mob.name}\n*Level:* ${mob.level}\n*Location:* ${mob.location}\n*Difficulty:* ${mob.difficulty}\n*Element:* ${mob.element}\n*HP:* ${mob.hp}\n*EXP:* ${mob.exp}\n*Tameable:* ${mob.tamable}\n*Drops:*\n- ${dropsText}\n`;
+                  }
+                  m.reply(displayText);
+                  progress("✔");
+                } else {
+                  m.reply("Monster not found!");
                 }
-                m.reply(displayText);
-                progress("✔");
-              } else {
-                m.reply("Monster not found!");
-              }
-            })
-            .catch(() => m.reply("Official Website can't be accessed!"));
-         } catch(err) {
-          progress("❌");
-          m.reply(lang.error(err));
-          console.log(err);
-         }
+              })
+              .catch(() => m.reply("Official Website can't be accessed!"));
+          } catch (err) {
+            progress("❌");
+            m.reply(lang.error(err));
+            console.log(err);
+          }
         }
         break;
-        
-        case "mt":
-         url = `https://${language == "eng" ? "en" : "id"}.toram.jp/?type_code=update#contentAre`
-          axios.get(url)
-            .then((response) => {
-              if (response.status === 200) {
-                const html = response.data;
-                const $ = cheerio.load(html);
-                mtNow = $(".news_border > a").attr("href");
-                axios.get(`https://${language == "eng" ? "en" : "id"}.toram.jp/` + mtNow)
+
+      case "mt":
+        url = `https://${language == "eng" ? "en" : "id"}.toram.jp/?type_code=update#contentAre`;
+        axios
+          .get(url)
+          .then((response) => {
+            if (response.status === 200) {
+              const html = response.data;
+              const $ = cheerio.load(html);
+              mtNow = $(".news_border > a").attr("href");
+              axios
+                .get(`https://${language == "eng" ? "en" : "id"}.toram.jp/` + mtNow)
                 .then((response) => {
                   if (response.status === 200) {
                     const html = response.data;
                     const $ = cheerio.load(html);
                     container = $("#news > div").text().trim();
-                    textSample = container.split("Kembali ke atas")[0]
+                    textSample = container.split("Kembali ke atas")[0];
                     textTemplate = textSample.split("Tweet")[1].trim();
-                    reply(textTemplate)
+                    reply(textTemplate);
                   } else {
                     m.reply("Official Website can't be accessed!");
                   }
-                })
-              }
-            })
-            .catch(() => m.reply("Official Website can't be accessed!"));
-        break
+                });
+            }
+          })
+          .catch(() => m.reply("Official Website can't be accessed!"));
+        break;
 
       case "food":
         client.sendText(
@@ -1456,7 +1435,7 @@ lv = Exp Needed
 8 = 381
 9 = 765
 10 = 1533`,
-          mek
+          mek,
         );
         break;
 
@@ -1467,10 +1446,7 @@ lv = Exp Needed
 
       case "maze":
         maze = text;
-        if (!maze)
-          return reply(
-            "masukan query! contoh :\n /maze guide\n/maze build\n/maze drop"
-          );
+        if (!maze) return reply("masukan query! contoh :\n /maze guide\n/maze build\n/maze drop");
         dbs = await lang.maze(maze);
         client.sendText(from, dbs, mek);
         break;
@@ -1511,7 +1487,7 @@ lv = Exp Needed
               {
                 packname: q.split("|")[0] ? ipackName : global.packName,
                 author: q.split("|")[1] ? iauthor : global.author,
-              }
+              },
             );
             fs.unlinkSync(encmedia);
             progress("✔");
@@ -1543,9 +1519,7 @@ lv = Exp Needed
           bottom = encodeURIComponent(q.split("|")[1]);
 
           if (
-            ((isMedia && !m.message.videoMessage) ||
-              isQuotedImage ||
-              isQuotedSticker) &&
+            ((isMedia && !m.message.videoMessage) || isQuotedImage || isQuotedSticker) &&
             args.length > 0
           ) {
             ranp = getRandom("54");
@@ -1568,13 +1542,10 @@ lv = Exp Needed
             anu1 = `https://api.memegen.link/images/custom/${
               text.split("|")[1] ? top : " "
             }/${text.split("|")[1] ? bottom : top}.png?background=${teks}`;
-            encmedia = await client.sendImageAsSticker(
-              from,
-              `${anu1}`,
-              m,
-              false,
-              { packname: global.packName, author: global.author }
-            );
+            encmedia = await client.sendImageAsSticker(from, `${anu1}`, m, false, {
+              packname: global.packName,
+              author: global.author,
+            });
             fs.unlinkSync(owgi);
             fs.unlinkSync(encmedia);
             progress("✔");
@@ -1599,9 +1570,7 @@ lv = Exp Needed
           progress("⏳");
           res = await axios({
             method: "get",
-            url: `https://api.lolicon.app/setu/v2?keyword=${encodeURIComponent(
-              text
-            )}`,
+            url: `https://api.lolicon.app/setu/v2?keyword=${encodeURIComponent(text)}`,
             headers: {
               DNT: 1,
               "Upgrade-Insecure-Request": 1,
@@ -1614,12 +1583,7 @@ lv = Exp Needed
           for (let i = 0; i < res.data.data[0].tags.length; i++) {
             textTemplate += `\n- ${i + 1}. ${res.data.data[0].tags[i]}`;
           }
-          client.sendImage(
-            from,
-            res.data.data[0].urls.original,
-            textTemplate,
-            mek
-          );
+          client.sendImage(from, res.data.data[0].urls.original, textTemplate, mek);
           progress("✔");
         } catch (err) {
           progress("❌");
@@ -1645,9 +1609,7 @@ lv = Exp Needed
       case "anime":
         try {
           progress("⏳");
-          response = await axios.get(
-            "https://loli-api.glitch.me/api/v1/twintails"
-          );
+          response = await axios.get("https://loli-api.glitch.me/api/v1/twintails");
           client.sendImage(from, response.data.url, " ", mek);
           progress("✔");
         } catch (err) {
@@ -1661,9 +1623,7 @@ lv = Exp Needed
           progress("⏳");
           res = await axios({
             method: "get",
-            url: `https://api.lolicon.app/setu/v2?tag=萝莉&r18=${
-              text == "nsfw" ? "1" : "0"
-            }`,
+            url: `https://api.lolicon.app/setu/v2?tag=萝莉&r18=${text == "nsfw" ? "1" : "0"}`,
             headers: {
               DNT: 1,
               "Upgrade-Insecure-Request": 1,
@@ -1686,9 +1646,7 @@ lv = Exp Needed
         try {
           progress("⌛");
           let milfs = (
-            await axios.get(
-              `https://raw.githubusercontent.com/Arya-was/endak-tau/main/milf.json`
-            )
+            await axios.get(`https://raw.githubusercontent.com/Arya-was/endak-tau/main/milf.json`)
           ).data;
           let milf = milfs[Math.floor(Math.random() * milfs.length)];
           let res = await getBuffer(milf);
@@ -1706,8 +1664,8 @@ lv = Exp Needed
           progress("⏳");
           buffer = await getBuffer(
             `https://api.siputzx.my.id/api/m/brat?text=${encodeURIComponent(
-              text
-            )}&isVideo=false&delay=500`
+              text,
+            )}&isVideo=false&delay=500`,
           );
           client.sendImageAsSticker(from, buffer, mek, false, {
             packname: global.packName,
@@ -1753,18 +1711,12 @@ lv = Exp Needed
         infoGroup = `*- Group Metadata Info -*\n\n*Group ID:* ${
           groupMetadata.id
         }\n*Group Name:* ${groupName}\n*Name Since:* ${timeUnix(
-          groupMetadata.subjectTime
-        )}\n*Group Creation:* ${timeUnix(
-          groupMetadata.creation
-        )}\n*Owner Group:* ${
-          groupMetadata.owner !== undefined
-            ? client.getName(groupMetadata.owner)
-            : "-"
+          groupMetadata.subjectTime,
+        )}\n*Group Creation:* ${timeUnix(groupMetadata.creation)}\n*Owner Group:* ${
+          groupMetadata.owner !== undefined ? client.getName(groupMetadata.owner) : "-"
         }\n*Members:* ${groupMetadata.size} member.\n*Join Approval:* ${
           groupMetadata.joinApprovalMode ? "Yes" : "No"
-        }.\n*Member Add Mode:* ${
-          groupMetadata.memberAddMode ? "Yes" : "No"
-        }.\n*Antilink:* ${
+        }.\n*Member Add Mode:* ${groupMetadata.memberAddMode ? "Yes" : "No"}.\n*Antilink:* ${
           global.db.groups[groupMetadata.id]?.antilink ? "Yes" : "No"
         }\n*Antilinkgc:* ${
           global.db.groups[groupMetadata.id]?.antilinkgc ? "Yes" : "No"
@@ -1780,9 +1732,7 @@ lv = Exp Needed
 
       case "join":
         if (!isUrl(text))
-          return reply(
-            "Example:\n\n!join https://chat.whatsapp.com/GhGhNeX8p3MKwc8KsmaWph"
-          );
+          return reply("Example:\n\n!join https://chat.whatsapp.com/GhGhNeX8p3MKwc8KsmaWph");
         try {
           progress("⌛");
           groupLink = text.split(" ")[0].split("https://chat.whatsapp.com/")[1];
@@ -1815,27 +1765,18 @@ lv = Exp Needed
         textTemplate = `${text ? text : "Tag all!!"}\n\n`;
         for (let member of members) {
           mem.push(member.id);
-          textTemplate += `- @${member.id.split("@")[0]}\n`;
+          textTemplate += `- @${jidDecode(member.id)?.user || ""}\n`;
         }
-        client.sendMessage(
-          from,
-          { text: textTemplate, mentions: mem },
-          { quoted: m }
-        );
+        client.sendMessage(from, { text: textTemplate, mentions: mem }, { quoted: m });
         break;
 
       case "add":
         if (!m.isGroup) return reply(lang.onGroup());
         if (!botAdmin) return reply(lang.botAdmin());
-        if (!isGroupAdmins && !groupMetadata.memberAddMode)
-          return reply(lang.onAdmin());
+        if (!isGroupAdmins && !groupMetadata.memberAddMode) return reply(lang.onAdmin());
         if (!text) return reply(lang.format(prefix, command));
         if (isNaN(text)) return reply("use number!");
-        await client.groupParticipantsUpdate(
-          from,
-          [`${text}@s.whatsapp.net`],
-          "add"
-        );
+        await client.groupParticipantsUpdate(from, [`${text}@s.whatsapp.net`], "add");
         break;
 
       case "kick":
@@ -1844,18 +1785,14 @@ lv = Exp Needed
         if (!isGroupAdmins) return reply(lang.onAdmin());
         if (m.mentionedJid.length > 0) {
           removePPL = m.mentionedJid;
-          await client
-            .groupParticipantsUpdate(from, removePPL, "remove")
-            .then(() => {
-              client.sendText(from, "success✔", mek);
-            });
+          await client.groupParticipantsUpdate(from, removePPL, "remove").then(() => {
+            client.sendText(from, "success✔", mek);
+          });
         } else if (m.quoted) {
           removePPL = [m.quoted.sender];
-          await client
-            .groupParticipantsUpdate(from, removePPL, "remove")
-            .then(() => {
-              client.sendText(from, "success✔", mek);
-            });
+          await client.groupParticipantsUpdate(from, removePPL, "remove").then(() => {
+            client.sendText(from, "success✔", mek);
+          });
         } else {
           reply("tag/reply member!");
         }
@@ -1867,18 +1804,14 @@ lv = Exp Needed
         if (!isGroupAdmins) return reply(lang.onAdmin());
         if (m.mentionedJid.length > 0) {
           promotePPL = m.mentionedJid;
-          await client
-            .groupParticipantsUpdate(from, promotePPL, "promote")
-            .then(() => {
-              client.sendText(from, "success✔", mek);
-            });
+          await client.groupParticipantsUpdate(from, promotePPL, "promote").then(() => {
+            client.sendText(from, "success✔", mek);
+          });
         } else if (m.quoted) {
           promotePPL = [m.quoted.sender];
-          await client
-            .groupParticipantsUpdate(from, promotePPL, "promote")
-            .then(() => {
-              client.sendText(from, "success✔", mek);
-            });
+          await client.groupParticipantsUpdate(from, promotePPL, "promote").then(() => {
+            client.sendText(from, "success✔", mek);
+          });
         } else {
           reply("tag/reply member!");
         }
@@ -1891,46 +1824,42 @@ lv = Exp Needed
         if (!isGroupAdmins) return reply(lang.onAdmin());
         if (m.mentionedJid.length > 0) {
           demotePPL = m.mentionedJid;
-          await client
-            .groupParticipantsUpdate(from, demotePPL, "demote")
-            .then(() => {
-              client.sendText(from, "success✔", mek);
-            });
+          await client.groupParticipantsUpdate(from, demotePPL, "demote").then(() => {
+            client.sendText(from, "success✔", mek);
+          });
         } else if (m.quoted) {
           demotePPL = [m.quoted.sender];
-          await client
-            .groupParticipantsUpdate(from, demotePPL, "demote")
-            .then(() => {
-              client.sendText(from, "success✔", mek);
-            });
+          await client.groupParticipantsUpdate(from, demotePPL, "demote").then(() => {
+            client.sendText(from, "success✔", mek);
+          });
         } else {
           reply("tag/reply member!");
         }
 
         break;
 
-        case "welcome":
+      case "welcome":
         if (!text) return reply("ON/OFF?");
         if (!m.isGroup) return reply(lang.onGroup());
         if (!isGroupAdmins) return reply(lang.onAdmin());
-         if (text.toLowerCase() === "on") {
+        if (text.toLowerCase() === "on") {
           if (global.db.groups[groupMetadata.id]?.welcome) return reply("Welcome already on!");
-          if(!global.db.groups[groupMetadata.id]) {
+          if (!global.db.groups[groupMetadata.id]) {
             global.db.groups[groupMetadata.id] = { welcome: true };
           } else {
             global.db.groups[groupMetadata.id].welcome = true;
           }
           reply("Welcome message is now ON!");
-         }
-          if (text.toLowerCase() === "off") {
-            if (!global.db.groups[groupMetadata.id]?.welcome) return reply("Welcome already off!");
-            if(!global.db.groups[groupMetadata.id]) {
-              global.db.groups[groupMetadata.id] = { welcome: false };
-            } else {
-              global.db.groups[groupMetadata.id].welcome = false;
-            }
-            reply("Welcome message is now OFF!");
+        }
+        if (text.toLowerCase() === "off") {
+          if (!global.db.groups[groupMetadata.id]?.welcome) return reply("Welcome already off!");
+          if (!global.db.groups[groupMetadata.id]) {
+            global.db.groups[groupMetadata.id] = { welcome: false };
+          } else {
+            global.db.groups[groupMetadata.id].welcome = false;
           }
+          reply("Welcome message is now OFF!");
+        }
         break;
 
       case "antilink":
@@ -1964,7 +1893,8 @@ lv = Exp Needed
         if (!isGroupAdmins) return reply(lang.onAdmin());
         if (!botAdmin) return reply(lang.botAdmin());
         if (text.toLowerCase() === "on") {
-          if (global.db.groups[groupMetadata.id]?.antilinkgc) return reply("Antilinkgc already on!");
+          if (global.db.groups[groupMetadata.id]?.antilinkgc)
+            return reply("Antilinkgc already on!");
           if (!global.db.groups[groupMetadata.id]) {
             global.db.groups[groupMetadata.id] = { antilinkgc: true };
           } else {
@@ -1973,7 +1903,8 @@ lv = Exp Needed
           reply("Antilinkgc is now ON!");
         }
         if (text.toLowerCase() === "off") {
-          if (!global.db.groups[groupMetadata.id]?.antilinkgc) return reply("Antilinkgc already off!");
+          if (!global.db.groups[groupMetadata.id]?.antilinkgc)
+            return reply("Antilinkgc already off!");
           if (!global.db.groups[groupMetadata.id]) {
             global.db.groups[groupMetadata.id] = { antilinkgc: false };
           } else {
@@ -1987,8 +1918,8 @@ lv = Exp Needed
         if (!text)
           return reply(
             `bot active!\nsince ${runtime(
-              process.uptime()
-            )} ago\n\n${prefix}bot open - bot can used for all member\n${prefix}bot close - bot can used for admin only`
+              process.uptime(),
+            )} ago\n\n${prefix}bot open - bot can used for all member\n${prefix}bot close - bot can used for admin only`,
           );
         if (!m.isGroup) return reply(lang.onGroup());
         if (!isGroupAdmins) return reply(lang.onAdmin());
@@ -2021,24 +1952,24 @@ lv = Exp Needed
 
       case "donasi":
       case "donate":
-        client.sendImage(
-          from,
-          fs.readFileSync("./assets/donate-me.jpg"),
-          lang.donate(),
-          mek
-        );
+        client.sendImage(from, fs.readFileSync("./assets/donate-me.jpg"), lang.donate(), mek);
         break;
 
       case "language":
       case "lang":
       case "bahasa":
-        if (!text) return reply(`Your current language is ${global.db.user[user].language}\n\nto change language, use:\n${prefix}language ${global.db.user[user].language == "ind" ? "eng" : global.db.user[user].language == "eng" ? "ind" : "unknow"}\n\nAvailable languages:\n- ind\n- eng\n\nind - indonesia\neng - english`);
+        if (!text)
+          return reply(
+            `Your current language is ${global.db.user[user].language}\n\nto change language, use:\n${prefix}language ${global.db.user[user].language == "ind" ? "eng" : global.db.user[user].language == "eng" ? "ind" : "unknow"}\n\nAvailable languages:\n- ind\n- eng\n\nind - indonesia\neng - english`,
+          );
         if (["id", "ind", "indonesia", "ind - indonesia"].includes(text.toLowerCase())) {
           global.db.user[user].language = "ind";
         } else if (["en", "eng", "english", "eng - english"].includes(text.toLowerCase())) {
           global.db.user[user].language = "eng";
         } else {
-          return reply("Language not found!\n\nAvailable languages:\n- ind\n- eng\n\nind - indonesia\neng - english");
+          return reply(
+            "Language not found!\n\nAvailable languages:\n- ind\n- eng\n\nind - indonesia\neng - english",
+          );
         }
         reply(`Language changed to ${text}`);
         break;
@@ -2049,10 +1980,7 @@ lv = Exp Needed
       case "info":
         const used = process.memoryUsage();
         const cpus = os.cpus().map((cpu) => {
-          cpu.total = Object.keys(cpu.times).reduce(
-            (last, type) => last + cpu.times[type],
-            0
-          );
+          cpu.total = Object.keys(cpu.times).reduce((last, type) => last + cpu.times[type], 0);
           return cpu;
         });
         const cpu = cpus.reduce(
@@ -2076,7 +2004,7 @@ lv = Exp Needed
               idle: 0,
               irq: 0,
             },
-          }
+          },
         );
         let timestamp = speed();
         let latensi = speed() - timestamp;
@@ -2101,8 +2029,8 @@ lv = Exp Needed
   *Total user:* ${global.db.user.length}.
   
   Kecepatan Respon ${latensi.toFixed(4)} _Second_ \n ${
-          oldd - neww
-        } _miliseconds_\n\nRuntime : ${runtime(process.uptime())}
+    oldd - neww
+  } _miliseconds_\n\nRuntime : ${runtime(process.uptime())}
   
   💻 Info Server
   RAM: ${formatp(os.totalmem() - os.freemem())} / ${formatp(os.totalmem())}
@@ -2111,9 +2039,7 @@ lv = Exp Needed
   ${Object.keys(used)
     .map(
       (key, _, arr) =>
-        `${key.padEnd(Math.max(...arr.map((v) => v.length)), " ")}: ${formatp(
-          used[key]
-        )}`
+        `${key.padEnd(Math.max(...arr.map((v) => v.length)), " ")}: ${formatp(used[key])}`,
     )
     .join("\n")}
   
@@ -2121,29 +2047,21 @@ lv = Exp Needed
     cpus[0]
       ? `_Total CPU Usage_
   ${cpus[0].model.trim()} (${cpu.speed} MHZ)\n${Object.keys(cpu.times)
-          .map(
-            (type) =>
-              `- *${(type + "*").padEnd(6)}: ${(
-                (100 * cpu.times[type]) /
-                cpu.total
-              ).toFixed(2)}%`
-          )
-          .join("\n")}
+    .map(
+      (type) =>
+        `- *${(type + "*").padEnd(6)}: ${((100 * cpu.times[type]) / cpu.total).toFixed(2)}%`,
+    )
+    .join("\n")}
   _CPU Core(s) Usage (${cpus.length} Core CPU)_
   ${cpus
     .map(
       (cpu, i) =>
-        `${i + 1}. ${cpu.model.trim()} (${cpu.speed} MHZ)\n${Object.keys(
-          cpu.times
-        )
+        `${i + 1}. ${cpu.model.trim()} (${cpu.speed} MHZ)\n${Object.keys(cpu.times)
           .map(
             (type) =>
-              `- *${(type + "*").padEnd(6)}: ${(
-                (100 * cpu.times[type]) /
-                cpu.total
-              ).toFixed(2)}%`
+              `- *${(type + "*").padEnd(6)}: ${((100 * cpu.times[type]) / cpu.total).toFixed(2)}%`,
           )
-          .join("\n")}`
+          .join("\n")}`,
     )
     .join("\n\n")}`
       : ""
@@ -2185,7 +2103,7 @@ lv = Exp Needed
 
       default: {
         if (isCmd && budy.toLowerCase() != undefined) {
-          if (m.chat.endsWith("broadcast")) return;
+          if (jidDecode(m.chat)?.server === "broadcast") return;
           if (m.isBaileys) return;
           if (!budy.toLowerCase()) return;
           if (argsLog || (isCmd && !isGroup)) {
@@ -2193,14 +2111,14 @@ lv = Exp Needed
               chalk.black(chalk.bgRed("[ ERROR ]")),
               color("command", "turquoise"),
               color(`${prefix}${command}`, "turquoise"),
-              color("tidak tersedia", "turquoise")
+              color("tidak tersedia", "turquoise"),
             );
           } else if (argsLog || (isCmd && isGroup)) {
             console.log(
               chalk.black(chalk.bgRed("[ ERROR ]")),
               color("command", "turquoise"),
               color(`${prefix}${command}`, "turquoise"),
-              color("tidak tersedia", "turquoise")
+              color("tidak tersedia", "turquoise"),
             );
           }
         }

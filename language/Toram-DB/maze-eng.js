@@ -1,11 +1,10 @@
-date = new Date().toLocaleDateString('en-US', { weekday: 'long' });
+date = new Date().toLocaleDateString("en-US", { weekday: "long" });
 exports.maze = (query) => {
-    query = query.toLowerCase()
-        if (query == "drop") {
-            switch(date) {
-    
-    case "Saturday" :
-    return `
+  query = query.toLowerCase();
+  if (query == "drop") {
+    switch (date) {
+      case "Saturday":
+        return `
     Drop Guild Maze Saturday(Chocolatte chest)
     NB : High Gemstone
     
@@ -48,10 +47,10 @@ exports.maze = (query) => {
     - Book of Minstrel
     - Book of Unarmed
     - Book of Ninja
-    `
-    
-    case 'Sunday' :
-    return `
+    `;
+
+      case "Sunday":
+        return `
     Drop Guild Maze Sunday(Light Green)
     NB : Gigh Ores Drops
     
@@ -77,10 +76,10 @@ exports.maze = (query) => {
     - Book of Unarmed
     - Book of Ninja
     *7. Gender Switch Stone* (Super RARE)
-    `
-    
-    case 'Monday' :
-    return `
+    `;
+
+      case "Monday":
+        return `
     Drop Guild Maze Monday(Purple)
     
     *1. Light Shard*
@@ -113,10 +112,10 @@ exports.maze = (query) => {
     *8. Tattered Catalog* (Rare)
     *9. Maze Gem* (Rare)
     *10. Hair Catalog* (Rare)
-    `
-    
-    case 'Tuesday' :
-    return `
+    `;
+
+      case "Tuesday":
+        return `
     Drop Guild Maze Tuesday(Red)
     
     *1. Light Shard*
@@ -149,9 +148,9 @@ exports.maze = (query) => {
     *8. Tattered Catalog* (Rare)
     *9. Maze Gem* (Rare)
     *10. Hair Catalog* (Rare)
-    `
+    `;
 
-    case 'Wednesday' :
+      case "Wednesday":
         return `
     Drop Guild Maze Wednesday(Blue)
     
@@ -185,9 +184,9 @@ exports.maze = (query) => {
     *8. Tattered Catalog* (Rare)
     *9. Face Catalog* (Rare)
     *10. Hair Catalog* (Rare)
-    `
-    
-    case 'Thursday' :
+    `;
+
+      case "Thursday":
         return `
     Drop Guild Maze Thursday(Green)
     
@@ -221,9 +220,9 @@ exports.maze = (query) => {
     *8. Tattered Catalog* (Rare)
     *9. Face Catalog* (Rare)
     *10. Hair Catalog* (Rare)
-    `
-    
-    case 'Friday' :
+    `;
+
+      case "Friday":
         return `
     Drop Guild Maze Friday(Light Purple)
     
@@ -257,10 +256,9 @@ exports.maze = (query) => {
     *8. Tattered Catalog* (Rare)
     *9. Eye Catalog* (Rare)
     *10. Hair Catalog* (Rare)
-    `
-    
-            }
-        } else if (query == "guide") {
+    `;
+    }
+  } else if (query == "guide") {
     return `
     Guild Maze is a dungeon-like place from which you have to find a way out. There are also monsters that will block your way while looking for chests of tangs located randomly somewhere. there is also a hidden trap as for the details about the trap:
     *1. explosion Trap*
@@ -281,10 +279,9 @@ exports.maze = (query) => {
     
     that's all the Guild Maze guide that I can explain. Good luck.
     - ${global.botName} -
-    `
-    
-        } else if (query == "build") {
-            return `
+    `;
+  } else if (query == "build") {
+    return `
     To play Guild Maze, it is recommended to use a level 1 char with the Bowgun job(Those who have T5 skill) or use Bow. Fill in the status is Full DEX/(DEX/AGI) to add aspd
     
      Build Skill :
@@ -293,8 +290,8 @@ exports.maze = (query) => {
     mp charge lvl 1 (optional. u can use ampr)
     Shukuchi lvl 1
     for equipment it is recommended to use eq which has MaxHP & MaxMP
-    `
-        } else {
-            return console.log("enter the query !\cexample : /maze guide\n/maze build\n/maze drop")
-        }
-    }
+    `;
+  } else {
+    return console.log("enter the query !\cexample : /maze guide\n/maze build\n/maze drop");
+  }
+};

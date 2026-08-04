@@ -1,5 +1,5 @@
 exports.menu = (prefix) => {
-    return `
+  return `
 ❏ *${global.botName} Menu* ❏
 
  ❏ *Other Menu*
@@ -46,31 +46,31 @@ exports.menu = (prefix) => {
 💳 dana : 083831853737
 💳 GoPay : 083831853737
 💳 ShopeePay : 083831853737
-`
-}
+`;
+};
 
 exports.ownerContact = () => {
-    return `
+  return `
 *Kontak Owner:*
 
 *WhatsApp:* wa.me/${global.owner[0]}
 *Facebook:* ${global.facebook}
 *Instagram:* ${global.instagram}
-`
-}
+`;
+};
 
 exports.donate = () => {
-    return `
+  return `
 💰 *Bantu donasi di :*
 
 💳 Dana : 083831853737
 💳 GoPay : 083831853737
 💳 ShopeePay : 083831853737
-`
-}
+`;
+};
 
 exports.pricing = () => {
-    return `
+  return `
 *List Harga ${global.botName}*
 
 - Sewa : 3k/bulan
@@ -78,11 +78,11 @@ exports.pricing = () => {
 - script : pm owner
 
 > Payment: Qris, Dana, Gopay, Shopeepay
-`
-}
+`;
+};
 
 exports.update = (pushname) => {
-    return `
+  return `
 *New Update V. 5.4.4a*
 Hi ${pushname}.
 
@@ -94,5 +94,5 @@ harap maklumi jika masih banyak error🙏
 *laporkan jika ada fitur error kepada owner*
 tanya tanya silahkan pm owner dengan mengetik:
 *!owner*
-`
-}
+`;
+};

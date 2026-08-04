@@ -1,21 +1,30 @@
 {
   "name": "vertibus",
   "version": "5.3.1a",
+  "description": "Vertibus automates Toram Online WhatsApp communities with fast in-chat game helpers, group moderation and bilingual utility commands.",
   "main": "index.js",
-  "type": "module",
   "scripts": {
     "start": "node index.js",
     "run": "npm i pm2 && pm2 start index.js && pm2 logs",
-    "test": "nodemon index.js"
+    "test": "nodemon index.js",
+    "format": "prettier --write ."
   },
+  "keywords": [
+    "vertibus",
+    "mikako",
+    "baileys",
+    "whatsapp",
+    "group engagement"
+  ],
   "author": "MiKako",
   "license": "MIT",
-  "description": "",
+  "type": "module",
   "dependencies": {
     "@whiskeysockets/baileys": "^7.0.0-rc14",
     "chalk": "^6.0.0",
     "figlet": "^1.11.4",
     "node-cache": "^5.1.2",
-    "pino": "^10.3.1"
+    "pino": "^10.3.1",
+    "pm2": "^7.0.3"
   }
 }

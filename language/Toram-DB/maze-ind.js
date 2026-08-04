@@ -1,13 +1,12 @@
-const  date = new Date().toLocaleString("id-ID", { weekday: "long" });
+const date = new Date().toLocaleString("id-ID", { weekday: "long" });
 exports.maze = (query) => {
-	query = query.toLowerCase()
-		if (query == "drop") {
-		console.log(date)
-			switch(date) {
-
-	case "Saturday" :
-    case "Sabtu" :
-	return `
+  query = query.toLowerCase();
+  if (query == "drop") {
+    console.log(date);
+    switch (date) {
+      case "Saturday":
+      case "Sabtu":
+        return `
 	Drop Guild Maze hari Sabtu(Peti Cokelat)
 	NB : Drop Gemstone Tinggi
 	
@@ -50,11 +49,11 @@ exports.maze = (query) => {
 	- Buku Minstrel
 	- Buku Tangan Kosong
 	- Buku Ninja
-	`
-	
-	case 'Sunday' :
-    case "Minggu" :
-	return `
+	`;
+
+      case "Sunday":
+      case "Minggu":
+        return `
 	Drop Guild Maze hari Minggu(Hijau Muda)
 	NB : Drop Bijih Tinggi
 	
@@ -80,11 +79,11 @@ exports.maze = (query) => {
 	- Buku Tangan Kosong
 	- Buku Ninja
 	*7. Batu Ganti Jenis Kelamin* (Super RARE)
-	`
-	
-	case 'Monday' :
-    case "Senin" :
-	return `
+	`;
+
+      case "Monday":
+      case "Senin":
+        return `
 	Drop Guild Maze hari Senin(Ungu)
 	
 	*1. Kachaya*
@@ -117,11 +116,11 @@ exports.maze = (query) => {
 	*8. Katalog Sobek* (Rare)
 	*9. Permata Labirin* (Rare)
 	*10. Katalog Rambut* (Rare)
-	`
-	
-	case 'Tuesday' :
-    case "Selasa" :
-	return `
+	`;
+
+      case "Tuesday":
+      case "Selasa":
+        return `
 	Drop Guild Maze hari Selasa(Merah)
 	
 	*1. Kachaya*
@@ -154,12 +153,11 @@ exports.maze = (query) => {
 	*8. Katalog Sobek* (Rare)
 	*9. Permata Labirin* (Rare)
 	*10. Katalog Rambut* (Rare)
-	`
+	`;
 
-	
-	case 'Wednesday' :
-    case "Rabu" :
-		return `
+      case "Wednesday":
+      case "Rabu":
+        return `
 	Drop Guild Maze hari Rabu(Biru)
 	
 	*1. Kachaya*
@@ -192,11 +190,11 @@ exports.maze = (query) => {
 	*8. Katalog Sobek* (Rare)
 	*9. Katalog Wajah* (Rare)
 	*10. Katalog Rambut* (Rare)
-	`
-	
-	case 'Thursday' :
-    case "Kamis" :
-		return `
+	`;
+
+      case "Thursday":
+      case "Kamis":
+        return `
 	Drop Guild Maze hari Kamis(Hijau)
 	
 	*1. Kachaya*
@@ -229,11 +227,11 @@ exports.maze = (query) => {
 	*8. Katalog Sobek* (Rare)
 	*9. Katalog Wajah* (Rare)
 	*10. Katalog Rambut* (Rare)
-	`
-	
-	case 'Friday' :
-    case "Jumat":
-		return `
+	`;
+
+      case "Friday":
+      case "Jumat":
+        return `
 	Drop Guild Maze hari Jum'at(Ungu Muda)
 	
 	*1. Kachaya*
@@ -266,11 +264,10 @@ exports.maze = (query) => {
 	*8. Katalog Sobek* (Rare)
 	*9. Katalog Mata* (Rare)
 	*10. Katalog Rambut* (Rare)
-	`
-
-			}
-		} else if (query == "guide") {
-	return `
+	`;
+    }
+  } else if (query == "guide") {
+    return `
 	Guild Maze/Labirin serikat adalah sebuah tempat seperti dungeon dimana kamu harus mencari jalan untuk keluar. Disana juga terdapat monster yang akan menghalangi jalanmu sambil mencari peti tang terletak secara acak di suatu tempat. disana juga terdapat jebakan yang di sembunyikan adapun detail tentang jebakan tersebut :
 	*1. Jebakan Bom*
 	- damage : 40% HP
@@ -290,10 +287,9 @@ exports.maze = (query) => {
 	
 	itu saja guide Guild Maze yang bisa saya jelaskan. Semoga Beruntung.
 	- Vertibus -
-	`
-	
-		} else if (query == "build") {
-			return `
+	`;
+  } else if (query == "build") {
+    return `
 	Untuk memainkan Guild Maze di rekomendasikan menggunakan char level 1 dengan job Bowgun(untuk yang sudah T5 skill) atau job Bow. Status yang di isi adalah Full DEX/(DEX/AGI) untuk menambah aspd
 	
 	 build skillnya :
@@ -302,8 +298,8 @@ exports.maze = (query) => {
 	mp charge lvl 1 (optional. bisa menggunakan ampr)
 	Shukuchi lvl 1
 	untuk equipment di sarankan menggunakan eq yang ada MaxHP & MaxMP nya
-	`
-		} else {
-			return console.log("masukan query !\contoh : /maze guide\n/maze build\n/maze drop")
-		}
-	}
+	`;
+  } else {
+    return console.log("masukan query !\contoh : /maze guide\n/maze build\n/maze drop");
+  }
+};
