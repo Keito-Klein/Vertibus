@@ -1,0 +1,4 @@
+- lengkapi komponen index.js
+- lengkapi logika core.js
+- tambah data mq 
+- tambah data mq mats
