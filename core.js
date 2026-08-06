@@ -1,8 +1,10 @@
 import "./setting.js";
 import anyAscii from "any-ascii";
+import util from "util";
 
 import Create_Update from "./database/create-update.js";
 import Read from "./database/read.js";
+import chalk from "chalk";
 
 const core = async(m, client, message) => {
   try {
@@ -103,7 +105,7 @@ const core = async(m, client, message) => {
           message.chat,
         );
       } catch (error) {
-        console.error("Failed to get group metadata:", error.message);
+        console.error(global.errorLog("Failed to get group metadata:"), error.message);
         groupMetadata = {};
       }
     }
@@ -135,9 +137,117 @@ const core = async(m, client, message) => {
       }
     }
 
-    
+    if (budy.startsWith(">")) {
+        if (!isOwner) return;
+        try {
+        console.log("[eval] " + budy.slice(2));
+        let evaled = await eval(budy.slice(2));
+        if (typeof evalved !== "string") {
+            evaled = util.inspect(evaled);
+        }
+        await message.reply(evaled);
+        } catch (error) {
+        await message.reply(String(error));
+        }
+    }
+
+    //antilink
+    if (
+      budy.match(/\b((https?:\/\/|www\.)[a-zA-Z0-9-]+(\.[a-zA-Z]{2,})+([\s\S]*?)?)\b/gm) &&
+      isGroup &&
+      !isCmd
+    ) {
+      if (isGroupAdmins) return;
+      if (!isGroup && !isOwner) return;
+      if (!isBotGroupAdmins) return;
+      if (itsMe) return;
+
+      let checking = await check.checkRestrict(groupMetadata.id);
+      let restricted = checking.antilink;
+
+      if (restricted) {
+        await client.sendMessage(from, {
+          delete: {
+            remoteJid: from,
+            fromMe: false,
+            id: message.key.id,
+            participant: message.key.participant,
+          },
+        });
+        }
+    }
+
+      //AntilinkGC
+      if (body.match(/chat.whatsapp.com/g) && isGroup) {
+        if (!isBotGroupAdmins) return;
+        if (isGroupAdmins) return;
+        if (itsMe) return;
+
+        let checking = await check.checkRestrict(groupMetadata.id);
+        let restricted = checking.antilinkgc;
+
+        if (restricted) {
+          await client.sendMessage(from, {
+            delete: {
+              remoteJid: from,
+              fromMe: false,
+              id: message.key.id,
+              participant: message.key.participant,
+            },
+          });
+        }
+      }
+
+      // ON/OFF BOT
+      if (isCmd && isGroup) {
+        let checking = await check.checkRestrict(groupMetadata.id);
+        let opened = checking.open;
+
+        if (!opened && !isGroupAdmins) return;
+      }
+
+      const progress = (reaction) => {
+          const reacting = {
+              react: {
+                  text: reaction,
+                  key: message.key
+              }
+          }
+          client.sendMessage(from, reacting)
+      }
+
+      await client.readMessages([message.key]) // Auto read
+      if(isBanned?.banned && command !== prefix + "me") {
+        if (isCmd) {
+          console.log(global.warningLog("[SKIP]"), chalk.yellowBright(moment(t * 1000).format("DD/MM/YY HH:mm:ss")), global.successLog(`${command} [${args.length}]`), "from", pushname);
+          progress("🚫")
+          return;
+        }
+      }
+      if (!isCmd && !isGroup) return;
+      if (!isCmd && isGroup) return;
+      if (isCmd && !isGroup) {
+        console.log(global.infoLog("[EXEC]"), chalk.yellowBrigh(moment(t * 1000).format("DD/MM/YY HH:mm:ss")), global.successLog(`${command} [${args.length}]`), "from", global.successLog(pushname));
+      }
+      if (isCmd && isGroup) {
+        console.log(global.infoLog("[EXEC]"), chalk.yellowBrigh(moment(t * 1000).format("DD/MM/YY HH:mm:ss")), global.successLog(`${command} [${args.length}]`), "from", global.successLog(pushname), "in", global.successLog(groupName));
+      }
+
+      let senderType = isGroup ? groupMetadata.id : sender;
+      let isLid = isGroup ? "isGroup" : senderLid
+      let cekUser = await check.checkUser(senderType);
+      if (cekUser.user === null || !cekUser.user.latest) {
+
+          await create.addUser(senderType, isLid);
+          reply(lang.update(pushname));
+        }
+      await create.addUsage(isGroup ? "group" : "private");
+
+    //BUAT FITUR
     
   } catch (err) {
-    
+    console.error(global.errorLog("[ERROR]"), err)
   }
 }
+
+export default core;

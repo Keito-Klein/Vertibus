@@ -13,13 +13,22 @@ import chalk from "chalk"
 import NodeCache from "node-cache";
 import Pino from "pino"
 import figlet from "figlet";
+import path from "path";
+import chalk from "chalk";
+import os from "os";
+import fs from "fs";
 import { Boom } from "@hapi/boom"
+import { fileURLToPath } from "url";
 import { sleep } from "./lib/general-function.js";
 
 //vars
 let version;
 let reconnectTimer = null;
 let isStarting = false;
+global.errorLog = chalk.redBright;
+global.warningLog = chalk.hex('#FFA500')
+global.successLog = chalk.redBright;
+global.infoLog = chalk.blueBright;
 
 // ============ RATE LIMIT HANDLER (Initialized once at startup) ============
 const groupMetadataCache = new Map();
@@ -86,6 +95,33 @@ const getGroupMetadataWithRateLimit = async (client, groupId) => {
 };
 global.getGroupMetadataWithRateLimit = getGroupMetadataWithRateLimit;
 
+const tempDir = path.resolve("./tmp");
+fs.mkdirSync(tempDir, { recursive: true });
+process.env.TMPDIR = tempDir;
+process.env.TMP = tempDir;
+process.env.TEMP = tempDir;
+os.tmpdir = () => tempDir;
+
+let core;
+const importHandler = async (reload = false) => {
+    core = (await import(`./core.js${reload ? `?update=${Date.now()}` : ""}`)).default;
+};
+await importHandler();
+
+const coreFile = fileURLToPath(new URL("./core.js", import.meta.url));
+if (!global.__fileWatchers) global.__fileWatchers = new Set();
+if (!global.__fileWatchers.has(coreFile)) {
+  global.__fileWatchers.add(coreFile);
+  fs.watchFile(coreFile, async () => {
+    console.log(infoLog("Updated 'core.js'"));
+    try {
+      await importHandler(true);
+    } catch (err) {
+      console.error(errorLog(err));
+    }
+  });
+}
+
 async function start() {
   if(isStarting) return;
   isStarting = true;
@@ -144,9 +180,9 @@ async function start() {
     if (connection === 'close') {
           const reason = lastDisconnected?.error?.output?.statusCode;
           const reasonName = Object.entries(DisconnectReason).find(([, code]) => code === reason)?.[0] || "unknown";
-          console.log(chalk.rgb(252, 138, 56)("Connection closed:"), reasonName, reason, lastDisconnected?.error?.message || "");
+          console.log(warningLog("Connection closed:"), reasonName, reason, lastDisconnected?.error?.message || "");
           if (reason === DisconnectReason.loggedOut) {
-            console.log(chalk.redBright("Device Logged out, remove /session to re-login."));
+            console.log(errorLog("Device Logged out, remove /session to re-login."));
             return;
           }
           if (!reconnectTimer) {
@@ -156,19 +192,29 @@ async function start() {
             }, 3000);
           }
         } else if (connection === 'open') {
-            console.log(chalk.greenBright("session connected:"), jidDecode(client?.user?.id)?.user);
+            console.log(successLog("session connected:"), jidDecode(client?.user?.id)?.user);
         } else if (connection === "connecting") {
           console.log(chalk.yellowBright("Connecting to server..."))
         }
   })
 
   client.ev.on("messages.upsert", (mess) => {
-    //buat logika pemrosesann pesan
-    for(const message of mess.messages) {
-      console.log(JSON.stringify(message, undefined, 2))
-      if(message.type !== "notify") return
+    try {
+      //buat logika pemrosesann pesan
+      for(const message of mess.messages) {
+        if(message.key && message.key.remoteJid === "status@broadcast") return;
+        if(message.mtype === "protocolMessage") return;
+        if (message.category === "peer") return;
+        console.log(JSON.stringify(message, undefined, 2))
+        core(mess, client, message);
+      }
+    } catch (err) {
+      console.error(errorLog("error processing message:"), err)
     }
   })
+
+
+
   isStarting = false;
 }
 
