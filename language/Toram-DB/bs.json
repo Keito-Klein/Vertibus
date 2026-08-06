@@ -1,0 +1,166 @@
+{
+  "eng": [
+    {
+      "range": [1, 5],
+      "craft": "Shortsword (OHS)",
+      "mats": "Metal(mats)",
+      "location": "-",
+      "mob": "-",
+      "point": "5"
+    },
+    {
+      "range": [6, 10],
+      "craft": "Adventurer's Garb (ARM)",
+      "mats": "Bird Wing 35x",
+      "location": "Ruined Temple: A1",
+      "mob": "Beak",
+      "point": "10"
+    },
+    {
+      "range": [11, 50],
+      "craft": "Hard Knuckle (KNK)",
+      "mats": "- Dark Gray Metal Plate 20x\n- High-Purity Oil 5x",
+      "location": "Ancient Empress Tomb",
+      "mob": "- Bone Dragonewt\n- Black Jelly",
+      "point": "50"
+    },
+    {
+      "range": [51, 90],
+      "craft": "Indigo Sword (OHS)",
+      "mats": "- Heated Sword Fin 20x\n- Deformed Blade 5x",
+      "location": "- Blazing Graben : Upper\n- Dark Castle : A2",
+      "mob": "- Baby Salamander\n- Controlled Knight",
+      "point": "90"
+    },
+    {
+      "range": [91, 120],
+      "craft": "Diomedea Suit (ARM)",
+      "mats": "- Ox Fabric 25x\n- Ultimea Stone 10x",
+      "location": "- Lab. Brahe : A2\n- Ultimea Sewer : Southeast",
+      "mob": "- Lyark Specialist\n- Grape Jelly",
+      "point": "120"
+    },
+    {
+      "range": [121, 140],
+      "craft": "Lightning Bolt Spear (HB)",
+      "mats": "- Shining Stone Monument 5x\n- Cracked Halo 20x",
+      "location": "Shrine of the Gods : A2",
+      "mob": "- Destiny Cube\n- Bubble Angel",
+      "point": "140"
+    },
+    {
+      "range": [141, 170],
+      "craft": "Red Spider Lily (KTN)",
+      "mats": "- Weird Snake Skin 20x\n- Dark Red Crystal 5x",
+      "location": "Rokoko City Ruins",
+      "mob": "Coofer",
+      "point": "170"
+    },
+    {
+      "range": [171, 200],
+      "craft": "Arachnid Sword (OHS)",
+      "mats": "- Radiant Miracle Water 2x\n- Evil Spirit Crystal 1x",
+      "location": "Arche Valley : Depths",
+      "mob": "Arachnidemon",
+      "point": "200"
+    },
+    {
+      "range": [201, 250],
+      "craft": "Trickster Costume (ARM)",
+      "mats": "- Trikster Dragon Skin 4x\n- Trikster Dragon Eye 1x",
+      "location": "OPeration Zone : Cockpit Area",
+      "mob": "Trikster Dragon Mimyugon",
+      "point": "250"
+    },
+    {
+      "range": [251, 260],
+      "craft": "Water Priest Robe (ARM)",
+      "mats": "- Frog Warrior Kung Fu Book 1x\n- Frog Warrior Arm Bit 4x",
+      "location": "Puerta Islands : Adit",
+      "mob": "Zapo",
+      "point": "260"
+    }
+  ],
+  "ind": [
+    {
+        "range": [1, 5],
+        "craft": "Pedang Pendek (OHS)",
+		"mats": "logam(mats)",
+		"location": "-",
+		"mob": "-",
+		"point": "5"
+    },
+    {
+        "range": [6, 10],
+        "craft": "Baju Pengelana (ARM)",
+		"mats": "Sayap Burung 35x",
+		"location": "Kuil Runtuh: A1",
+		"mob": "Beak",
+		"point": "10"
+    },
+    {
+        "range": [11, 50],
+        "craft": "Hard Knuckle (KNK)",
+		"mats": "- Pelat Abu-Abu 20x\n- Minyak Jernih Murni 5x",
+		"location": "Makam Ratu Kuno",
+		"mob": "- Bone Dragonewt\n- Black Jelly",
+		"point": "50"
+    },
+    {
+        "range": [51, 90],
+        "craft": "Pedang Indigo (OHS)",
+		"mats": "- Sirip Pedang Panas 20x\n- Pedang Cacat 5x",
+		"location": "- Graben Membara : atas\n- Istana Gelap : A2",
+		"mob": "- Baby Salamander\n- Ksatria Terkontrol",
+		"point": "90"
+    },
+    {
+        "range": [91, 120],
+        "craft": "Baju Diomedea (ARM)",
+		"mats": "- Kain Lembu 25x\n- Batu Ultimea 10x",
+		"location": "- Lab. Brahe : A2\n- Saluran Ultimea : Tenggara",
+		"mob": "- Lyark Spesialis\n- Grape Jelly",
+		"point": "120"
+    },
+    {
+        "range": [121, 140],
+        "craft": "Tombak Baskara (HB)",
+		"mats": "- Prasasti Bersinar 5x\n- Halo Terputus 20x",
+		"location": "Kuil Dewa Berkah",
+		"mob": "- Kubus Kodrat\n- Malaikat Gelembung",
+		"point": "140"
+    },
+    {
+        "range": [141, 170],
+        "craft": "Bakung Lelabah Merah (KTN)",
+		"mats": "- Kulit Ular Aneh 20x\n- Kristal Merah Kehitaman 5x",
+		"location": "Reruntuhan Kota Rokoko",
+		"mob": "Coofer",
+		"point": "170"
+    },
+    {
+        "range": [171, 200],
+        "craft": "Pedang Arachnida (OHS)",
+		"mats": "- Air Ajaib Berseri 2x\n- Kristal Roh Jahat 1x",
+		"location": "Lembah Arche : Area Terdalam",
+		"mob": "Arachnidemon",
+		"point": "200"
+    },
+    {
+        "range": [201, 250],
+        "craft": "Kostum Pengelabu (ARM)",
+		"mats": "- Kulit Naga Penyamar 4x\n- Mata Naga Penyamar 1x",
+		"location": "Zona Kemudi",
+		"mob": "Naga Penyamar Mimyugon",
+		"point": "250"
+    },
+    {
+        "range": [251, 260],
+        "craft": "Jubah Pendeta Air (ARM)",
+		"mats": "- Kitab Silat Prajurit Kodok 1x\n- Pecahan Zirah Prajurit Kodok 4x",
+		"location": "Kepulauan puerta : Portal",
+		"mob": "Zapo",
+		"point": "260"
+    }
+  ]
+}
