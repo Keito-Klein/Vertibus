@@ -8,5 +8,3 @@ global.author = botName;
 global.donate = "-";
 global.facebook = "url profile Facebook";
 global.instagram = "Url profile Instagram";
-global.mongoDB = false;
-global.mongoString = "Enter Your Connection String!!";
