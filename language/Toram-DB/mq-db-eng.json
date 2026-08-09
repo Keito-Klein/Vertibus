@@ -1,5 +1,6 @@
 [
     {
+        "ch_title": "Chapter 1: The Begining of Chaos",
         "title": "First Time Visit",
         "boss": "-",
         "chapter": 1,
@@ -7,6 +8,7 @@
         "exp": 30
     },
     {
+        "ch_title": "Chapter 1: The Begining of Chaos",
         "title": "Straye Brother and Sister",
         "boss": "Boss Colon",
         "chapter": 1,
@@ -14,6 +16,7 @@
         "exp": 80
     },
     {
+        "ch_title": "Chapter 1: The Begining of Chaos",
         "title": "A Golem on a Rampage",
         "boss": "Excavated Golem",
         "chapter": 1,
@@ -21,6 +24,7 @@
         "exp": 730
     },
     {
+        "ch_title": "Chapter 1: The Begining of Chaos",
         "title": "The Goddess of Wisdom",
         "boss": "-",
         "chapter": 1,
@@ -28,6 +32,7 @@
         "exp": 2050
     },
     {
+        "ch_title": "Chapter 1: The Begining of Chaos",
         "title": "The Dragon's Den",
         "boss": "Eerie Crystal",
         "chapter": 1,
@@ -35,6 +40,7 @@
         "exp": 4700
     },
     {
+        "ch_title": "Chapter 1: The Begining of Chaos",
         "title": "The Ruined Temple",
         "boss": "-",
         "chapter": 1,
@@ -42,6 +48,7 @@
         "exp": 9330
     },
     {
+        "ch_title": "Chapter 1: The Begining of Chaos",
         "title": "The First Magic Stone",
         "boss": "Minotaur",
         "chapter": 1,
@@ -49,6 +56,7 @@
         "exp": 16700
     },
     {
+        "ch_title": "Chapter 1: The Begining of Chaos",
         "title": "Purification Incense",
         "boss": "-",
         "chapter": 1,
@@ -56,6 +64,7 @@
         "exp": 27900
     },
     {
+        "ch_title": "Chapter 1: The Begining of Chaos",
         "title": "The Dragon and Black Crystal",
         "boss": "Brutal Dragon Decel",
         "chapter": 1,
@@ -63,6 +72,8 @@
         "exp": 43000
     },
     {
+        
+        "ch_title": "Chapter 2: Look for Holly Gems!",
         "title": "The Merchant Girl",
         "boss": "Mochelo",
         "chapter": 2,
@@ -70,6 +81,7 @@
         "exp": 64000
     },
     {
+        "ch_title": "Chapter 2: Look for Holly Gems!",
         "title": "Where Are the Gems?",
         "boss": "Flare Volg",
         "chapter": 2,
@@ -77,6 +89,7 @@
         "exp": 92000
     },
     {
+        "ch_title": "Chapter 2: Look for Holly Gems!",
         "title": "Who is the Black Knight?!",
         "boss": "Ooze",
         "chapter": 2,
@@ -84,6 +97,7 @@
         "exp": 118200
     },
     {
+        "ch_title": "Chapter 2: Look for Holly Gems!",
         "title": "Trials in the Palace",
         "boss": "-",
         "chapter": 2,
@@ -91,6 +105,7 @@
         "exp": 149000
     },
     {
+        "ch_title": "Chapter 2: Look for Holly Gems!",
         "title": "The Moon Wizard",
         "boss": "Mauez",
         "chapter": 2,
@@ -98,6 +113,7 @@
         "exp": 172000
     },
     {
+        "ch_title": "Chapter 2: Look for Holly Gems!",
         "title": "The Follower and Hater",
         "boss": "Ganglef",
         "chapter": 2,
@@ -105,6 +121,7 @@
         "exp": 227000
     },
     {
+        "ch_title": "Chapter 2: Look for Holly Gems!",
         "title": "The Wizard's Cave",
         "boss": "-",
         "chapter": 2,
@@ -112,6 +129,7 @@
         "exp": 240000
     },
     {
+        "ch_title": "Chapter 2: Look for Holly Gems!",
         "title": "The Star Wizard",
         "boss": "Boss Roga",
         "chapter": 2,
@@ -119,6 +137,7 @@
         "exp": 255000
     },
     {
+        "ch_title": "Chapter 3: Battle With the Ancient God",
         "title": "The Invincible... Enemy??",
         "boss": "-",
         "chapter": 3,
@@ -126,6 +145,7 @@
         "exp": 270000
     },
     {
+        "ch_title": "Chapter 3: Battle With the Ancient God",
         "title": "The Ancient Empress",
         "boss": "Ancient Empress",
         "chapter": 3,
@@ -133,6 +153,7 @@
         "exp": 284000
     },
     {
+        "ch_title": "Chapter 3: Battle With the Ancient God",
         "title": "The Culprit",
         "boss": "Masked Warrior",
         "chapter": 3,
@@ -140,6 +161,7 @@
         "exp": 319000
     },
     {
+        "ch_title": "Chapter 3: Battle With the Ancient God",
         "title": "Fate of the Fortress",
         "boss": "-",
         "chapter": 3,
@@ -147,6 +169,7 @@
         "exp": 335000
     },
     {
+        "ch_title": "Chapter 3: Battle With the Ancient God",
         "title": "Memory in the Lost Town",
         "boss": "Pillar Golem",
         "chapter": 3,
@@ -154,6 +177,7 @@
         "exp": 398000
     },
     {
+        "ch_title": "Chapter 3: Battle With the Ancient God",
         "title": "The Stolen Sorcery Gem",
         "boss": "-",
         "chapter": 3,
@@ -161,6 +185,7 @@
         "exp": 417000
     },
     {
+        "ch_title": "Chapter 3: Battle With the Ancient God",
         "title": "Living with a Dragon",
         "boss": "Grass Dragon Yelb",
         "chapter": 3,
@@ -168,6 +193,7 @@
         "exp": 462300
     },
     {
+        "ch_title": "Chapter 3: Battle With the Ancient God",
         "title": "Monsters from Outerworld",
         "boss": "Nurethoth",
         "chapter": 3,
@@ -175,6 +201,7 @@
         "exp": 540000
     },
     {
+        "ch_title": "Chapter 4: The Creeping Shadows",
         "title": "The Mage Diels",
         "boss": "-",
         "chapter": 4,
@@ -182,6 +209,7 @@
         "exp": 562000
     },
     {
+        "ch_title": "Chapter 4: The Creeping Shadows",
         "title": "Journey for Reconstruction",
         "boss": "Goldoon (MQ only)",
         "chapter": 4,
@@ -189,6 +217,7 @@
         "exp": 585000
     },
     {
+        "ch_title": "Chapter 4: The Creeping Shadows",
         "title": "The Sacred Gem in Akaku",
         "boss": "Goouva",
         "chapter": 4,
@@ -196,6 +225,7 @@
         "exp": 710000
     },
     {
+        "ch_title": "Chapter 4: The Creeping Shadows",
         "title": "The King of Darkan",
         "boss": "-",
         "chapter": 4,
@@ -203,6 +233,7 @@
         "exp": 740000
     },
     {
+        "ch_title": "Chapter 4: The Creeping Shadows",
         "title": "The Lurking Evil",
         "boss": "Scrader",
         "chapter": 4,
@@ -210,6 +241,7 @@
         "exp": 803000
     },
     {
+        "ch_title": "Chapter 4: The Creeping Shadows",
         "title": "Find the False Black Knight!",
         "boss": "Black Knight of Delusion",
         "chapter": 4,
@@ -217,6 +249,7 @@
         "exp": 913000
     },
     {
+        "ch_title": "Chapter 4: The Creeping Shadows",
         "title": "Technista's Movement",
         "boss": "-",
         "chapter": 4,
@@ -224,6 +257,7 @@
         "exp": 1000000
     },
     {
+        "ch_title": "Chapter 4: The Creeping Shadows",
         "title": "The Falling Feather of Death",
         "boss": "Evil Crystal Beast",
         "chapter": 4,
@@ -231,6 +265,7 @@
         "exp": 1100000
     },
     {
+        "ch_title": "Chapter 5: The Storm in the Darkness",
         "title": "In The Unknown Darkness",
         "boss": "-",
         "chapter": 5,
@@ -238,6 +273,7 @@
         "exp": 1150000
     },
     {
+        "ch_title": "Chapter 5: The Storm in the Darkness",
         "title": "The Charm",
         "boss": "Cerberus",
         "chapter": 5,
@@ -245,6 +281,7 @@
         "exp": 1310000
     },
     {
+        "ch_title": "Chapter 5: The Storm in the Darkness",
         "title": "Parching Dark Mirror",
         "boss": "Zolban",
         "chapter": 5,
@@ -252,6 +289,7 @@
         "exp": 1370000
     },
     {
+        "ch_title": "Chapter 5: The Storm in the Darkness",
         "title": "Fierce Battle in the Garden",
         "boss": "Aranea",
         "chapter": 5,
@@ -259,6 +297,7 @@
         "exp": 1550000
     },
     {
+        "ch_title": "Chapter 5: The Storm in the Darkness",
         "title": "A Light in the Darkness",
         "boss": "Bexiz",
         "chapter": 5,
@@ -266,6 +305,7 @@
         "exp": 1750000
     },
     {
+        "ch_title": "Chapter 5: The Storm in the Darkness",
         "title": "The Ones Nesting in the Manor",
         "boss": "Imitator",
         "chapter": 5,
@@ -273,6 +313,7 @@
         "exp": 1970000
     },
     {
+        "ch_title": "Chapter 5: The Storm in the Darkness",
         "title": "The Dark Castle",
         "boss": "Imitacia",
         "chapter": 5,
@@ -280,6 +321,7 @@
         "exp": 2210000
     },
     {
+        "ch_title": "Chapter 5: The Storm in the Darkness",
         "title": "To The Living World",
         "boss": "-",
         "chapter": 5,
@@ -287,6 +329,7 @@
         "exp": 2220000
     },
     {
+        "ch_title": "Chapter 6: The Two Technistas",
         "title": "Demi Machina",
         "boss": "-",
         "chapter": 6,
@@ -294,6 +337,7 @@
         "exp": 2600000
     },
     {
+        "ch_title": "Chapter 6: The Two Technistas",
         "title": "The Town of Pax Faction",
         "boss": "Iconos",
         "chapter": 6,
@@ -301,6 +345,7 @@
         "exp": 2700000
     },
     {
+        "ch_title": "Chapter 6: The Two Technistas",
         "title": "Mechanical Heart",
         "boss": "Ifrid",
         "chapter": 6,
@@ -308,6 +353,7 @@
         "exp": 2800000
     },
     {
+        "ch_title": "Chapter 6: The Two Technistas",
         "title": "Black Knights of Lyark",
         "boss": "-",
         "chapter": 6,
@@ -315,6 +361,7 @@
         "exp": 2820000
     },
     {
+        "ch_title": "Chapter 6: The Two Technistas",
         "title": "The Mysterious Artifact",
         "boss": "Proto Leon",
         "chapter": 6,
@@ -322,6 +369,7 @@
         "exp": 3030000
     },
     {
+        "ch_title": "Chapter 6: The Two Technistas",
         "title": "Truth of the Artifact",
         "boss": "-",
         "chapter": 6,
@@ -329,6 +377,7 @@
         "exp": 3099000
     },
     {
+        "ch_title": "Chapter 6: The Two Technistas",
         "title": "The Price of Treachery",
         "boss": "York",
         "chapter": 6,
@@ -336,6 +385,7 @@
         "exp": 3320000
     },
     {
+        "ch_title": "Chapter 6: The Two Technistas",
         "title": "The Blasphemous Factory",
         "boss": "Tyrant Machina",
         "chapter": 6,
@@ -343,6 +393,7 @@
         "exp": 3640000
     },
     {
+        "ch_title": "Chapter 6: The Two Technistas",
         "title": "Mystery of the Black Knights",
         "boss": "Mozto Machina",
         "chapter": 6,
@@ -350,6 +401,7 @@
         "exp": 4020000
     },
     {
+        "ch_title": "Chapter 7: Upheaval in Ultimea",
         "title": "Monster's Forest",
         "boss": "Lalvada",
         "chapter": 7,
@@ -357,6 +409,7 @@
         "exp": 4730000
     },
     {
+        "ch_title": "Chapter 7: Upheaval in Ultimea",
         "title": "The Underground Town",
         "boss": "-",
         "chapter": 7,
@@ -364,6 +417,7 @@
         "exp": 4820000
     },
     {
+        "ch_title": "Chapter 7: Upheaval in Ultimea",
         "title": "The Elves in Lyark",
         "boss": "Zahhak Machina",
         "chapter": 7,
@@ -371,6 +425,7 @@
         "exp": 5070000
     },
     {
+        "ch_title": "Chapter 7: Upheaval in Ultimea",
         "title": "The Mad Laboratory",
         "boss": "Guignol",
         "chapter": 7,
@@ -378,6 +433,7 @@
         "exp": 5500000
     },
     {
+        "ch_title": "Chapter 7: Upheaval in Ultimea",
         "title": "Tragedy in the Jail",
         "boss": "Gwaimol",
         "chapter": 7,
@@ -385,6 +441,7 @@
         "exp": 6000000
     },
     {
+        "ch_title": "Chapter 7: Upheaval in Ultimea",
         "title": "Calamity in Droma Square",
         "boss": "Ultimate Machina",
         "chapter": 7,
@@ -392,6 +449,7 @@
         "exp": 6400000
     },
     {
+        "ch_title": "Chapter 7: Upheaval in Ultimea",
         "title": "Head for Ultimea Palace",
         "boss": "Ornlarf",
         "chapter": 7,
@@ -399,6 +457,7 @@
         "exp": 6900000
     },
     {
+        "ch_title": "Chapter 7: Upheaval in Ultimea",
         "title": "The Chaotic Truth",
         "boss": "Venena Coenubia",
         "chapter": 7,
@@ -406,6 +465,7 @@
         "exp": 7400000
     },
     {
+        "ch_title": "Chapter 8: Road to Eldenbaum",
         "title": "The Mine Where Monsters Lurk",
         "boss": "Shampy",
         "chapter": 8,
@@ -413,6 +473,7 @@
         "exp": 8400000
     },
     {
+        "ch_title": "Chapter 8: Road to Eldenbaum",
         "title": "The Mysterious Shadow",
         "boss": "-",
         "chapter": 8,
@@ -420,6 +481,7 @@
         "exp": 8500000
     },
     {
+        "ch_title": "Chapter 8: Road to Eldenbaum",
         "title": "The New Diel Country",
         "boss": "Crystal Titan",
         "chapter": 8,
@@ -427,6 +489,7 @@
         "exp": 8600000
     },
     {
+        "ch_title": "Chapter 8: Road to Eldenbaum",
         "title": "The Ruins of the Gods",
         "boss": "Mom Fluck",
         "chapter": 8,
@@ -434,6 +497,7 @@
         "exp": 8800000
     },
     {
+        "ch_title": "Chapter 8: Road to Eldenbaum",
         "title": "The Former God of Justice",
         "boss": "Zelbuse",
         "chapter": 8,
@@ -441,6 +505,7 @@
         "exp": 9100000
     },
     {
+        "ch_title": "Chapter 8: Road to Eldenbaum",
         "title": "The Remaining Thrones in the Shrine",
         "boss": "Mardula",
         "chapter": 8,
@@ -448,6 +513,7 @@
         "exp": 9700000
     },
     {
+        "ch_title": "Chapter 8: Road to Eldenbaum",
         "title": "Gods' Whereabouts",
         "boss": "-",
         "chapter": 8,
@@ -455,6 +521,7 @@
         "exp": 10400000
     },
     {
+        "ch_title": "Chapter 8: Road to Eldenbaum",
         "title": "The Wait at Specia's Shrine",
         "boss": "Seele Zauga",
         "chapter": 8,
@@ -462,6 +529,7 @@
         "exp": 11100000
     },
     {
+        "ch_title": "Chapter 8: Road to Eldenbaum",
         "title": "The Warden of Ice & Snow",
         "boss": "King Piton",
         "chapter": 8,
@@ -469,6 +537,7 @@
         "exp": 11800000
     },
     {
+        "ch_title": "Chapter 8: Road to Eldenbaum",
         "title": "At Mountains End",
         "boss": "Finstern the Dark Dragon",
         "chapter": 8,
@@ -476,6 +545,7 @@
         "exp": 12500000
     },
     {
+        "ch_title": "Chapter 9: Recapturing Eldenbaum",
         "title": "Deadly Road to Eldenbaum",
         "boss": "Tuscog",
         "chapter": 9,
@@ -483,6 +553,7 @@
         "exp": 15800000
     },
     {
+        "ch_title": "Chapter 9: Recapturing Eldenbaum",
         "title": "Unforseen Trap",
         "boss": "Eroded Pilz",
         "chapter": 9,
@@ -490,6 +561,7 @@
         "exp": 17100000
     },
     {
+        "ch_title": "Chapter 9: Recapturing Eldenbaum",
         "title": "Traces of Technological Progress",
         "boss": "Pyxtica",
         "chapter": 9,
@@ -497,6 +569,7 @@
         "exp": 18200000
     },
     {
+        "ch_title": "Chapter 9: Recapturing Eldenbaum",
         "title": "An Unexpected Acquaintance",
         "boss": "Kuzto",
         "chapter": 9,
@@ -504,6 +577,7 @@
         "exp": 19200000
     },
     {
+        "ch_title": "Chapter 9: Recapturing Eldenbaum",
         "title": "Front Line Base Operation",
         "boss": "Sapphire Roga",
         "chapter": 9,
@@ -511,6 +585,7 @@
         "exp": 20300000
     },
     {
+        "ch_title": "Chapter 9: Recapturing Eldenbaum",
         "title": "Strategy to Redeem the Treetop Harbor",
         "boss": "Gravicep",
         "chapter": 9,
@@ -518,6 +593,7 @@
         "exp": 21500000
     },
     {
+        "ch_title": "Chapter 9: Recapturing Eldenbaum",
         "title": "The Teleporter Left Behind",
         "boss": "Repthon",
         "chapter": 9,
@@ -525,6 +601,7 @@
         "exp": 22700000
     },
     {
+        "ch_title": "Chapter 9: Recapturing Eldenbaum",
         "title": "The Man Who Seeks Death",
         "boss": "Vulture",
         "chapter": 9,
@@ -532,6 +609,7 @@
         "exp": 23900000
     },
     {
+        "ch_title": "Chapter 9: Recapturing Eldenbaum",
         "title": "The Battle to Recapture Eldenbaum",
         "boss": "Venena Meta Coenubia",
         "chapter": 9,
@@ -539,6 +617,7 @@
         "exp": 25000000
     },
     {
+        "ch_title": "Chapter 9: Recapturing Eldenbaum",
         "title": "A New Beginning",
         "boss": "-",
         "chapter": 9,
@@ -546,6 +625,7 @@
         "exp": 13000000
     },
     {
+        "ch_title": "Chapter 10: The Lost God's Ship",
         "title": "Off to the Fateful Land",
         "boss": "-",
         "chapter": 10,
@@ -553,6 +633,7 @@
         "exp": 26000000
     },
     {
+        "ch_title": "Chapter 10: The Lost God's Ship",
         "title": "The Inhabitants Under the Cliff",
         "boss": "Pisteus",
         "chapter": 10,
@@ -560,6 +641,7 @@
         "exp": 27400000
     },
     {
+        "ch_title": "Chapter 10: The Lost God's Ship",
         "title": "The Nightmare Returns",
         "boss": "-",
         "chapter": 10,
@@ -567,6 +649,7 @@
         "exp": 28800000
     },
     {
+        "ch_title": "Chapter 10: The Lost God's Ship",
         "title": "The Whereabouts of the Missing Monks",
         "boss": "Arachnidemon",
         "chapter": 10,
@@ -574,6 +657,7 @@
         "exp": 30200000
     },
     {
+        "ch_title": "Chapter 10: The Lost God's Ship",
         "title": "The Goddess of Courage and the Squatters",
         "boss": "-",
         "chapter": 10,
@@ -581,6 +665,7 @@
         "exp": 31600000
     },
     {
+        "ch_title": "Chapter 10: The Lost God's Ship",
         "title": "Navigator of the Ark",
         "boss": "Black Shadow",
         "chapter": 10,
@@ -588,6 +673,7 @@
         "exp": 33100000
     },
     {
+        "ch_title": "Chapter 10: The Lost God's Ship",
         "title": "Witch in the Woods",
         "boss": "Hexter",
         "chapter": 10,
@@ -595,6 +681,7 @@
         "exp": 34600000
     },
     {
+        "ch_title": "Chapter 10: The Lost God's Ship",
         "title": "The Duel in Nov Diela",
         "boss": "Irestida",
         "chapter": 10,
@@ -602,6 +689,7 @@
         "exp": 36200000
     },
     {
+        "ch_title": "Chapter 11: Off to Toram",
         "title": "Flying the Ark",
         "boss": "Reliza",
         "chapter": 11,
@@ -609,6 +697,7 @@
         "exp": 37800000
     },
     {
+        "ch_title": "Chapter 11: Off to Toram",
         "title": "Land of the Unknown",
         "boss": "Gemma",
         "chapter": 11,
@@ -616,6 +705,7 @@
         "exp": 49000000
     },
     {
+        "ch_title": "Chapter 11: Off to Toram",
         "title": "The Strolling Forest",
         "boss": "Ferzen the Rock Dragon",
         "chapter": 11,
@@ -623,6 +713,7 @@
         "exp": 51000000
     },
     {
+        "ch_title": "Chapter 11: Off to Toram",
         "title": "Eumanos the Forest Dwellers",
         "boss": "Junior Dragon Zyvio",
         "chapter": 11,
@@ -630,6 +721,7 @@
         "exp": 53400000
     },
     {
+        "ch_title": "Chapter 11: Off to Toram",
         "title": "A Sproutling is Born",
         "boss": "War Dragon Turba",
         "chapter": 11,
@@ -637,6 +729,7 @@
         "exp": 55700000
     },
     {
+        "ch_title": "Chapter 11: Off to Toram",
         "title": "The Blessing-Bearer",
         "boss": "Vlam the Flame Dragon",
         "chapter": 11,
@@ -644,6 +737,7 @@
         "exp": 58100000
     },
     {
+        "ch_title": "Chapter 11: Off to Toram",
         "title": "Intense Battle in Coenubla's Stronghold",
         "boss": "Velum",
         "chapter": 11,
@@ -651,6 +745,7 @@
         "exp": 60500000
     },
     {
+        "ch_title": "Chapter 11: Off to Toram",
         "title": "The Shadow of a Smoky Mountain",
         "boss": "Oculagsinio",
         "chapter": 11,
@@ -658,6 +753,7 @@
         "exp": 63000000
     },
     {
+        "ch_title": "Chapter 11: Off to Toram",
         "title": "The Weredragons & the Underground World",
         "boss": "Gordel",
         "chapter": 11,
@@ -665,6 +761,7 @@
         "exp": 65500000
     },
     {
+        "ch_title": "Chapter 12: The Weredragons' Vital Point",
         "title": "The Sky with a Ceiling",
         "boss": "-",
         "chapter": 12,
@@ -672,6 +769,7 @@
         "exp": 73400000
     },
     {
+        "ch_title": "Chapter 12: The Weredragons' Vital Point",
         "title": "Rivalry Between Dragons and Weredragons",
         "boss": "Burning Dragon Igneus",
         "chapter": 12,
@@ -679,6 +777,7 @@
         "exp": 76300000
     },
     {
+        "ch_title": "Chapter 12: The Weredragons' Vital Point",
         "title": "Weredragon Couple and a Baby",
         "boss": "Trickster Dragon Mimyugon",
         "chapter": 12,
@@ -686,6 +785,7 @@
         "exp": 79300000
     },
     {
+        "ch_title": "Chapter 12: The Weredragons' Vital Point",
         "title": "Vital Point",
         "boss": "Filrocas",
         "chapter": 12,
@@ -693,6 +793,7 @@
         "exp": 82300000
     },
     {
+        "ch_title": "Chapter 12: The Weredragons' Vital Point",
         "title": "Intense Battle in Propulsion System",
         "boss": "Wicked Dragon Fazzino",
         "chapter": 12,
@@ -700,6 +801,7 @@
         "exp": 85300000
     },
     {
+        "ch_title": "Chapter 12: The Weredragons' Vital Point",
         "title": "Discovering a New Technology",
         "boss": "-",
         "chapter": 12,
@@ -707,6 +809,7 @@
         "exp": 44200000
     },
     {
+        "ch_title": "Chapter 12: The Weredragons' Vital Point",
         "title": "Ark Repair",
         "boss": "Walican",
         "chapter": 12,
@@ -714,6 +817,7 @@
         "exp": 92700000
     },
     {
+        "ch_title": "Chapter 12: The Weredragons' Vital Point",
         "title": "Weredragon Dispute",
         "boss": "Brass Dragon Reguita",
         "chapter": 12,
@@ -721,6 +825,7 @@
         "exp": 96000000
     },
     {
+        "ch_title": "Chapter 12: The Weredragons' Vital Point",
         "title": "Cocoon in the Ice Wall",
         "boss": "Dominaredor",
         "chapter": 12,
@@ -728,6 +833,7 @@
         "exp": 99300000
     },
     {
+        "ch_title": "Chapter 13: The Water Tribe and Coenubia",
         "title": "Underwater Inhabitants",
         "boss": "Zapo",
         "chapter": 13,
@@ -735,6 +841,7 @@
         "exp": 112600000
     },
     {
+        "ch_title": "Chapter 13: The Water Tribe and Coenubia",
         "title": "Water Dome",
         "boss": "Red Ash Dragon Rudish",
         "chapter": 13,
@@ -742,6 +849,7 @@
         "exp": 116500000
     },
     {
+        "ch_title": "Chapter 13: The Water Tribe and Coenubia",
         "title": "Underwater City",
         "boss": "-",
         "chapter": 13,
@@ -749,6 +857,7 @@
         "exp": 60200000
     },
     {
+        "ch_title": "Chapter 13: The Water Tribe and Coenubia",
         "title": "The Thing in the Abandoned District",
         "boss": "Don Profundo",
         "chapter": 13,
@@ -756,6 +865,7 @@
         "exp": 125800000
     },
     {
+        "ch_title": "Chapter 13: The Water Tribe and Coenubia",
         "title": "Shadow from the Abyss",
         "boss": "Vatudo",
         "chapter": 13,
@@ -763,6 +873,7 @@
         "exp": 129900000
     },
     {
+        "ch_title": "Chapter 13: The Water Tribe and Coenubia",
         "title": "The Ruthless Council",
         "boss": "-",
         "chapter": 13,
@@ -770,6 +881,7 @@
         "exp": 67000000
     },
     {
+        "ch_title": "Chapter 13: The Water Tribe and Coenubia",
         "title": "Mysterious Entity in the Little Shrine",
         "boss": "Ragging Dragon Bovinari",
         "chapter": 13,
@@ -777,6 +889,7 @@
         "exp": 139900000
     },
     {
+        "ch_title": "Chapter 13: The Water Tribe and Coenubia",
         "title": "The Great Battle Underwater",
         "boss": "Humida & Torexesa",
         "chapter": 13,
@@ -784,6 +897,7 @@
         "exp": 144200000
     },
     {
+        "ch_title": "Chapter 14: Mainland Toram",
         "title": "Crisis in the Sky",
         "boss": "Mulgoon",
         "chapter": 14,
@@ -791,6 +905,7 @@
         "exp": 159100000
     },
     {
+        "ch_title": "Chapter 14: Mainland Toram",
         "title": "The Surviving Siblings",
         "boss": "Deformis",
         "chapter": 14,
@@ -798,6 +913,7 @@
         "exp": 164000000
     },
     {
+        "ch_title": "Chapter 14: Mainland Toram",
         "title": "Chaotic Situation",
         "boss": "-",
         "chapter": 14,
@@ -805,6 +921,7 @@
         "exp": 168900000
     },
     {
+        "ch_title": "Chapter 14: Mainland Toram",
         "title": "The Bitter Truth",
         "boss": "Menti",
         "chapter": 14,
@@ -812,6 +929,7 @@
         "exp": 173800000
     },
     {
+        "ch_title": "Chapter 14: Mainland Toram",
         "title": "The Uncouth Rana Prince",
         "boss": "Biskyva",
         "chapter": 14,
@@ -819,6 +937,7 @@
         "exp": 178800000
     },
     {
+        "ch_title": "Chapter 14: Mainland Toram",
         "title": "Mutant Coenubia Village",
         "boss": "Piscruva",
         "chapter": 14,
@@ -826,6 +945,7 @@
         "exp": 183900000
     },
     {
+        "ch_title": "Chapter 14: Mainland Toram",
         "title": "Fierce Battle with Mutant Lixis",
         "boss": "Supreme Evil Crystal Beast",
         "chapter": 14,
@@ -833,6 +953,7 @@
         "exp": 189000000
     },
     {
+        "ch_title": "Chapter 15: Coenubia's Awakening",
         "title": "Ark Crisis",
         "boss": "Bakuzan",
         "chapter": 15,
@@ -840,6 +961,7 @@
         "exp": 210500000
     },
     {
+        "ch_title": "Chapter 15: Coenubia's Awakening",
         "title": "Coastal Clash",
         "boss": "Rondine",
         "chapter": 15,
@@ -847,10 +969,67 @@
         "exp": 216300000
     },
     {
+        "ch_title": "Chapter 15: Coenubia's Awakening",
         "title": "Unda's Rescue Operartion",
         "boss": "Gula the Gourmet",
         "chapter": 15,
         "episode": 122,
         "exp": 222200000
+    },
+    {
+        "ch_title": "Chapter 15: Coenubia's Awakening",
+        "title": "Unda's Return",
+        "boss": "Goudvis",
+        "chapter": 15,
+        "episode": 123,
+        "exp": 228100000
+    },
+    {
+        "ch_title": "Chapter 15: Coenubia's Awakening",
+        "title": "The Young Man and the Old Tree",
+        "boss": "Puiet",
+        "chapter": 15,
+        "episode": 124,
+        "exp": 234000000
+    },
+    {
+        "ch_title": "Chapter 15: Coenubia's Awakening",
+        "title": "The Village of Lixis",
+        "boss": "Gioco",
+        "chapter": 15,
+        "episode": 125,
+        "exp": 240000000
+    },
+    {
+        "ch_title": "Chapter 15: Coenubia's Awakening",
+        "title": "Visions of a Distant Past",
+        "boss": "Baratok",
+        "chapter": 15,
+        "episode": 126,
+        "exp": 246000000
+    },
+    {
+        "ch_title": "Chapter 15: Coenubia's Awakening",
+        "title": "As the Roots Come to Light",
+        "boss": "Doy & Mari",
+        "chapter": 15,
+        "episode": 127,
+        "exp": 252100000
+    },
+    {
+        "ch_title": "Chapter 16: The Royal Dragon Bloodline",
+        "title": "Freedo's Thoughts",
+        "boss": "-",
+        "chapter": 16,
+        "episode": 128,
+        "exp": 141700000
+    },
+    {
+        "ch_title": "Chapter 16: The Royal Dragon Bloodline",
+        "title": "Chaos in the Valley",
+        "boss": "Kipina",
+        "chapter": 16,
+        "episode": 129,
+        "exp": 293700000
     }
 ]
