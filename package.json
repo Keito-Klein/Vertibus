@@ -1,6 +1,6 @@
 {
   "name": "vertibus",
-  "version": "5.3.1a",
+  "version": "6.0.0a",
   "main": "index.js",
   "type": "module",
   "scripts": {
