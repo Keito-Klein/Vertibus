@@ -1,5 +1,5 @@
 node_modules/
-client/
+session/
 package-lock.json
 db/date.json
 db/register.json
