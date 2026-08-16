@@ -1,1 +1,0 @@
-const empty = "empty File"
