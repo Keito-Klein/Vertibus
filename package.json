@@ -12,8 +12,9 @@
   "license": "MIT",
   "description": "",
   "dependencies": {
-    "@whiskeysockets/baileys": "^7.0.0-rc14",
+    "@whiskeysockets/baileys": "^7.0.0-rc11",
     "any-ascii": "^0.3.3",
+    "awesome-phonenumber": "^7.8.0",
     "axios": "^1.19.0",
     "chalk": "^6.0.0",
     "cheerio": "^1.2.0",
