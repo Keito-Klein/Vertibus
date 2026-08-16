@@ -1,4 +1,34 @@
-const menu = require("./menu");
+import * as menu from "./menu.js";
+import * as warning from "./warning.js";
+
+const ind = {
+    menu: menu.menu,
+    donate: menu.donate,
+    pricing: menu.pricing,
+    update: menu.update,
+    ownerContact: menu.ownerContact,
+    format: warning.format,
+    unsupported: warning.unsupported,
+    premium: warning.premium,
+    error: warning.error,
+    owner: warning.owner,
+    onGroup: warning.onGroup,
+    onAdmin: warning.onAdmin,
+    botAdmin: warning.botAdmin,
+    nsfw: warning.nsfw
+};
+
+export default ind;
+
+
+
+
+
+
+
+
+
+/*const menu = require("./menu");
 const warning = require("./warning");
 const bs = require("./bs");
 const mq = require("../Toram-DB/mq-ind");
@@ -26,4 +56,4 @@ module.exports = {
     maze: maze.maze,
     ailment: ailment.ailment,
     bag: bag.bag,
-};
+};*/

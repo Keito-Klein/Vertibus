@@ -1,6 +1,10 @@
-const { expectationFailed } = require("@hapi/boom");
 
-exports.format = (prefix, command) => {
+const format = (prefix, command) => {
+  let arr = [...command];
+  arr.shift();
+  command = arr.join("")
+  
+  console.log(command)
   switch (command) {
     case "brat":
       return `Cara penggunaan:\n${prefix}${command} Hallo`;
@@ -13,6 +17,9 @@ exports.format = (prefix, command) => {
 
     case "mq":
       return `Cara penggunaan:\n${prefix}${command} <level>|<EXP Percentage>\nContoh:\n${prefix}${command} 270|10`;
+
+    case "calculate":
+      return `belum ada info`;
 
       case "lv":
       case "lvl":
@@ -48,34 +55,50 @@ exports.format = (prefix, command) => {
   }
 };
 
-exports.unsupported = () => {
-  return `Format media tidak didukung!`;
+const unsupported = (media = "gambar") => {
+  return `Format media tidak didukung!\nmedia yang didukung: _${media}_`;
 };
 
-exports.premium = () => {
+const premium = () => {
   return `Fitur ini hanya tersedia untuk premium user/anda belum premium.\nSilahkan beli premium pada owner\n!owner`;
 };
 
-exports.owner = () => {
+const owner = () => {
   return `Fitur ini hanya tersedia untuk Owner!`;
 };
 
-exports.onGroup = () => {
+const onGroup = () => {
   return `Fitur ini hanya tersedia di Grup!`;
 };
 
-exports.onAdmin = () => {
+const onAdmin = () => {
   return `Fitur ini hanya tersedia untuk Admin Grup!`;
 };
 
-exports.botAdmin = () => {
+const botAdmin = () => {
   return `Fitur ini hanya tersedia jika bot adalah admin grup!`;
 };
 
-exports.nsfw = () => {
+const nsfw = () => {
   return `Konten nsfw dimatikan selama puasa!\nTunggu buka puasa dan sebelum imsak untuk mennggunakannya`;
 }
 
-exports.error = (err) => {
+const error = (err) => {
     return `Terjadi kesalahan dalam memproses command!\nPesan error: ${err.message}`;
+}
+
+const maintenance = () => {
+  return `Server saat ini sedang maintenance(05.00 - 12.00 WIB/UTC+7). fitur ini tidak dapat digunakan!`
+}
+
+export {
+  format,
+  unsupported,
+  premium,
+  owner,
+  onGroup,
+  onAdmin,
+  botAdmin,
+  nsfw,
+  error
 }
