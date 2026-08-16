@@ -1,8 +1,6 @@
 import fs from "fs";
-const Restrict = JSON.parse(fs.readFileSync("./database/db/restrict.json"));
-const Usage = JSON.parse(fs.readFileSync("./database/db/usage.json"));
-const User = JSON.parse(fs.readFileSync("./database/db/register.json"));
-const Banned = JSON.parse(fs.readFileSync("./database/db/bans.json"));
+
+const readDB = (filePath) => JSON.parse(fs.readFileSync(filePath, "utf8"));
 
 class Read {
     constructor() {
@@ -10,44 +8,39 @@ class Read {
     }
 
     checkRestrict(id) {
+        const Restrict = readDB("./database/db/restrict.json");
         const restrictIndex = Restrict.find((user) => user.group === id);
-        let result;
+
         if (!restrictIndex) {
-            result = {
+            return {
                 group: id,
                 antilink: false,
                 antilinkgc: false,
                 open: true,
-            }
-        } else {
-            result = restrictIndex;
+            };
         }
-        return result;
+
+        return restrictIndex;
     }
 
     checkUser(id) {
-        let result = {
-            users: [],
-            user: {}
-        }
+        const User = readDB("./database/db/register.json");
         const userIndex = User.find((user) => user.id === id);
-        result.users = User
-        if (!userIndex) {
-            result.user = null
-        } else {
-            result.user = userIndex;
-        }
-        return result;
+
+        return {
+            users: User,
+            user: userIndex ?? null,
+        };
     }
 
     checkBan(id) {
-        const bannedUser = Banned.find(user => user.id === id);
-        if(!bannedUser) return false;
-        return bannedUser;
+        const Banned = readDB("./database/db/bans.json");
+        const bannedUser = Banned.find((user) => user.id === id);
+        return bannedUser || false;
     }
 
     checkUsage() {
-        return Usage;
+        return readDB("./database/db/usage.json");
     }
 }
 

@@ -1,9 +1,7 @@
 import fs from "fs";
-import toMs from "ms";
-const User = JSON.parse(fs.readFileSync("./database/db/register.json"));
-const Usage = JSON.parse(fs.readFileSync("./database/db/usage.json"));
-const Restrict = JSON.parse(fs.readFileSync("./database/db/restrict.json"));
-const Banned = JSON.parse(fs.readFileSync("./database/db/bans.json"));
+
+const readDB = (filePath) => JSON.parse(fs.readFileSync(filePath, "utf8"));
+const writeDB = (filePath, data) => fs.writeFileSync(filePath, JSON.stringify(data, null, 2));
 
 //Create_Update Class to handle user and restrict data.
 class Create_Update {
@@ -12,103 +10,139 @@ class Create_Update {
     }
 
     addUser(id, lid) {
-        let userIndex = User.find((user) => user.id === id);
-        let update;
+        const User = readDB("./database/db/register.json");
+        const userIndex = User.find((user) => user.id === id);
+        let update = User;
+
         if (!userIndex) {
-          const ovj = {
+          const obj = {
             id,
             lid,
             date: Date.now(),
             latest: true,
           };
-          update = [...User, {...ovj}]
+          update = [...User, { ...obj }]
         } else {
-          if (!userIndex.latest) {
-            update = User.map((data) => data.id === id ? {...data, latest: true} : data)
-          }
-          if(!userIndex.date) {
-            update = User.map((data) => data.id === id ? {...data, date: Date.now()} : data)
-          }
-          if(!userIndex.lid) {
-            update = User.map((data) => data.id === id ? {...data, lid} : data)
+          const shouldUpdate =
+            !userIndex.latest ||
+            !userIndex.date ||
+            !userIndex.lid ||
+            userIndex.lid !== lid;
+
+          if (shouldUpdate) {
+            update = User.map((data) =>
+              data.id === id
+                ? {
+                    ...data,
+                    lid,
+                    date: data.date || Date.now(),
+                    latest: true,
+                  }
+                : data
+            );
           }
         }
-        if(!update) {
-            return false;
-          } else {
-            fs.writeFileSync("./database/db/restrict.json", JSON.stringify(update, null, 2));
-            console.log("Updated database for", userIndex.id)
-            return true;
-          }
+
+        writeDB("./database/db/register.json", update);
+        return true;
     }
 
     reset() {
-      Object.keys(User).forEach((i) => {
-        User[i].latest = false;
-      });
-      fs.writeFileSync("./database/db/register.json", JSON.stringify(User, null, 2));
+      const User = readDB("./database/db/register.json");
+      const refreshed = User.map((user) => ({ ...user, latest: false }));
+      writeDB("./database/db/register.json", refreshed);
+      return true;
     }
 
   addUsage(type) {
-    if(type === "private") {
+    const Usage = readDB("./database/db/usage.json");
+    if (type === "private") {
       Usage.usage_private++
     } else {
       Usage.usage_group++
     }
-    fs.writeFileSync("./database/db/usage.json", JSON.stringify(Usage));
+    writeDB("./database/db/usage.json", Usage);
+    return true;
   }
 
     addRestrict(group, antilinkStatus, antilinkgcStatus, openStatus, m) {
-        let restrictIndex = Restrict.find(
-            (restrict) => restrict.group === group
-          );
-          let update;
-          if (!restrictIndex) {
-            const ovj = {
+        const Restrict = readDB("./database/db/restrict.json");
+        const restrictIndex = Restrict.find((restrict) => restrict.group === group);
+        let update = Restrict;
+
+        if (!restrictIndex) {
+          update = [
+            ...Restrict,
+            {
               group,
               antilink: antilinkStatus,
               antilinkgc: antilinkgcStatus,
               open: openStatus,
-            };
-            update = [...Restrict, {...ovj}]
-          } else {
-            if (restrictIndex.antilinkgc !== antilinkgcStatus) {
-              update = Restrict.map((data) => data.group === group ? {...data, antilinkgc: antilinkgcStatus} : data)
-            }
-            if (restrictIndex.antilink !== antilinkStatus) {
-              update = Restrict.map((data) => data.group === group ? {...data, antilink: antilinkStatus} : data)
-            }
-            if (restrictIndex.open !== openStatus) {
-              update = Restrict.map((data) => data.group === group ? {...data, open: openStatus} : data)
-            }
+            },
+          ];
+        } else {
+          const hasChanges =
+            restrictIndex.antilink !== antilinkStatus ||
+            restrictIndex.antilinkgc !== antilinkgcStatus ||
+            restrictIndex.open !== openStatus;
+
+          if (hasChanges) {
+            update = Restrict.map((data) =>
+              data.group === group
+                ? {
+                    ...data,
+                    antilink: antilinkStatus,
+                    antilinkgc: antilinkgcStatus,
+                    open: openStatus,
+                  }
+                : data
+            );
           }
-          if(!update) {
-            m.reply("failed ❌")
-            return false;
-          } else {
-            fs.writeFileSync("./database/db/restrict.json", JSON.stringify(update, null, 2));
-            m.reply("success ✔")
-            return true;
-          }
+        }
+
+        writeDB("./database/db/restrict.json", update);
+        if (m) m.reply("success ✔");
+        return true;
     }
 
     banned(id, lid, banned, reason = "No Reason") {
-      const banDB = Banned.find(user => user.id === id);
-      let update;
-      if(!banDB) {
-        const obj = {
-          id,
-          lid,
-          banned: true,
-          reason
-        }
-        update = [...Banned, {...obj}];
-      }else {
-        if(banDB.banned !== banned) {
-          update = Banned.map(user => user.id === id ? {...user, banned, reason: !banned ? null : reason} : user);
+      const Banned = readDB("./database/db/bans.json");
+      const banDB = Banned.find((user) => user.id === id);
+      let update = Banned;
+
+      if (!banDB) {
+        update = [
+          ...Banned,
+          {
+            id,
+            lid,
+            banned: true,
+            reason,
+          },
+        ];
+      } else {
+        const shouldUpdate =
+          banDB.banned !== banned ||
+          banDB.reason !== reason ||
+          banDB.lid !== lid;
+
+        if (shouldUpdate) {
+          update = Banned.map((user) =>
+            user.id === id
+              ? {
+                  ...user,
+                  lid,
+                  banned,
+                  reason: banned ? reason : null,
+                }
+              : user
+          );
         }
       }
+
       console.log(`${banned ? "Banned" : "Unbanned"} user: ${id} with reason: ${reason}`)
+      writeDB("./database/db/bans.json", update);
+      return true;
     }
 }
 
