@@ -1,10 +1,19 @@
 import "./setting.js";
 import anyAscii from "any-ascii";
+import fs from "fs";
 import util from "util";
+import chalk from "chalk";
+import moment from "moment-timezone";
 
 import Create_Update from "./database/create-update.js";
 import Read from "./database/read.js";
-import chalk from "chalk";
+import ind from "./language/ind/index.js"
+import { separate } from "./lib/general-function.js";
+
+import mq from "./toram/mq-mats.js";
+const mqData = JSON.parse(fs.readFileSync("./language/Toram-DB/mq-db-eng.json"));
+
+let lang = ind;
 
 const core = async(m, client, message) => {
   try {
@@ -198,6 +207,7 @@ const core = async(m, client, message) => {
         }
       }
 
+      //console.log(sender)
       // ON/OFF BOT
       if (isCmd && isGroup) {
         let checking = await check.checkRestrict(groupMetadata.id);
@@ -227,24 +237,241 @@ const core = async(m, client, message) => {
       if (!isCmd && !isGroup) return;
       if (!isCmd && isGroup) return;
       if (isCmd && !isGroup) {
-        console.log(global.infoLog("[EXEC]"), chalk.yellowBrigh(moment(t * 1000).format("DD/MM/YY HH:mm:ss")), global.successLog(`${command} [${args.length}]`), "from", global.successLog(pushname));
+        console.log(global.infoLog("[EXEC]"), chalk.yellowBright(moment(t * 1000).format("DD/MM/YY HH:mm:ss")), global.successLog(`${command} [${args.length}]`), "from", global.successLog(pushname));
       }
       if (isCmd && isGroup) {
-        console.log(global.infoLog("[EXEC]"), chalk.yellowBrigh(moment(t * 1000).format("DD/MM/YY HH:mm:ss")), global.successLog(`${command} [${args.length}]`), "from", global.successLog(pushname), "in", global.successLog(groupName));
+        console.log(global.infoLog("[EXEC]"), chalk.yellowBright(moment(t * 1000).format("DD/MM/YY HH:mm:ss")), global.successLog(`${command} [${args.length}]`), "from", global.successLog(pushname), "in", global.successLog(groupName));
       }
 
       let senderType = isGroup ? groupMetadata.id : sender;
       let isLid = isGroup ? "isGroup" : senderLid
       let cekUser = await check.checkUser(senderType);
       if (cekUser.user === null || !cekUser.user.latest) {
-
           await create.addUser(senderType, isLid);
           reply(lang.update(pushname));
         }
       await create.addUsage(isGroup ? "group" : "private");
 
     //BUAT FITUR
+
+    switch (command) {
+      case prefix + "test":
+        reply("Hello World!");
+        break;
+
+        case prefix + "watk":{
+          if(!q) return reply(lang.format(prefix, command))
+          const int = parseInt(q);
+          const proc = eval((int * 110) / 100 + 10);
+          const str = proc.toString();
+          reply(str);
+        }
+        break;
+
+        case prefix + "cb-novip":{
+          if (!text) return;
+          const dotPrice = text.replace(/\./g, "");
+          const price = parseInt(dotPrice);
+          const fee = Math.floor(price * 0.1);
+          const profit = price - fee;
+
+          //Indonesia Server
+          const taxIn = price * 0.2;
+          const indo = price + taxIn;
+
+          //Chinesse Server 0 tax
+          const taxCh = price * 0;
+          const china = price + taxCh;
+
+          //Japan Server
+          const taxJp = price * 0.03;
+          const japan = price + taxJp;
+
+          const result = `
+  *Result*: 
+  Harga: \`\`\`${separate(price)}\`\`\`
+  Fee: \`\`\`${separate(fee)}\`\`\`
+  Profit: \`\`\`${separate(profit)}\`\`\`
+  Global Price: 
+  - Indonesia: \`\`\`${separate(indo)}\`\`\`
+  - China: \`\`\`${separate(china)}\`\`\`
+  - Japan: \`\`\`${separate(japan)}\`\`\`
+        `;
+          client.sendText(from, result, mek);
+        }
+        break;
+
+      case prefix + "cb-vip":{
+          if (!text) return;
+          const dotPrice = text.replace(/\./g, "");
+          const price = parseInt(dotPrice);
+          const fee = Math.floor(price * 0.1 * 0.6);
+
+          const profit = price - fee;
+
+          //Indonesia Server
+          const taxIn = price * 0.2;
+          const indo = price + taxIn;
+
+          //Chinesse Server 0 tax
+          const taxCh = price * 0;
+          const china = price + taxCh;
+
+          //Japan Server
+          const taxJp = price * 0.03;
+          const japan = price + taxJp;
+
+          const result = `
+  *Result*: 
+  Harga: \`\`\`${separate(price)}\`\`\`
+  Fee: \`\`\`${separate(fee)}\`\`\`
+  Profit: \`\`\`${separate(profit)}\`\`\`
+  Global Price: 
+  - Indonesia: \`\`\`${separate(indo)}\`\`\`
+  - China: \`\`\`${separate(china)}\`\`\`
+  - Japan: \`\`\`${separate(japan)}\`\`\`
+        `;
+          client.sendText(from, result, mek);
+      }
+        break;
+
+      case prefix + "cb":
+        if (!text) return reply("please input the price!");
+        if (isNaN(text)) return reply("Price should be number!");
+        const teks = "Do you have 30-Day Tickets/VIP?\nOpen button bellow ⬇";
+        await client.sendButtonMsg(
+          from,
+          {
+            text: teks,
+            footer: global.botName,
+            mentions: [message.sender],
+            contextInfo: {
+              forwardingScore: 10,
+              isForwarded: true,
+            },
+            buttons: [
+              {
+                buttonId: `${prefix}cb-vip ${text}`,
+                buttonText: { displayText: "Yes ✅" },
+                type: 1,
+              },
+              {
+                buttonId: `${prefix}cb-novip ${text}`,
+                buttonText: { displayText: "No ❌" },
+                type: 1,
+              },
+            ],
+          },
+          { quoted: mek }
+        );
+        break;
+
+        case prefix + "mqmats":{
+          const mqMats = mq("ind");
+          client.sendText(from, mqMats, mek);
+        }
+        break;
+
+        case prefix + "calculate":{
+          const lvl = parseInt(text.split("|")[0]);
+          const exp = parseInt(text.split("|")[1].split(" ")[0]);
+          const startEps = text.split(" ")[1];
+          const endEps = text.split(" ")[2];
+          const startMQ = parseInt(startEps.replace("eps", ""));
+          const endMQ = parseInt(endEps.replace("eps", ""));
+          if (isNaN(exp)) return reply(lang.format(prefix, command));
+          if (startMQ > endMQ) {
+            return reply(
+              "Unable to calculate because the final chapter is lower than the starting chapter."
+            );
+          }
+          const mqData = JSON.parse(
+            fs.readFileSync("./language/Toram-DB/mq-db-eng.json")
+          );
+          //kondisi !mq 260|38 eps58 eps125
+          let [lv, percentage] = calculateMQ(lvl, exp, startMQ, endMQ);
+          let teksTemplate = `
+- *Toram MQ Calculator* -
+Start: CH ${mqData[startMQ - 1].chapter}: ${mqData[startMQ - 1].title}
+End: CH ${mqData[endMQ - 1].chapter}: ${mqData[endMQ - 1].title}
+
+After doing MQ from *${startEps}* to *${endEps}* you will reach to level ${lv} with ${percentage}%
+`;
+          reply(teksTemplate);
+        }
+        break;
+
+        case prefix + "mq":{
+          if (!text) return reply(lang.format(prefix, command));
+          let [lvl, exp] = text.split("|")
+          if (isNaN(lvl)) return reply(lang.format(prefix, command));
+          if (!exp) {
+            exp = 0;
+          }
+          const MQstart = q.split(" ")[1];
+          const MQend = q.split(" ")[2];
+          let MQmsg;
+          let MQcmd = command;
+          if (!MQstart) {
+            MQmsg = "Select where MQ to *Start*";
+          }
+          if (MQstart && !MQend) {
+            MQmsg = "Select where MQ to *End*";
+            MQcmd = "calculate";
+          }
+          const sections = []
+          mqData.map((data, i) => {
+            if(data.chapter !== mqData[i - 1]?.chapter) {
+                    const epsData = mqData.filter((mq) => mq.chapter === data.chapter)
+                    sections.push({
+                        title: data.ch_title,
+                        highlight_label: `Chapter ${data.chapter}`,
+                        rows: epsData.map(eps => ({
+                            title: `EPS${eps.episode}: ${eps.title}`,
+                            description: `Boss: ${eps.boss}`,
+                            id: `${prefix}${MQcmd} ${lvl}|${exp} eps${eps.episode}`
+                        }))
+                    })
+                }
+            })
+
+          const listMessage = {
+            title: "List MQ",
+            sections,
+          };
+
+          const templateButton = {
+            text: MQmsg,
+            footer: `_*- ${global.botName} -*_`,
+            mentions: [message.sender],
+            contextInfo: {
+              forwardingScore: 10,
+              isForwarded: true,
+            },
+            buttons: [
+              {
+                buttonId: "list_button",
+                buttonText: {
+                  displayText: "List MQ",
+                },
+                nativeFlowInfo: {
+                  name: "single_select",
+                  paramsJson: JSON.stringify(listMessage),
+                },
+                type: 2,
+              },
+            ],
+          };
+
+          await client.sendButtonMsg(from, templateButton);
+        }
+        break;
+
+        
     
+      default:
+        break;
+    }
   } catch (err) {
     console.error(global.errorLog("[ERROR]"), err)
   }
